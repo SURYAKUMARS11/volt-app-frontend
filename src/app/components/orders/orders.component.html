@@ -1,0 +1,99 @@
+<div class="page-container">
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h2>My Investments</h2>
+    <div class="header-icon">
+      <i class="fas fa-chart-line"></i>
+    </div>
+  </div>
+
+  <div class="tabs-section">
+    <div class="tabs-container">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'daily'"
+        (click)="switchTab('daily')">
+        <i class="fas fa-calendar-day"></i>
+        Daily Plans
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'advanced'"
+        (click)="switchTab('advanced')">
+        <i class="fas fa-award"></i>
+        Advanced Plans
+      </button>
+    </div>
+  </div>
+
+  <div class="orders-section">
+    <div class="orders-list" *ngIf="getFilteredOrders().length > 0">
+      <div class="order-card" *ngFor="let order of getFilteredOrders()" (click)="viewOrderDetails(order)">
+        <div class="order-header">
+          <div class="order-icon">
+            <i [class]="getOrderIcon(order.plan_type)"></i>
+          </div>
+          <div class="order-info">
+            <div class="order-id">{{order.id}}</div>
+            <div class="order-plan">{{order.plan_title}}</div>
+          </div>
+          <div class="order-amount">₹{{order.amount | number : '1.2-2'}}</div>
+        </div>
+
+        <div class="order-details">
+          <div class="detail-row">
+            <span class="detail-label">Date:</span>
+            <span class="detail-value">{{order.date | date}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Daily Income:</span>
+            <span class="detail-value">₹{{order.daily_income | number : '1.0-0'}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Duration:</span>
+            <span class="detail-value">{{order.duration_days}} days</span>
+          </div>
+          <div class="detail-row" *ngIf="order.status === 'active'">
+            <span class="detail-label">Earned Today:</span>
+            <span class="detail-value">₹{{order.current_daily_earnings | number : '1.0-0'}}</span>
+          </div>
+        </div>
+
+        <div class="order-progress" *ngIf="order.status === 'active'">
+          <div class="progress-info">
+            <span>Progress: {{order.progress_percentage | number : '1.0-0'}}%</span>
+            <span>{{ floor((order.duration_days || 0) * (order.progress_percentage || 0) / 100)}} / {{order.duration_days}} days</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="order.progress_percentage"></div>
+          </div>
+        </div>
+
+        <div class="order-footer">
+          <div class="order-status" [class]="getStatusColor(order.status)">
+            <i class="fas fa-circle"></i>
+            {{order.status | titlecase}}
+          </div>
+          <button class="view-btn">
+            <i class="fas fa-eye"></i>
+            Income will claim automatically.
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="getFilteredOrders().length === 0">
+      <div class="empty-icon">
+        <i class="fas fa-inbox"></i>
+      </div>
+      <h3>No Investments Found</h3>
+      <p>You don't have any {{activeTab === 'daily' ? 'daily' : 'advanced'}} plans yet.</p>
+      <button class="start-btn" (click)="navigateToInvest()">
+        <i class="fas fa-plus"></i>
+        Start Investing
+      </button>
+    </div>
+  </div>
+</div>

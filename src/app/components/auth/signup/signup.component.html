@@ -1,0 +1,82 @@
+<app-loading [visible]="isLoading"></app-loading>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="app-icon">
+        <i class="fas fa-bolt"></i>
+      </div>
+      <img src="assets/images/volt-logo.png" alt="Volt Logo" class="logo-img" />
+      <p>Create account and start your journey</p>
+    </div>
+
+    <div class="auth-form">
+      <div *ngIf="message" [ngClass]="{'text-green-500': isSuccess, 'text-red-500': !isSuccess}"
+        class="mb-4 text-center font-medium">
+        {{ message }}
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-user"></i> Nickname</label>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="nickname" placeholder="Enter your nickname" required [disabled]="isLoading">
+          <i class="fas fa-user-circle input-icon"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-phone"></i> Mobile Number</label>
+        <div class="input-wrapper">
+          <input type="tel" [(ngModel)]="phoneNumber" placeholder="Enter 10-digit mobile number" maxlength="10" required
+            [disabled]="isLoading">
+          <i class="fas fa-mobile-alt input-icon"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+  <label><i class="fas fa-lock"></i> Create Password</label>
+  <div class="input-wrapper">
+    <input 
+      [type]="showPassword ? 'text' : 'password'" 
+      [(ngModel)]="password_signup"
+      placeholder="Minimum 6 characters" 
+      required 
+      [disabled]="isLoading">
+      
+    <i 
+      [ngClass]="['fas', showPassword ? 'fa-eye' : 'fa-eye-slash', 'input-icon']"
+      (click)="togglePasswordVisibility()" 
+      style="cursor: pointer;">
+    </i>
+  </div>
+</div>
+
+
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> Confirm Password</label>
+        <div class="input-wrapper">
+          <input type="password" [(ngModel)]="confirmPassword_signup" placeholder="Confirm your password" required
+            [disabled]="isLoading">
+          <i class="fas fa-check-circle input-icon"></i>
+        </div>
+      </div>
+
+      <button class="auth-btn primary" (click)="signup()"
+        [disabled]="isLoading || !nickname.trim() || phoneNumber.length !== 10 || password_signup.length < 6 || password_signup !== confirmPassword_signup">
+        <span *ngIf="!isLoading">
+          <i class="fas fa-user-plus"></i> Create Account
+        </span>
+        <span *ngIf="isLoading">
+          <i class="fas fa-bolt fa-spin"></i> Creating... </span>
+      </button>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <button class="auth-btn secondary" (click)="goToSignin()" [disabled]="isLoading">
+        <i class="fas fa-sign-in-alt"></i>
+        Already have? Sign In
+      </button>
+    </div>
+  </div>
+</div>

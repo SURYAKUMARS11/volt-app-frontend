@@ -1,0 +1,42 @@
+<div class="mission-container">
+  <!-- Header Section -->
+  <div class="mission-header">
+    <div class="header-content">
+      <button class="back-btn"  (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Mission Rewards</h1>
+        <p>Complete team recharges and unlock amazing rewards</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mission Cards -->
+  <div class="mission-content">
+    <div class="mission-card" *ngFor="let mission of missions">
+      <div class="mission-info">
+        <div class="mission-icon">
+          <img src="https://images.pexels.com/photos/259027/pexels-photo-259027.jpeg?auto=compress&cs=tinysrgb&w=100&h=100" alt="Money" class="money-icon">
+        </div>
+        <div class="mission-details">
+          <h3>Complete {{ mission.target }} Team Recharge</h3>
+          <p class="reward-text">Reward: <span class="reward-amount">{{ mission.reward }} Cash</span></p>
+        </div>
+      </div>
+      <button class="claim-btn" (click)="claimReward(mission)">
+        Claim Reward
+      </button>
+    </div>
+  </div>
+
+   <div class="info-section">
+      <div class="info-header">
+        <i class="fas fa-info-circle"></i>
+        <h3>How to get mission rewards</h3>
+      </div>
+      <p>🔻Make your Team recharge to earn rewards</p>
+      <p>🔻Complete missions to unlock exclusive bonuses</p>
+      <p>🔻Join our community to claim your rewards</p>
+    </div>
+</div>

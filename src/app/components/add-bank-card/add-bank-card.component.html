@@ -1,0 +1,83 @@
+<div class="page-container">
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h2>Add Bank Card</h2>
+    <div class="header-icon">
+      <i class="fas fa-university"></i>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i> Loading...
+  </div>
+  <div *ngIf="addCardMessage" [ngClass]="['message-card', addCardMessage.type]">
+    {{ addCardMessage.text }}
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-credit-card"></i>
+      <h3>Enter Bank Details</h3>
+    </div>
+    <div class="bank-form-card">
+      <div class="form-group">
+        <label for="accountNumber">Account Number</label>
+        <input
+          id="accountNumber"
+          type="text"
+          [(ngModel)]="bankDetails.account_number"
+          placeholder="Enter Account Number"
+          class="form-input"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="bankName">Bank Name</label>
+        <input
+          id="bankName"
+          type="text"
+          [(ngModel)]="bankDetails.bank_name"
+          placeholder="e.g., State Bank of India"
+          class="form-input"
+          required
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="ifscCode">IFSC Code</label>
+        <input
+          id="ifscCode"
+          type="text"
+          [(ngModel)]="bankDetails.ifsc_code"
+          placeholder="e.g., SBIN0000001"
+          class="form-input"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="accountHolderName">Account Holder Name</label>
+        <input
+          id="accountHolderName"
+          type="text"
+          [(ngModel)]="bankDetails.account_holder_name"
+          placeholder="Name as per Bank Account"
+          class="form-input"
+          required
+        >
+      </div>
+
+      <button
+        class="save-btn"
+        [disabled]="!bankDetails.account_number || !bankDetails.bank_name || !bankDetails.ifsc_code || !bankDetails.account_holder_name || isLoading"
+        (click)="saveBankCard()"
+      >
+        <i class="fas fa-save"></i>
+        Save Bank Card
+      </button>
+    </div>
+  </div>
+</div>

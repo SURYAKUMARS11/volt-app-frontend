@@ -1,0 +1,551 @@
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f093fb 0%, #f5f7fa 50%, #c3cfe2 100%);
+  padding-bottom: 100px;
+}
+
+.page-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 10px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+.status-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.loading-icon {
+  font-size: 42px; /* Bigger spinner */
+  color: #ff6b9d;  /* Blue spinner */
+  animation: spin 1s linear infinite; /* Optional: override spin speed */
+}
+
+/* Optional: Custom animation if fa-spin is not working */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.header-icon {
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+/* Total Referrals Section */
+.referrals-section {
+  padding: 30px 20px 10px 20px;
+  margin-top: -15px;
+}
+.invite-button-top {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  background-color: #ff6b9d;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 10;
+}
+
+.invite-button-top:hover {
+  background-color: #7c2188;
+}
+.referrals-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.referrals-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+}
+
+.referrals-info {
+  flex: 1;
+}
+
+.referrals-count {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2d3748;
+  margin-bottom: px;
+}
+
+.referrals-label {
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.referrals-earnings {
+  text-align: right;
+}
+
+.earnings-amount {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #10b981;
+  margin-bottom: 5px;
+}
+
+.earnings-label {
+  font-size: 0.8rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+/* Commission Section */
+.commission-section {
+  padding: 10px 15px 10px 15px;
+}
+
+.commission-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.commission-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.commission-icon {
+  width: 65px;
+  height: 50px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+}
+
+.commission-text h4 {
+  margin: 0 0 2px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.commission-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+.commission-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(16, 185, 129, 0.05);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.detail-item i {
+  color: #10b981;
+  font-size: 1rem;
+}
+
+/* Referral Code Section */
+.referral-code-section {
+  padding: 0 20px 25px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom:10px;
+}
+
+.section-title i {
+  font-size: 1.3rem;
+  color: #ff6b9d;
+}
+
+.section-title h3 {
+  color: #2d3748;
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.referral-code-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.code-display {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.code-text {
+  flex: 1;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.copy-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 12px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.referral-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.share-btn {
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+}
+
+.share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+}
+
+/* Team Members Section */
+.team-members-section {
+  padding: 20px 20px 20px 20px;
+}
+
+.members-list-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.members-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Changed from 3 columns to 2 */
+  gap: 20px;
+  font-weight: 600;
+  align-items: center; /* Optional: to vertically center the content */
+}
+
+
+.header-item {
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.members-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.member-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Now just two columns */
+  gap: 20px;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.member-row:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+.no-members{
+  font-size: 15px;
+  text-align: center;
+}
+.member-row:last-child {
+  border-bottom: none;
+}
+
+.member-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9rem;
+}
+
+.member-name i {
+  color: #667eea;
+  font-size: 1rem;
+}
+
+.member-phone {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.member-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.member-status.active {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.member-status.inactive {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.member-status i {
+  font-size: 0.6rem;
+}
+
+/* Benefits Section */
+.benefits-section {
+  padding: 0 20px 25px;
+}
+
+.benefits-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.benefit-rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.benefit-rule:last-child {
+  border-bottom: none;
+}
+
+.rule-number {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.rule-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.rule-content i {
+  color: #10b981;
+  font-size: 1rem;
+}
+
+.rule-text {
+  color: #4a5568;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+  border-radius: 25px 25px 0 0;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #a0aec0;
+  border-radius: 12px;
+}
+
+.nav-item.active {
+  color: #ff6b9d;
+  background: rgba(255, 107, 157, 0.1);
+}
+
+.nav-item:hover {
+  transform: translateY(-2px);
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+
+.nav-item span {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Customer Service Button */
+.customer-service-btn {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+  margin-top: -20px;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+}
+
+.customer-service-btn:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 12px 30px rgba(255, 107, 157, 0.5);
+}
+
+.service-icon {
+  font-size: 1.6rem;
+  color: white;
+}

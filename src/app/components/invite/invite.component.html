@@ -1,0 +1,135 @@
+<div class="page-container">
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h2>Invite Friends</h2>
+    <div class="header-icon">
+      <i class="fas fa-user-friends"></i>
+    </div>
+  </div>
+
+   <div class="commission-section">
+    <div class="commission-card">
+      <div class="commission-header">
+        <div class="commission-icon">
+          <i class="fas fa-percentage"></i>
+        </div>
+        <div class="commission-text">
+          <h4>Level 1 : 10% </h4>
+          <h4>Level 2 : 3% </h4>
+          <h4>Level 3 : 1% </h4>
+          <p>Earn commission based on your referrals</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-share-alt"></i>
+      <h3>Share Your Link</h3>
+    </div>
+    <div class="invitation-card">
+      <div class="invitation-text">
+        <h4>Invitation Text</h4>
+        <p>Join Volt and start earning daily! Use my referral code: <strong>{{referralCode}}</strong></p>
+      </div>
+
+      <div *ngIf="isLoading" class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Generating link..</p>
+      </div>
+      <div class="invitation-link">
+        <div class="link-display">
+          <span>{{invitationLink}}</span>
+        </div>
+      </div>
+      <div class="invitation-actions">
+        <button class="action-btn copy" (click)="copyInvitationLink()">
+          <i class="fas fa-copy"></i>
+          Copy Invitation Link
+        </button>
+        <button class="action-btn share" (click)="shareInvitationLink()">
+          <i class="fas fa-share"></i>
+          Share Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="team-nav-card" (click)="navigateToTeam()">
+      <div class="team-nav-content">
+        <div class="team-nav-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="team-nav-info">
+          <h4>My Team</h4>
+          <p>View your team and their earnings</p>
+        </div>
+      </div>
+      <div class="team-nav-arrow">
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="referral-section">
+    <div class="referral-card">
+      <div class="referral-header">
+        <div class="referral-title">
+          <div class="referral-icon">
+            <i class="fas fa-gift"></i>
+          </div>
+          <div class="referral-text">
+            <h3>Referral Bonus</h3>
+            <p>Invite and earn ₹10 on each sign-up!</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="referral-stats">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-container">
+            <div class="stat-details">
+              <span class="stat-value">{{totalReferrals}}</span>
+              <span class="stat-label">Total Invites</span>
+            </div>
+
+            <button class="claim-btn" [disabled]="!canClaimBonus" (click)="claimReferralBonus()">
+              <i class="fas fa-hand-holding-usd"></i>
+              {{canClaimBonus ? 'Claim ₹' + pendingBonus : 'No Bonus'}}
+            </button>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon earnings">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="stat-details">
+            <span class="stat-value">₹{{referralEarnings}}</span>
+            <span class="stat-label">Bonus Earned</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-info-circle"></i>
+      <h3>Invitation Rules</h3>
+    </div>
+    <div class="rules-card">
+      <div class="rule-item" *ngFor="let rule of invitationRules; let i = index">
+        <div class="rule-number">{{i + 1}}</div>
+        <div class="rule-text">{{rule}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+

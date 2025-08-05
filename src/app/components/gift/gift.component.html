@@ -1,0 +1,86 @@
+<div class="gift-container">
+  <!-- Header Section -->
+  <div class="gift-header">
+    <div class="header-content">
+      <button class="back-btn"  (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>Gift Code</h1>
+      </div>
+      <button class="telegram-btn" (click)="goToTelegram()">
+        <i class="fab fa-telegram-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Gift Content -->
+  <div class="gift-content">
+    <!-- Main Gift Card -->
+    <div class="gift-card">
+      <!-- Gift Icon -->
+      <div class="gift-icon-container">
+        <div class="gift-icon">
+          <i class="fas fa-gift"></i>
+        </div>
+      </div>
+
+      <!-- Title and Description -->
+      <div class="gift-text">
+        <h2>Redeem Your Gift Code</h2>
+        <p>Enter your gift code below to claim your rewards</p>
+      </div>
+
+      <!-- Message Display -->
+      <div *ngIf="message"
+           [ngClass]="{'success-message': isSuccess, 'error-message': !isSuccess}"
+           class="message-container">
+        <i [class]="isSuccess ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
+        <span>{{ message }}</span>
+      </div>
+
+      <!-- Gift Code Input -->
+      <div class="form-group" [class.focused]="giftCodeFocused" [class.filled]="giftCode.trim()">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            [(ngModel)]="giftCode"
+            placeholder="Enter Gift Code"
+            required
+            [disabled]="isLoading"
+            (focus)="giftCodeFocused = true"
+            (blur)="giftCodeFocused = false"
+            (keyup.enter)="redeemGiftCode()">
+          <div class="input-border"></div>
+        </div>
+      </div>
+
+      <!-- Redeem Button -->
+      <button
+        class="redeem-btn"
+        (click)="redeemGiftCode()"
+        [disabled]="isLoading || !giftCode.trim()">
+        <span *ngIf="!isLoading" class="btn-content">
+          <i class="fas fa-gift"></i>
+          <span>Redeem Now</span>
+        </span>
+        <span *ngIf="isLoading" class="btn-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Redeeming...</span>
+        </span>
+        <div class="btn-shine"></div>
+      </button>
+    </div>
+
+    <!-- Info Section -->
+    <div class="info-section">
+      <div class="info-header">
+        <i class="fas fa-info-circle"></i>
+        <h3>How to get gift codes?</h3>
+      </div>
+      <p>🔻Buy any plans to get daily gift codes</p>
+      <p>🔻Gift codes will be share via telegram</p>
+      <p>🔻Join our community to get the latest updates</p>
+    </div>
+  </div>
+</div>

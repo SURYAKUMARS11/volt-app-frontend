@@ -1,0 +1,59 @@
+<app-loading [visible]="isLoading"></app-loading>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="app-icon">
+        <i class="fas fa-bolt"></i>
+      </div>
+      <img src="assets/images/volt-logo.png" alt="Volt Logo" class="logo-img" />
+      <p>Sign in to continue your journey</p>
+    </div>
+
+    <div class="auth-form">
+      <div *ngIf="message" [ngClass]="{'text-green-500': isSuccess, 'text-red-500': !isSuccess}"
+        class="mb-4 text-center font-medium">
+        {{ message }}
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-phone"></i> Mobile Number</label>
+        <div class="input-wrapper">
+          <input type="tel" [(ngModel)]="loginPhoneNumber" placeholder="Enter your mobile number" maxlength="10"
+            required [disabled]="isLoading">
+          <i class="fas fa-mobile-alt input-icon"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> Password</label>
+        <div class="input-wrapper">
+          <input [type]="showLoginPassword ? 'text' : 'password'" [(ngModel)]="loginPassword"
+            placeholder="Enter your password" required [disabled]="isLoading">
+
+          <i [ngClass]="['fas', showLoginPassword ? 'fa-eye' : 'fa-eye-slash', 'input-icon']"
+            (click)="toggleLoginPasswordVisibility()" style="cursor: pointer;">
+          </i>
+        </div>
+      </div>
+
+
+      <button class="auth-btn primary" (click)="signIn()"
+        [disabled]="isLoading || loginPhoneNumber.length !== 10 || !loginPassword">
+        <span *ngIf="!isLoading">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </span>
+        <span *ngIf="isLoading">
+          <i class="fas fa-bolt fa-spin"></i> Signing In... </span>
+      </button>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <button class="auth-btn secondary" (click)="goToSignup()" [disabled]="isLoading">
+        <i class="fas fa-user-plus"></i>
+        No account? Sign Up
+      </button>
+    </div>
+  </div>
+</div>

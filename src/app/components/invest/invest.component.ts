@@ -1,0 +1,555 @@
+// src/app/components/invest/invest.component.ts
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { RealtimeChannel } from '@supabase/supabase-js';
+
+import {
+  SupabaseService,
+  InvestmentPlan,
+  NewInvestment,
+  Order,
+  transaction_type,
+  transaction_status,
+  investment_status_type,
+  UserWallet
+} from '../../supabase.service';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-invest',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './invest.component.html',
+  styleUrls: ['./invest.component.css']
+})
+export class InvestComponent implements OnInit, OnDestroy {
+  dailyPlans: InvestmentPlan[] = [];
+  advancedPlans: InvestmentPlan[] = [];
+  activePlanType: 'daily' | 'advanced' = 'daily';
+  isLoading: boolean = true;
+  isLoadingUserData: boolean = true;
+  errorMessage: string | null = null;
+
+  showInvestmentPopup: boolean = false;
+  selectedPlan: InvestmentPlan | null = null;
+  investmentQuantity: number = 1;
+  investmentErrorMessage: string = '';
+  investmentSuccessMessage: string = '';
+
+  private userId: string | null = null;
+  public purchasedPlans: { [planId: number]: number } = {};
+  private userOrders: Order[] = [];
+
+  public userWallet: UserWallet | null = null;
+
+  private walletChannel: RealtimeChannel | undefined;
+  private investmentsChannel: RealtimeChannel | undefined;
+
+  constructor(
+    private supabaseService: SupabaseService,
+    private router: Router
+  ) {}
+
+  get currentBalance(): number {
+    if (!this.userWallet) {
+      return 0;
+    }
+    return this.userWallet.recharged_amount;
+  }
+
+  get calculatedTotalIncome(): number {
+    if (!this.userWallet) {
+      return 0;
+    }
+    return this.userWallet.order_income + this.userWallet.invite_commission;
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.isLoadingUserData = true;
+    this.isLoading = true;
+    try {
+      const user = await this.supabaseService.getUser();
+      if (!user) {
+        console.log('No user logged in. Redirecting to login from InvestComponent.');
+        this.router.navigate(['/login']);
+        this.isLoading = false;
+        this.isLoadingUserData = false;
+        return;
+      }
+      this.userId = user.id;
+
+      // New: Process payouts on every component load.
+      await this.processPayoutsAndRefresh();
+
+      // Set up realtime subscriptions to listen for future changes.
+      this.setupRealtimeSubscriptions();
+
+    } catch (error) {
+      console.error('Error in InvestComponent ngOnInit:', error);
+      this.errorMessage = 'Failed to load investment data. Please try again.';
+    } finally {
+      this.isLoading = false;
+      this.isLoadingUserData = false;
+      console.log('DEBUG (ngOnInit Finished): isLoadingUserData =', this.isLoadingUserData);
+      console.log('DEBUG (ngOnInit Finished): userWallet =', this.userWallet);
+      console.log('DEBUG (ngOnInit Finished): currentBalance =', this.currentBalance);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.walletChannel) {
+      this.supabaseService.client.removeChannel(this.walletChannel);
+    }
+    if (this.investmentsChannel) {
+      this.supabaseService.client.removeChannel(this.investmentsChannel);
+    }
+  }
+
+  // --- NEW: Method to call the backend function and refresh data ---
+  private async processPayoutsAndRefresh(): Promise<void> {
+    if (!this.userId) return;
+
+    try {
+      // Call the backend function to process all payouts for the user.
+      const { data, error } = await this.supabaseService.client
+        .rpc('process_daily_payouts', { p_user_id: this.userId });
+
+      if (error) {
+        console.error('Error calling backend payout function:', error);
+      } else {
+        console.log('Backend payout function executed successfully.');
+      }
+    } catch (e) {
+      console.error('An unexpected error occurred while calling the RPC:', e);
+    }
+
+    // After the backend function has run, load all data to reflect the changes.
+    await this.loadInitialData();
+  }
+
+  // --- Realtime subscription setup ---
+  private setupRealtimeSubscriptions(): void {
+    if (!this.userId) return;
+
+    this.walletChannel = this.supabaseService.client
+      .channel('public:user_wallets')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'user_wallets',
+        filter: `user_id=eq.${this.userId}`
+      }, (payload) => {
+        console.log('Wallet Realtime update received:', payload);
+        this.loadWallet();
+      })
+      .subscribe();
+
+    this.investmentsChannel = this.supabaseService.client
+      .channel('public:user_investments')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'user_investments',
+        filter: `user_id=eq.${this.userId}`
+      }, (payload) => {
+        console.log('Investments Realtime update received:', payload);
+        this.loadInvestments();
+      })
+      .subscribe();
+  }
+
+  private async loadInitialData(): Promise<void> {
+    await this.loadWallet();
+    await this.loadInvestments();
+    await this.loadInvestmentPlans();
+    this.checkPlanUnlockStatus();
+
+      // --- ADD THESE LINES TO YOUR CODE ---
+  console.log('Verification: Data loaded after payout function call.');
+  console.log('Updated User Wallet:', this.userWallet);
+  console.log('Updated User Investments:', this.userOrders);
+  // --- END OF ADDITION ---
+
+  }
+
+  private async loadWallet(): Promise<void> {
+    if (!this.userId) return;
+    const fetchedWallet = await this.supabaseService.getUserWallet(this.userId);
+    if (fetchedWallet) {
+      this.userWallet = fetchedWallet;
+    } else {
+      console.warn(`User wallet not found for user ID: ${this.userId}. Attempting to create one.`);
+      this.userWallet = await this.supabaseService.createWalletForUser(this.userId);
+    }
+  }
+
+  private async loadInvestments(): Promise<void> {
+    if (!this.userId) return;
+    const orders = await this.supabaseService.getUserInvestments(this.userId);
+    if (orders) {
+      this.userOrders = orders;
+      this.purchasedPlans = {};
+      this.userOrders.forEach(order => {
+        if (order.plan_id) {
+          this.purchasedPlans[order.plan_id] = (this.purchasedPlans[order.plan_id] || 0) + (order.purchased_quantity || 0);
+        }
+      });
+      this.checkPlanUnlockStatus();
+    }
+  }
+
+  async loadInvestmentPlans(): Promise<void> {
+    this.errorMessage = null;
+    try {
+      const daily = await this.supabaseService.getInvestmentPlans('daily');
+      if (daily) {
+        this.dailyPlans = daily;
+      }
+
+      const advanced = await this.supabaseService.getInvestmentPlans('advanced');
+      if (advanced) {
+        this.advancedPlans = advanced;
+      }
+    } catch (error) {
+      console.error('Error loading investment plans:', error);
+      this.errorMessage = 'Failed to load investment plans.';
+    }
+  }
+
+  switchPlanType(type: 'daily' | 'advanced'): void {
+    this.activePlanType = type;
+  }
+
+  getCurrentPlans(): InvestmentPlan[] {
+    if (this.activePlanType === 'daily') {
+      // Combine daily plans with pre-sale plans using the spread operator
+      return [...this.dailyPlans, ...this.presalePlans];
+    } else if (this.activePlanType === 'advanced') {
+      // You can add advanced pre-sale plans here if you have them
+      return this.advancedPlans;
+    }
+    return [];
+  }
+  checkPlanUnlockStatus(): void {
+    console.log('--- checkPlanUnlockStatus START (InvestComponent) ---');
+    console.log('--- Current purchasedPlans map for checkPlanUnlockStatus ---', this.purchasedPlans);
+
+    const isPlanPurchased = (type: 'daily' | 'advanced', tier: number): boolean => {
+      const plan = [...this.dailyPlans, ...this.advancedPlans].find(p => p.plan_type === type && p.tier === tier);
+      let isFound = false;
+      let purchasedQuantityForLog = 'N/A';
+
+      if (plan) {
+        purchasedQuantityForLog = this.purchasedPlans[plan.id] !== undefined ? this.purchasedPlans[plan.id].toString() : '0';
+        isFound = this.purchasedPlans[plan.id] > 0;
+      } else {
+        console.error(`ERROR: isPlanPurchased(${type}, ${tier}): Plan not found!`);
+      }
+      console.log(`DEBUG: isPlanPurchased(${type}, ${tier}): Found plan ID ${plan?.id}, Purchased Quantity: ${purchasedQuantityForLog}, Result: ${isFound}`);
+      return isFound;
+    };
+
+    this.dailyPlans.forEach(plan => {
+      console.log(`Processing Daily Plan: ${plan.title} (ID: ${plan.id}, Tier: ${plan.tier}, Initial isActive: ${plan.is_active})`);
+      let shouldBeActive = plan.is_active;
+
+      if (typeof plan.tier !== 'number') {
+        console.warn(`-> Daily Plan ${plan.title} has undefined/invalid tier. Setting inactive.`);
+        shouldBeActive = false;
+      } else {
+        if (plan.tier === 1) {
+          shouldBeActive = plan.is_active;
+          console.log(`-> Daily VIP 1 (Tier 1) special logic: retains DB active status (${plan.is_active}).`);
+        } else {
+          const previousDailyTierPurchased = isPlanPurchased('daily', plan.tier - 1);
+          const previousAdvancedTierPurchased = isPlanPurchased('advanced', plan.tier - 1);
+
+          shouldBeActive = Boolean(
+            plan.is_active &&
+            previousDailyTierPurchased &&
+            previousAdvancedTierPurchased
+          );
+          console.log(`-> Daily VIP ${plan.tier} Logic: (Prev Daily Purchased: ${previousDailyTierPurchased}, Prev Advanced Purchased: ${previousAdvancedTierPurchased}, Initial Active: ${plan.is_active}) -> Result: ${shouldBeActive}`);
+        }
+      }
+
+      if (plan.is_purchasable_once && this.purchasedPlans[plan.id] > 0) {
+        console.log(`-> Purchasable Once check: Plan ${plan.id} already purchased (${this.purchasedPlans[plan.id]} times), setting is_active to false.`);
+        shouldBeActive = false;
+      }
+      plan.is_active = shouldBeActive;
+      console.log(`Final status for Daily Plan ${plan.title}: is_active = ${plan.is_active}`);
+    });
+
+    this.advancedPlans.forEach(plan => {
+      console.log(`Processing Advanced Plan: ${plan.title} (ID: ${plan.id}, Tier: ${plan.tier}, Initial isActive: ${plan.is_active})`);
+      let shouldBeActive = plan.is_active;
+
+      if (typeof plan.tier !== 'number') {
+        console.warn(`-> Advanced Plan ${plan.title} has undefined/invalid tier. Setting inactive.`);
+        shouldBeActive = false;
+      } else {
+        const correspondingDailyTierPurchased = isPlanPurchased('daily', plan.tier);
+
+        shouldBeActive = Boolean(
+          plan.is_active &&
+          correspondingDailyTierPurchased
+        );
+        console.log(`-> Advanced VIP ${plan.tier} Logic: (Corresponding Daily Purchased: ${correspondingDailyTierPurchased}, Initial Active: ${plan.is_active}) -> Result: ${shouldBeActive}`);
+      }
+
+      if (plan.is_purchasable_once && this.purchasedPlans[plan.id] > 0) {
+        console.log(`-> Purchasable Once check: Plan ${plan.id} already purchased (${this.purchasedPlans[plan.id]} times), setting is_active to false.`);
+        shouldBeActive = false;
+      }
+      plan.is_active = shouldBeActive;
+      console.log(`Final status for Advanced Plan ${plan.title}: is_active = ${plan.is_active}`);
+    });
+    console.log('--- checkPlanUnlockStatus END (InvestComponent) ---');
+  }
+
+  goToInvestmentDetail(plan: InvestmentPlan): void {
+    console.log('--- goToInvestmentDetail ---');
+    console.log('Plan passed to goToInvestmentDetail:', plan);
+    console.log('Is plan active (from plan object):', plan.is_active);
+    console.log('Selected Plan Active Status:', plan.is_active);
+
+    if (!this.userWallet) {
+      this.investmentErrorMessage = 'Wallet data is still loading. Please wait.';
+      setTimeout(() => this.investmentErrorMessage = '', 3000);
+      console.warn('Attempted to open popup before userWallet was loaded.');
+      return;
+    }
+
+    if (!plan.is_active) {
+      this.investmentErrorMessage = 'This plan is currently locked or already purchased.';
+      setTimeout(() => this.investmentErrorMessage = '', 3000);
+      return;
+    }
+    this.selectedPlan = plan;
+    this.investmentQuantity = plan.is_purchasable_once ? 1 : 1;
+    this.investmentErrorMessage = '';
+    this.investmentSuccessMessage = '';
+    this.showInvestmentPopup = true;
+
+    console.log('DEBUG (Popup Open): currentBalance =', this.currentBalance);
+    console.log('DEBUG (Popup Open): selectedPlan.investment =', this.selectedPlan.investment);
+    console.log('DEBUG (Popup Open): investmentQuantity =', this.investmentQuantity);
+    console.log('DEBUG (Popup Open): getTotalInvestment() =', this.getTotalInvestment());
+    console.log('DEBUG (Popup Open): canAffordInvestment() =', this.canAffordInvestment());
+    console.log('DEBUG (Popup Open): isLoading =', this.isLoading);
+    console.log('DEBUG (Popup Open): isLoadingUserData =', this.isLoadingUserData);
+  }
+
+  closeInvestmentPopup(): void {
+    this.showInvestmentPopup = false;
+    this.selectedPlan = null;
+    this.investmentQuantity = 1;
+    this.investmentErrorMessage = '';
+    this.investmentSuccessMessage = '';
+  }
+
+  increaseQuantity(): void {
+    if (this.selectedPlan && !this.selectedPlan.is_purchasable_once) {
+      this.investmentQuantity++;
+    }
+  }
+
+  decreaseQuantity(): void {
+    if (this.selectedPlan && !this.selectedPlan.is_purchasable_once && this.investmentQuantity > 1) {
+      this.investmentQuantity--;
+    }
+  }
+
+  getTotalInvestment(): number {
+    return this.selectedPlan ? this.selectedPlan.investment * this.investmentQuantity : 0;
+  }
+
+  canAffordInvestment(): boolean {
+    const totalCost = Number(this.getTotalInvestment());
+    console.log(`DEBUG (canAffordInvestment): Checking ${this.currentBalance} >= ${totalCost}`);
+    return this.currentBalance >= totalCost;
+  }
+
+  async confirmInvestment() {
+    console.log('Attempting investment...');
+    if (!this.userId || !this.selectedPlan || !this.userWallet) {
+      console.error('Missing prerequisites:', { userId: this.userId, selectedPlan: this.selectedPlan, userWallet: this.userWallet });
+      this.investmentErrorMessage = 'User not logged in, no plan selected, or wallet not loaded.';
+      return;
+    }
+
+    const totalCost = this.getTotalInvestment();
+    console.log('User Wallet Balance (before deduction):', this.currentBalance);
+    console.log('Selected Plan Investment:', this.selectedPlan.investment);
+    console.log('Investment Quantity:', this.investmentQuantity);
+    console.log('Total Cost:', totalCost);
+    console.log('Can afford (pre-check):', this.canAffordInvestment());
+    if (!this.canAffordInvestment()) {
+      this.investmentErrorMessage = 'Insufficient balance. Please recharge.';
+      console.warn('Insufficient balance.');
+      return;
+    }
+    console.log('Selected Plan is_active (pre-check):', this.selectedPlan.is_active);
+    if (!this.selectedPlan.is_active) {
+      this.investmentErrorMessage = 'This plan is no longer available or already purchased.';
+      console.warn('Plan is not active.');
+      return;
+    }
+
+    this.isLoading = true;
+    this.investmentErrorMessage = '';
+    this.investmentSuccessMessage = '';
+
+    try {
+      let newRechargedAmount = this.userWallet.recharged_amount;
+      let newOrderIncome = this.userWallet.order_income;
+      let newInviteCommission = this.userWallet.invite_commission;
+
+      if (newRechargedAmount >= totalCost) {
+        newRechargedAmount -= totalCost;
+      } else {
+        const remainingCost = totalCost - newRechargedAmount;
+        newRechargedAmount = 0;
+        if (newOrderIncome >= remainingCost) {
+          newOrderIncome -= remainingCost;
+        } else {
+          const finalRemainingCost = remainingCost - newOrderIncome;
+          newOrderIncome = 0;
+          newInviteCommission -= finalRemainingCost;
+        }
+      }
+
+      const { data: updatedWallet, error: walletError } = await this.supabaseService.updateWalletBalance(
+        this.userId,
+        newRechargedAmount,
+        newOrderIncome,
+        newInviteCommission
+      );
+
+      if (walletError || !updatedWallet) {
+        throw new Error('Failed to update wallet balance.');
+      }
+      this.userWallet.recharged_amount = updatedWallet.recharged_amount;
+      this.userWallet.order_income = updatedWallet.order_income;
+      this.userWallet.invite_commission = updatedWallet.invite_commission;
+
+      const startDate = new Date();
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + (this.selectedPlan.days || 0));
+
+      const newInvestmentData: NewInvestment = {
+        user_id: this.userId,
+        plan_id: this.selectedPlan.id,
+        quantity: this.investmentQuantity,
+        invested_amount: totalCost,
+        daily_return_amount: this.selectedPlan.daily_income * this.investmentQuantity,
+        end_date: endDate.toISOString(),
+        start_date: startDate.toISOString(),
+        current_status: 'active',
+        last_daily_payout_date: null,
+        current_earnings: 0
+      };
+
+      const { data: createdInvestmentRecord, error: investmentError } = await this.supabaseService.createInvestment(newInvestmentData);
+
+      if (investmentError || !createdInvestmentRecord) {
+        await this.supabaseService.updateWalletBalance(
+          this.userId,
+          this.userWallet.recharged_amount + totalCost,
+          this.userWallet.order_income,
+          this.userWallet.invite_commission
+        );
+        this.userWallet.recharged_amount += totalCost;
+        throw new Error('Failed to create investment record.');
+      }
+
+      const { error: transactionError } = await this.supabaseService.createTransaction({
+        user_id: this.userId,
+        type: transaction_type.Investment,
+        amount: totalCost,
+        status: transaction_status.Completed,
+        related_entity_id: createdInvestmentRecord.id,
+        description: `Investment in ${this.selectedPlan.title} x${this.investmentQuantity}`
+      });
+
+      if (transactionError) {
+        console.error('Error creating transaction:', transactionError);
+      }
+
+      this.investmentSuccessMessage = `Successfully invested ₹${totalCost} in ${this.selectedPlan.title}!`;
+      this.isLoading = false;
+
+      this.purchasedPlans[this.selectedPlan.id] = (this.purchasedPlans[this.selectedPlan.id] || 0) + this.investmentQuantity;
+      this.checkPlanUnlockStatus();
+
+      setTimeout(() => {
+        this.closeInvestmentPopup();
+      }, 2000);
+
+    } catch (error) {
+      console.error('Investment failed:', error);
+      this.investmentErrorMessage = `Investment failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`;
+      this.isLoading = false;
+    }
+  }
+
+  formatNumber(value: number, decimals: number = 2): string {
+    return value.toFixed(decimals);
+  }
+
+  getPlanLockStatus(plan: InvestmentPlan): string {
+    if (plan.is_active) return 'Unlocked';
+    if (plan.is_purchasable_once && this.purchasedPlans[plan.id] > 0) {
+      return 'Purchased';
+    }
+    return 'Locked';
+  }
+
+  navigateToRecharge(): void { this.router.navigate(['/recharge']); }
+  navigateToHome(): void { this.router.navigate(['/home']); }
+  navigateToInvite(): void { this.router.navigate(['/invite']); }
+  navigateToAbout(): void { this.router.navigate(['/about']); }
+  navigateToSettings(): void { this.router.navigate(['/settings']); }
+  openCustomerService(): void { window.open('https://t.me/voltearning', '_blank'); }
+  navigateToInvest() {
+    this.router.navigate(['/invest']);
+  }
+  navigateToTeam() {
+    this.router.navigate(['/team']);
+  }
+  presalePlans: InvestmentPlan[] = [
+  {
+    id: 101, // Use new, unique IDs
+    title: 'Pre-sale Daily Plan A',
+    image_url: 'https://images.pexels.com/photos/2645317/pexels-photo-2645317.jpeg?auto=compress&cs=tinysrgb&w=1260',
+    is_active: false,
+    is_presale: true,
+    investment: 5000,
+    daily_income: 1500,
+    days: 30,
+    total: 45000,
+    plan_type: 'daily',
+    tier: 1,
+    is_purchasable_once: false
+  },
+  {
+    id: 102,
+    title: 'Pre-sale Daily Plan B',
+    image_url: 'https://images.pexels.com/photos/532192/pexels-photo-532192.jpeg?auto=compress&cs=tinysrgb&w=1260',
+    is_active: false,
+    is_presale: true,
+    investment: 10000,
+    daily_income: 2500,
+    days: 35,
+    total: 87500,
+    plan_type: 'daily',
+    tier: 2,
+    is_purchasable_once: false
+  },
+];
+
+}

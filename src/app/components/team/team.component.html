@@ -1,0 +1,143 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h2>My Team</h2>
+    <div class="header-icon">
+      <i class="fas fa-users"></i>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="status-message">
+    <i class="fas fa-spinner fa-spin loading-icon"></i>
+    <p>Loading..</p>
+  </div>
+  <div *ngIf="errorMessage" class="status-message error-message">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage">
+
+    <div class="referrals-section">
+      <div class="referrals-card">
+        <div class="referrals-icon">
+          <i class="fas fa-user-friends"></i>
+        </div>
+        <div class="referrals-info">
+          <div class="referrals-count">{{ totalReferrals }}</div>
+          <div class="referrals-label">Total Referrals</div>
+        </div>
+        <div class="referrals-earnings">
+          <div class="earnings-amount">₹{{ totalEarnings | number:'1.2-2' }}</div>
+          <div class="earnings-label">Total Earned</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="commission-section">
+  <div class="commission-card" style="position: relative;">
+
+    <!-- Invitation Button in Top-Right -->
+    <button class="invite-button-top" (click)="redirectToInvite()">Referral Link</button>
+
+    <div class="commission-header">
+      <div class="commission-icon">
+        <i class="fas fa-percentage"></i>
+      </div>
+      <div class="commission-text">
+        <h4>Level 1 : 10%</h4>
+        <h4>Level 2 : 3%</h4>
+        <h4>Level 3 : 1%</h4>
+        <p>Earn commission based on your referrals.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="team-members-section">
+      <div class="section-title">
+        <i class="fas fa-list"></i>
+        <h3>Team Members ({{ totalReferrals }})</h3>
+      </div>
+      <div class="members-list-card">
+        <div class="members-header">
+          <!-- <div class="header-item">Name</div> -->
+          <div class="header-item">Phone</div>
+          <div class="header-item">Status</div>
+        </div>
+        <div class="members-list">
+          <div class="member-row" *ngFor="let member of teamMembers">
+            <!-- <div class="member-name">
+              <i class="fas fa-user-circle"></i>
+              {{ member.name }}
+            </div> -->
+            <div class="member-phone">{{ member.phone }}</div>
+            <div class="member-status" [class]="member.status">
+              <i class="fas fa-circle"></i>
+              {{ member.status | titlecase }}
+            </div>
+          </div>
+          <div *ngIf="teamMembers.length === 0" class="no-members">
+            <p>No Team. Share max.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="benefits-section">
+      <div class="section-title">
+        <i class="fas fa-gift"></i>
+        <h3>Referral Benefits</h3>
+      </div>
+      <div class="benefits-card">
+        <div class="benefit-rule" *ngFor="let benefit of referralBenefits; let i = index">
+          <div class="rule-number">{{ i + 1 }}</div>
+          <div class="rule-content">
+            <i class="fas fa-check-circle"></i>
+            <span class="rule-text">{{ benefit }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item " (click)="navigateToHome()">
+    <div class="nav-icon">
+      <i class="fas fa-home"></i>
+    </div>
+    <span>Home</span>
+  </div>
+
+  <div class="nav-item" (click)="navigateToInvest()">
+    <div class="nav-icon">
+      <i class="fas fa-chart-line"></i>
+    </div>
+    <span>Invest</span>
+  </div>
+
+  <div class="customer-service-btn" (click)="openCustomerService()">
+    <div class="service-icon">
+      <i class="fas fa-headset"></i>
+    </div>
+  </div>
+
+  <div class="nav-item active" (click)="navigateToTeam()">
+    <div class="nav-icon">
+      <i class="fas fa-user-friends"></i>
+    </div>
+    <span>Team</span>
+  </div>
+
+  <div class="nav-item" (click)="navigateToSettings()">
+    <div class="nav-icon">
+      <i class="fas fa-cog"></i>
+    </div>
+    <span>Settings</span>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<div class="page-container">
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h2>Settings</h2>
+    <div class="header-icon">
+      <i class="fas fa-cog"></i>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="profile-info">
+          <h3>{{ getHiddenPhone() }}</h3>
+        </div>
+      </div>
+      <div class="balance-section">
+        <div class="balance-item">
+          <div class="balance-label">Balance</div>
+          <div class="balance-value">₹{{ balance }}</div>
+        </div>
+        <div class="balance-item">
+          <div class="balance-label">Withdrawable</div>
+          <div class="balance-value">₹{{ withdrawableIncome }}</div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="action-btn recharge" (click)="navigateToRecharge()">
+          <i class="fas fa-credit-card"></i> Recharge
+        </button>
+        <button class="action-btn withdrawal" (click)="navigateToWithdrawal()">
+          <i class="fas fa-money-bill-wave"></i> Withdrawal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-concierge-bell"></i>
+      <h3>Services</h3>
+    </div>
+    <div class="services-card">
+      <div class="service-item" (click)="navigateToOrders()">
+        <div class="service-icon"><i class="fas fa-clipboard-list"></i></div>
+        <span>Orders</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="service-item" (click)="navigateToDepositRecord()">
+        <div class="service-icon"><i class="fas fa-plus-circle"></i></div>
+        <span>Deposit Record</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="service-item" (click)="navigateToWithdrawalRecord()">
+        <div class="service-icon"><i class="fas fa-minus-circle"></i></div>
+        <span>Withdrawal Record</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="service-item" (click)="navigateToBankCard()">
+        <div class="service-icon"><i class="fas fa-credit-card"></i></div>
+        <span>Bank Card</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="service-item" (click)="navigateToHelpCentre()">
+        <div class="service-icon"><i class="fas fa-question-circle"></i></div>
+        <span>Help Centre</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-user-cog"></i>
+      <h3>Account</h3>
+    </div>
+    <div class="account-card">
+      <div class="account-item" (click)="navigateToInfo()">
+        <div class="account-icon"><i class="fas fa-info-circle"></i></div>
+        <span>Info</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="account-item" (click)="navigateToTradePassword()">
+        <div class="account-icon"><i class="fas fa-key"></i></div>
+        <span>Trade Password</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="account-item" (click)="navigateToPassword()">
+        <div class="account-icon"><i class="fas fa-lock"></i></div>
+        <span>Password</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <button class="logout-btn" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item" (click)="navigateToHome()">
+    <div class="nav-icon"><i class="fas fa-home"></i></div>
+    <span>Home</span>
+  </div>
+  <div class="nav-item" (click)="navigateToInvest()">
+    <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+    <span>Invest</span>
+  </div>
+  <div class="customer-service-btn" (click)="openCustomerService()">
+    <div class="service-icon231"><i class="fas fa-headset"></i></div>
+  </div>
+  <div class="nav-item" (click)="navigateToTeam()">
+    <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+    <span>Team</span>
+  </div>
+  <div class="nav-item active" (click)="navigateToSettings()">
+    <div class="nav-icon"><i class="fas fa-cog"></i></div>
+    <span>Settings</span>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+.status-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center;
+}
+
+.loading-icon {
+  font-size: 48px;
+  color: #ff6b9d ;
+}

@@ -1,0 +1,608 @@
+/* Gift Container - Mobile First */
+.gift-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: #f5f5f5;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Header Section */
+.gift-header {
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  padding: 60px 20px 40px;
+  border-radius: 0 0 30px 30px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.back-btn, .telegram-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.back-btn:active, .telegram-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.95);
+}
+
+.telegram-btn {
+  background: rgba(29, 161, 242, 0.9);
+}
+
+.telegram-btn:active {
+  background: rgba(29, 161, 242, 1);
+}
+
+.header-text {
+  flex: 1;
+  text-align: center;
+}
+
+.header-text h1 {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Gift Content */
+.gift-content {
+  padding: 24px 20px 40px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Gift Card */
+.gift-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.gift-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.02), rgba(196, 69, 105, 0.02));
+  opacity: 1;
+}
+
+/* Gift Icon */
+.gift-icon-container {
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.gift-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+  animation: giftPulse 2s ease-in-out infinite;
+  position: relative;
+}
+
+.gift-icon::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: giftRing 2s ease-in-out infinite;
+}
+
+.gift-icon i {
+  font-size: 2.2rem;
+  color: white;
+  z-index: 1;
+  position: relative;
+}
+
+@keyframes giftPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes giftRing {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.2); opacity: 0.1; }
+}
+
+/* Gift Text */
+.gift-text {
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.gift-text h2 {
+  color: #2d3748;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+
+.gift-text p {
+  color: #718096;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Message Container */
+.message-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.success-message {
+  background: rgba(72, 187, 120, 0.1);
+  color: #38a169;
+  border: 1px solid rgba(72, 187, 120, 0.2);
+}
+
+.error-message {
+  background: rgba(245, 101, 101, 0.1);
+  color: #e53e3e;
+  border: 1px solid rgba(245, 101, 101, 0.2);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 18px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 1px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #ff6b9d;
+  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+  background: white;
+}
+
+.input-wrapper input:disabled {
+  background: #f7fafc;
+  cursor: not-allowed;
+}
+
+.input-wrapper input::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.input-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ff6b9d, #c44569);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  border-radius: 0 0 16px 16px;
+}
+
+.form-group.focused .input-border {
+  transform: scaleX(1);
+}
+
+/* Redeem Button */
+.redeem-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 18px 24px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.3);
+  min-height: 56px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 2;
+}
+
+.redeem-btn:not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+}
+
+.redeem-btn:disabled {
+  background: #cbd5e0;
+  color: #a0aec0;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.redeem-btn:not(:disabled):hover .btn-shine {
+  left: 100%;
+}
+
+/* Info Section */
+.info-section {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.info-header i {
+  color: #ff6b9d;
+  font-size: 1.2rem;
+}
+
+.info-header h3 {
+  color: #2d3748;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.info-section p {
+  color: #718096;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Mobile Optimizations */
+@media (max-height: 700px) {
+  .gift-header {
+    padding: 50px 20px 30px;
+  }
+  
+  .header-text h1 {
+    font-size: 1.6rem;
+  }
+  
+  .gift-content {
+    padding: 20px 20px 30px;
+  }
+  
+  .gift-card {
+    padding: 28px 20px;
+    margin-bottom: 16px;
+  }
+  
+  .gift-icon {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .gift-icon i {
+    font-size: 2rem;
+  }
+  
+  .gift-text {
+    margin-bottom: 20px;
+  }
+  
+  .gift-text h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-wrapper input {
+    padding: 16px 18px;
+    font-size: 1rem;
+  }
+  
+  .redeem-btn {
+    padding: 16px 20px;
+    font-size: 1.05rem;
+    min-height: 52px;
+  }
+}
+
+@media (max-height: 600px) {
+  .gift-header {
+    padding: 45px 20px 25px;
+  }
+  
+  .header-text h1 {
+    font-size: 1.5rem;
+  }
+  
+  .gift-content {
+    padding: 16px 20px 24px;
+  }
+  
+  .gift-card {
+    padding: 24px 18px;
+    margin-bottom: 14px;
+  }
+  
+  .gift-icon-container {
+    margin-bottom: 20px;
+  }
+  
+  .gift-icon {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .gift-icon i {
+    font-size: 1.8rem;
+  }
+  
+  .gift-text {
+    margin-bottom: 18px;
+  }
+  
+  .gift-text h2 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .gift-text p {
+    font-size: 0.9rem;
+  }
+  
+  .form-group {
+    margin-bottom: 18px;
+  }
+  
+  .input-wrapper input {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .redeem-btn {
+    padding: 14px 18px;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+  
+  .info-section {
+    padding: 16px;
+  }
+  
+  .info-header h3 {
+    font-size: 1rem;
+  }
+  
+  .info-section p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape Mode */
+@media (orientation: landscape) and (max-height: 500px) {
+  .gift-container {
+    overflow-y: auto;
+  }
+  
+  .gift-header {
+    padding: 40px 20px 20px;
+  }
+  
+  .header-text h1 {
+    font-size: 1.4rem;
+  }
+  
+  .gift-content {
+    padding: 12px 20px 20px;
+  }
+  
+  .gift-card {
+    padding: 20px 16px;
+    margin-bottom: 12px;
+  }
+  
+  .gift-icon-container {
+    margin-bottom: 16px;
+  }
+  
+  .gift-icon {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .gift-icon i {
+    font-size: 1.6rem;
+  }
+  
+  .gift-text {
+    margin-bottom: 16px;
+  }
+  
+  .gift-text h2 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+  
+  .gift-text p {
+    font-size: 0.85rem;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .input-wrapper input {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .redeem-btn {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    min-height: 44px;
+  }
+  
+  .info-section {
+    padding: 14px;
+  }
+  
+  .info-header h3 {
+    font-size: 0.95rem;
+  }
+  
+  .info-section p {
+    font-size: 0.85rem;
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .gift-card, .info-section {
+    border-width: 0.5px;
+  }
+}
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus Visible */
+.back-btn:focus-visible,
+.telegram-btn:focus-visible,
+.redeem-btn:focus-visible,
+.input-wrapper input:focus-visible {
+  outline: 2px solid #ff6b9d;
+  outline-offset: 2px;
+}
+
+/* Prevent zoom and improve mobile experience */
+input, textarea, select {
+  font-size: 16px !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+/* Improve touch targets */
+button {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}

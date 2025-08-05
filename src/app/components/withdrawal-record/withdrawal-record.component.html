@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="header-text">
+      <h2>Withdrawal Record</h2>
+    </div>
+    <div class="header-icon">
+      <i class="fas fa-minus-circle"></i>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">All</button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'processing'" (click)="setFilter('processing')">Processing</button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'completed'" (click)="setFilter('completed')">Completed</button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'failed'" (click)="setFilter('failed')">Failed</button>
+    </div>
+  </div>
+
+  <div class="records-section">
+    <div *ngIf="isLoading" class="status-message">
+      <div class="spinner"></div>
+      <p>Loading records...</p>
+    </div>
+
+    <div *ngIf="!isLoading && errorMessage" class="status-message error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && filteredRecords.length === 0" class="no-records">
+      <i class="fas fa-inbox"></i>
+      <h3>No Records Found</h3>
+      <p>You don't have any withdrawal records yet.</p>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage" class="record-list">
+      <div *ngFor="let record of filteredRecords; let i = index" class="record-card">
+        <div class="record-header">
+          <div class="record-number">#{{ i + 1 }}</div>
+          <div class="record-info">
+            <h3 class="record-amount">₹{{ record.amount }}</h3>
+          </div>
+          <div class="record-status">
+            <span class="status-badge" [ngClass]="record.status">
+              {{ getStatusText(record.status) }}
+            </span>
+          </div>
+        </div>
+        <div class="record-details">
+          <div class="detail-item">
+            <span class="label">Transaction ID:</span>
+            <span class="value">{{ record.id }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Net Amount:</span>
+            <span class="value net-amount">₹{{ record.amount - record.fee }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Processing Fee:</span>
+            <span class="value">₹{{ record.fee }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Date:</span>
+            <span class="value">{{ record.created_at | date:'MMM d, y, h:mm a' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+<div class="page-container">
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>{{ rechargeMessage?.text || 'Loading...' }}</p>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h2>Recharge Wallet</h2>
+    <div class="header-icon">
+      <i class="fas fa-credit-card"></i>
+    </div>
+  </div>
+
+  <div class="balance-info">
+    <div class="balance-card">
+      <div class="balance-header">
+        <i class="fas fa-wallet"></i>
+        <span>Current Balance</span>
+      </div>
+      <div class="balance-amount">₹{{ currentBalance | number:'1.2-2' }}</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-bolt"></i>
+      <h3>Quick Recharge</h3>
+    </div>
+
+    <div class="recharge-card">
+      <div class="amount-grid">
+        <div
+          class="amount-btn"
+          *ngFor="let amount of quickAmounts"
+          [class.selected]="selectedAmount === amount"
+          (click)="selectAmount(amount)">
+          ₹{{amount}}
+        </div>
+      </div>
+
+      <div class="custom-amount-section">
+        <div class="input-wrapper">
+          <span class="currency">₹</span>
+          <input
+            type="number"
+            [(ngModel)]="customAmount"
+            (input)="onCustomAmountChange()"
+            placeholder="Enter custom amount (Min ₹500)"
+            class="amount-input">
+        </div>
+        <p class="recharge-amount-text">Recharge Amount</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-credit-card"></i>
+      <h3>Payment Channel</h3>
+    </div>
+    <div class="payment-channels">
+      <div
+        class="channel-card"
+        *ngFor="let channel of paymentChannels"
+        [class.selected]="selectedChannel === channel.id"
+        (click)="selectPaymentChannel(channel.id)">
+        <div class="channel-icon">
+          <i [class]="channel.icon"></i>
+        </div>
+        <div class="channel-name">{{channel.name}}</div>
+        <div class="channel-radio">
+          <i class="fas fa-check-circle" *ngIf="selectedChannel === channel.id"></i>
+          <i class="far fa-circle" *ngIf="selectedChannel !== channel.id"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="rechargeMessage" class="recharge-message" [ngClass]="rechargeMessage.type">
+    {{ rechargeMessage.text }}
+  </div>
+
+  <div class="proceed-section">
+    <button
+      class="proceed-btn"
+      [disabled]="!selectedAmount || selectedAmount < 500 || !selectedChannel || isLoading"
+      (click)="proceedToPayment()">
+      <i class="fas fa-lock"></i>
+      Proceed to Pay ₹{{selectedAmount || 0 | number:'1.2-2'}}
+    </button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <i class="fas fa-info-circle"></i>
+      <h3>Recharge Rules</h3>
+    </div>
+    <div class="rules-card">
+      <div class="rule-item" *ngFor="let rule of rechargeRules; let i = index">
+        <div class="rule-number">{{i + 1}}</div>
+        <div class="rule-text">{{rule}}</div>
+      </div>
+    </div>
+  </div>
+</div>
