@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1754720974234,
+  "timestamp": 1754722009166,
   "index": "/index.csr.html",
   "assetGroups": [
     {
@@ -47,7 +47,22 @@
       "patterns": []
     }
   ],
-  "dataGroups": [],
+  "dataGroups": [
+    {
+      "name": "api-calls",
+      "patterns": [
+        "https:\\/\\/volt-app-4s13\\.onrender\\.com\\/api\\/.*"
+      ],
+      "strategy": "freshness",
+      "maxSize": 0,
+      "maxAge": 0,
+      "timeoutMs": 5000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
   "hashTable": {
     "/assets/fonts/KOMIKAX_.ttf": "350755d1fec575f076f60c39b0f3e5fcb151d929",
     "/assets/images/qr.jpg": "7fa312d6fbed0f635a0c4b16db19caae6cde1b22",
