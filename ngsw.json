@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1755343969185,
+  "timestamp": 1755345724047,
   "index": "/index.csr.html",
   "assetGroups": [
     {
@@ -16,7 +16,7 @@
         "/favicon.ico",
         "/index.csr.html",
         "/index.html",
-        "/main-YXTFX3CC.js",
+        "/main-6K4AXWF6.js",
         "/manifest.webmanifest",
         "/polyfills-B6TNHZQ6.js",
         "/styles-L4BHWXFD.css"
@@ -78,9 +78,9 @@
     "/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
     "/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
     "/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
-    "/index.csr.html": "1f4250f370704ba65725a6e24ef6698e321c5e54",
-    "/index.html": "08da3e97cc1f221474b7ed3e02ff553fa3f57af1",
-    "/main-YXTFX3CC.js": "8b11d75206589f3b07796db71579769542d9b562",
+    "/index.csr.html": "3c833557233dbc961e387464ed2d677b23672be4",
+    "/index.html": "f45c317b75a3fef3ad5f194ff98b6d8aa0e1bd7d",
+    "/main-6K4AXWF6.js": "de12903703d55401368d1af0170f9358c599ff9c",
     "/manifest.webmanifest": "e40e0fa9451a36acb71459e5d5107449fd7c67bd",
     "/media/Eina04-Bold-EKNFZ6PZ.ttf": "1e6a6791163d643e33d3a100c2ca2e7d18e42497",
     "/polyfills-B6TNHZQ6.js": "bf76ac291d7f51c1139b7edcf86b359a30c08c64",
