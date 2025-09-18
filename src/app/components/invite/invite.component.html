@@ -1,135 +1,83 @@
-<div class="page-container">
-  <div class="page-header">
-    <button class="back-btn" (click)="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <h2>Invite Friends</h2>
-    <div class="header-icon">
-      <i class="fas fa-user-friends"></i>
+<div class="tesla-home-container">
+  <!-- Loading Spinner -->
+  <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+
+  <!-- Background Elements -->
+  <div class="background-grid"></div>
+  <div class="background-glow"></div>
+
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-user-friends"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Invite Friends</h2>
+          <p class="user-phone">Share and earn rewards</p>
+        </div>
+      </div>
+      <div class="tesla-brand">
+        <div class="tesla-logo">
+          <svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 
-   <div class="commission-section">
-    <div class="commission-card">
-      <div class="commission-header">
-        <div class="commission-icon">
-          <i class="fas fa-percentage"></i>
-        </div>
-        <div class="commission-text">
-          <h4>Level 1 : 10% </h4>
-          <h4>Level 2 : 3% </h4>
-          <h4>Level 3 : 1% </h4>
-          <p>Earn commission based on your referrals</p>
-        </div>
-      </div>
+  <!-- Invite Section -->
+  <div class="invite-section">
+    <div *ngIf="errorMessage" class="invite-message-new error">
+      {{ errorMessage }}
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-share-alt"></i>
-      <h3>Share Your Link</h3>
-    </div>
-    <div class="invitation-card">
-      <div class="invitation-text">
-        <h4>Invitation Text</h4>
-        <p>Join Volt and start earning daily! Use my referral code: <strong>{{referralCode}}</strong></p>
-      </div>
-
-      <div *ngIf="isLoading" class="loading-spinner">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>Generating link..</p>
-      </div>
-      <div class="invitation-link">
-        <div class="link-display">
-          <span>{{invitationLink}}</span>
-        </div>
-      </div>
-      <div class="invitation-actions">
-        <button class="action-btn copy" (click)="copyInvitationLink()">
+    <div class="invite-card-new">
+      <div class="section-title-new">Your Invitation Link</div>
+      <div class="link-display-new">{{ invitationLink }}</div>
+      <div class="invite-actions-new">
+        <button class="invite-btn-new primary" (click)="copyInvitationLink()">
           <i class="fas fa-copy"></i>
-          Copy Invitation Link
+          <span>Copy Link</span>
         </button>
-        <button class="action-btn share" (click)="shareInvitationLink()">
-          <i class="fas fa-share"></i>
-          Share Link
+        <button class="invite-btn-new secondary" (click)="shareInvitationLink()">
+          <i class="fas fa-share-alt"></i>
+          <span>Share</span>
         </button>
       </div>
     </div>
+
+    <div class="commission-card-new">
+        <div class="commission-level">
+            <span class="level-label">Level 1</span>
+            <span class="level-value">10%</span>
+        </div>
+        <div class="commission-level">
+            <span class="level-label">Level 2</span>
+            <span class="level-value">3%</span>
+        </div>
+        <div class="commission-level">
+            <span class="level-label">Level 3</span>
+            <span class="level-value">1%</span>
+        </div>
+    </div>
+
+    <button class="team-nav-btn-new" (click)="navigateToTeam()">
+      <i class="fas fa-users"></i>
+      <span>My Team</span>
+      <i class="fas fa-chevron-right"></i>
+    </button>
   </div>
 
-  <div class="section">
-    <div class="team-nav-card" (click)="navigateToTeam()">
-      <div class="team-nav-content">
-        <div class="team-nav-icon">
-          <i class="fas fa-users"></i>
-        </div>
-        <div class="team-nav-info">
-          <h4>My Team</h4>
-          <p>View your team and their earnings</p>
-        </div>
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="goBack()">
+      <div class="nav-icon">
+        <i class="fas fa-arrow-left"></i>
       </div>
-      <div class="team-nav-arrow">
-        <i class="fas fa-chevron-right"></i>
-      </div>
-    </div>
-  </div>
-
-  <div class="referral-section">
-    <div class="referral-card">
-      <div class="referral-header">
-        <div class="referral-title">
-          <div class="referral-icon">
-            <i class="fas fa-gift"></i>
-          </div>
-          <div class="referral-text">
-            <h3>Referral Bonus</h3>
-            <p>Invite and earn ₹10 on each sign-up!</p>
-          </div>
-        </div>
-
-      </div>
-      <div class="referral-stats">
-        <div class="stat-item">
-          <div class="stat-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="stat-container">
-            <div class="stat-details">
-              <span class="stat-value">{{totalReferrals}}</span>
-              <span class="stat-label">Total Invites</span>
-            </div>
-
-            <button class="claim-btn" [disabled]="!canClaimBonus" (click)="claimReferralBonus()">
-              <i class="fas fa-hand-holding-usd"></i>
-              {{canClaimBonus ? 'Claim ₹' + pendingBonus : 'No Bonus'}}
-            </button>
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-icon earnings">
-            <i class="fas fa-coins"></i>
-          </div>
-          <div class="stat-details">
-            <span class="stat-value">₹{{referralEarnings}}</span>
-            <span class="stat-label">Bonus Earned</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-info-circle"></i>
-      <h3>Invitation Rules</h3>
-    </div>
-    <div class="rules-card">
-      <div class="rule-item" *ngFor="let rule of invitationRules; let i = index">
-        <div class="rule-number">{{i + 1}}</div>
-        <div class="rule-text">{{rule}}</div>
-      </div>
+      <span class="nav-label">Back</span>
     </div>
   </div>
 </div>
-

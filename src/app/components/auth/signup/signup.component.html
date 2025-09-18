@@ -1,82 +1,164 @@
-<app-loading [visible]="isLoading"></app-loading>
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-header">
-      <div class="app-icon">
-        <i class="fas fa-bolt"></i>
+<div class="tesla-auth-container">
+<!-- Background Elements -->
+<div class="background-grid"></div>
+<div class="background-glow"></div>
+
+<!-- Main Content -->
+
+<div class="auth-wrapper">
+<!-- Tesla Header -->
+<div class="tesla-header">
+<div class="tesla-logo">
+<svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+</svg>
+</div>
+<!-- <h1 class="auth-title">Create Account</h1> -->
+<p class="auth-subtitle">Join the Tesla community</p>
+</div>
+
+<!-- Form Container -->
+<div class="form-container">
+  <!-- Status Message -->
+  <div class="status-message" *ngIf="message" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
+    <div class="status-icon">
+      <svg *ngIf="isSuccess" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <svg *ngIf="!isSuccess" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
+    </div>
+    <!-- <span>{{ message }}</span> -->
+  </div>
+
+  <!-- Registration Form -->
+  <form class="tesla-form" (ngSubmit)="signup()">
+    <!-- Full Name Field -->
+    <div class="input-group">
+      <label class="input-label">Full Name</label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          class="tesla-input"
+          [(ngModel)]="nickname"
+          name="nickname"
+          placeholder="Enter your full name"
+          required
+          [disabled]="isLoading"
+          autocomplete="name">
+        <div class="input-border"></div>
       </div>
-      <img src="assets/images/volt-logo.png" alt="Volt Logo" class="logo-img" />
-      <p>Create account and start your journey</p>
     </div>
 
-    <div class="auth-form">
-      <div *ngIf="message" [ngClass]="{'text-green-500': isSuccess, 'text-red-500': !isSuccess}"
-        class="mb-4 text-center font-medium">
-        {{ message }}
+    <!-- Phone Number Field -->
+    <div class="input-group">
+      <label class="input-label">Phone Number</label>
+      <div class="input-wrapper">
+        <input
+          type="tel"
+          class="tesla-input"
+          [(ngModel)]="phoneNumber"
+          name="phoneNumber"
+          placeholder="10-digit mobile number"
+          maxlength="10"
+          required
+          [disabled]="isLoading"
+          autocomplete="tel">
+        <div class="input-border"></div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label><i class="fas fa-user"></i> Nickname</label>
-        <div class="input-wrapper">
-          <input type="text" [(ngModel)]="nickname" placeholder="Enter your nickname" required [disabled]="isLoading">
-          <i class="fas fa-user-circle input-icon"></i>
-        </div>
+    <!-- Password Field -->
+    <div class="input-group">
+      <label class="input-label">Password</label>
+      <div class="input-wrapper password-field">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          class="tesla-input"
+          [(ngModel)]="password_signup"
+          name="password_signup"
+          placeholder="Minimum 6 characters"
+          required
+          [disabled]="isLoading"
+          autocomplete="new-password">
+        <button
+          type="button"
+          class="password-toggle"
+          (click)="togglePasswordVisibility()"
+          [disabled]="isLoading">
+          <svg *ngIf="!showPassword" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+          </svg>
+          <svg *ngIf="showPassword" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
+            <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
+          </svg>
+        </button>
+        <div class="input-border"></div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label><i class="fas fa-phone"></i> Mobile Number</label>
-        <div class="input-wrapper">
-          <input type="tel" [(ngModel)]="phoneNumber" placeholder="Enter 10-digit mobile number" maxlength="10" required
-            [disabled]="isLoading">
-          <i class="fas fa-mobile-alt input-icon"></i>
-        </div>
+    <!-- Confirm Password Field -->
+    <div class="input-group">
+      <label class="input-label">Confirm Password</label>
+      <div class="input-wrapper">
+        <input
+          type="password"
+          class="tesla-input"
+          [(ngModel)]="confirmPassword_signup"
+          name="confirmPassword_signup"
+          placeholder="Confirm your password"
+          required
+          [disabled]="isLoading"
+          autocomplete="new-password">
+        <div class="input-border"></div>
       </div>
+    </div>
 
-      <div class="form-group">
-  <label><i class="fas fa-lock"></i> Create Password</label>
-  <div class="input-wrapper">
-    <input 
-      [type]="showPassword ? 'text' : 'password'" 
-      [(ngModel)]="password_signup"
-      placeholder="Minimum 6 characters" 
-      required 
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="tesla-submit-btn"
+      [disabled]="isLoading || !isFormValid()">
+      <span class="btn-content" *ngIf="!isLoading">
+        Create Account
+      </span>
+      <span class="btn-content loading" *ngIf="isLoading">
+        <app-loading></app-loading>
+        <!-- Creating Account... -->
+      </span>
+    </button>
+
+    <!-- Divider -->
+    <div class="form-divider">
+      <span>Already have an account?</span>
+    </div>
+
+    <!-- Sign In Link -->
+    <button
+      type="button"
+      class="tesla-link-btn"
+      (click)="goToSignin()"
       [disabled]="isLoading">
-      
-    <i 
-      [ngClass]="['fas', showPassword ? 'fa-eye' : 'fa-eye-slash', 'input-icon']"
-      (click)="togglePasswordVisibility()" 
-      style="cursor: pointer;">
-    </i>
+      Sign In
+    </button>
+  </form>
+
+  <div class="overlay" *ngIf="message">
+  <div class="popup" [ngClass]="{ 'success': isSuccess, 'error': !isSuccess }">
+    <span class="popup-text">{{ message }}</span>
+    <button class="close-btn" (click)="closePopup()">×</button>
   </div>
 </div>
-
-
-      <div class="form-group">
-        <label><i class="fas fa-lock"></i> Confirm Password</label>
-        <div class="input-wrapper">
-          <input type="password" [(ngModel)]="confirmPassword_signup" placeholder="Confirm your password" required
-            [disabled]="isLoading">
-          <i class="fas fa-check-circle input-icon"></i>
-        </div>
-      </div>
-
-      <button class="auth-btn primary" (click)="signup()"
-        [disabled]="isLoading || !nickname.trim() || phoneNumber.length !== 10 || password_signup.length < 6 || password_signup !== confirmPassword_signup">
-        <span *ngIf="!isLoading">
-          <i class="fas fa-user-plus"></i> Create Account
-        </span>
-        <span *ngIf="isLoading">
-          <i class="fas fa-bolt fa-spin"></i> Creating... </span>
-      </button>
-
-      <div class="divider">
-        <span>or</span>
-      </div>
-
-      <button class="auth-btn secondary" (click)="goToSignin()" [disabled]="isLoading">
-        <i class="fas fa-sign-in-alt"></i>
-        Already have? Sign In
-      </button>
-    </div>
-  </div>
 </div>
+
+<!-- Footer -->
+<div class="auth-footer">
+  <p>By creating an account, you agree to Tesla's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+</div>
+
+</div>
+</div>
+

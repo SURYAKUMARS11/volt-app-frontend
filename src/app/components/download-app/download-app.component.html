@@ -1,0 +1,117 @@
+<div class="tesla-home-container">
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-download"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Download App</h2>
+          <p class="user-phone">Get the full Volt experience</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="download-section-new">
+    <!-- App Info Card -->
+    <div class="download-card-new app-info-card">
+      <div class="app-logo-new"><i class="fas fa-bolt"></i></div>
+      <h3>Volt Pro</h3>
+      <p class="version-new">Version 1.0.0</p>
+      <p class="tagline-new">Your trusted platform for daily earnings</p>
+    </div>
+
+    <!-- Download Buttons -->
+    <div class="download-card-new buttons-card">
+      <h3>Download Now</h3>
+      <div class="download-buttons-new">
+        <button class="download-btn-new android" (click)="downloadAndroidApp()">
+          <i class="fab fa-android"></i>
+          <span>Download for Android</span>
+        </button>
+        <button class="download-btn-new ios" (click)="downloadIOSApp()">
+          <i class="fab fa-apple"></i>
+          <span>Download for iOS</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- App Features -->
+    <div class="download-card-new features-card">
+      <h3>App Features</h3>
+      <div class="features-grid-new">
+        <div class="feature-item-new" *ngFor="let feature of appFeatures">
+          <i [class]="feature.icon"></i>
+          <span>{{feature.title}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why Download -->
+    <div class="download-card-new benefits-card">
+      <h3>Why Download the App?</h3>
+      <div class="benefits-list-new">
+        <div class="benefit-item-new">
+          <i class="fas fa-rocket"></i>
+          <span>Better Performance</span>
+        </div>
+        <div class="benefit-item-new">
+          <i class="fas fa-bell"></i>
+          <span>Instant Notifications</span>
+        </div>
+        <div class="benefit-item-new">
+          <i class="fas fa-fingerprint"></i>
+          <span>Enhanced Security</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Requirements -->
+    <div class="download-card-new requirements-card">
+      <h3>System Requirements</h3>
+      <div class="requirements-grid-new">
+        <div class="requirement-item-new">
+          <h4><i class="fab fa-android"></i> Android</h4>
+          <ul>
+            <li>Android 6.0+</li>
+            <li>2GB RAM</li>
+            <li>50MB Storage</li>
+          </ul>
+        </div>
+        <div class="requirement-item-new">
+          <h4><i class="fab fa-apple"></i> iOS</h4>
+          <ul>
+            <li>iOS 12.0+</li>
+            <li>iPhone 6s+</li>
+            <li>50MB Storage</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      <span class="nav-label">Invest</span>
+    </div>
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+      <span class="nav-label">Team</span>
+    </div>
+    <div class="nav-item active" (click)="navigateToSettings()">
+      <div class="nav-icon"><i class="fas fa-cog"></i></div>
+      <span class="nav-label">Settings</span>
+    </div>
+  </div>
+</div>

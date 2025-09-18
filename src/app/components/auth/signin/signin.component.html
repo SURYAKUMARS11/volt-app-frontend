@@ -1,59 +1,146 @@
-<app-loading [visible]="isLoading"></app-loading>
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-header">
-      <div class="app-icon">
-        <i class="fas fa-bolt"></i>
+<div class="tesla-auth-container">
+  <!-- Background Elements -->
+  <div class="background-grid"></div>
+  <div class="background-glow"></div>
+
+  <!-- Loading Component -->
+  <app-loading [visible]="isLoading"></app-loading>
+
+  <!-- Main Content -->
+  <div class="auth-wrapper">
+    <!-- Tesla Header -->
+    <div class="tesla-header">
+      <div class="tesla-logo">
+        <svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+        </svg>
       </div>
-      <img src="assets/images/volt-logo.png" alt="Volt Logo" class="logo-img" />
-      <p>Sign in to continue your journey</p>
+      <!-- <h1 class="auth-title">Welcome Back</h1> -->
+      <p class="auth-subtitle">Sign in to your Tesla account</p>
     </div>
 
-    <div class="auth-form">
-      <div *ngIf="message" [ngClass]="{'text-green-500': isSuccess, 'text-red-500': !isSuccess}"
-        class="mb-4 text-center font-medium">
-        {{ message }}
-      </div>
-
-      <div class="form-group">
-        <label><i class="fas fa-phone"></i> Mobile Number</label>
-        <div class="input-wrapper">
-          <input type="tel" [(ngModel)]="loginPhoneNumber" placeholder="Enter your mobile number" maxlength="10"
-            required [disabled]="isLoading">
-          <i class="fas fa-mobile-alt input-icon"></i>
+    <!-- Form Container -->
+    <div class="form-container">
+      <!-- Status Message -->
+      <div class="status-message" *ngIf="message" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
+        <div class="status-icon">
+          <svg *ngIf="isSuccess" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <svg *ngIf="!isSuccess" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
         </div>
+        <!-- <span>{{ message }}</span> -->
       </div>
 
-      <div class="form-group">
-        <label><i class="fas fa-lock"></i> Password</label>
-        <div class="input-wrapper">
-          <input [type]="showLoginPassword ? 'text' : 'password'" [(ngModel)]="loginPassword"
-            placeholder="Enter your password" required [disabled]="isLoading">
-
-          <i [ngClass]="['fas', showLoginPassword ? 'fa-eye' : 'fa-eye-slash', 'input-icon']"
-            (click)="toggleLoginPasswordVisibility()" style="cursor: pointer;">
-          </i>
+      <!-- Sign In Form -->
+      <form class="tesla-form" (ngSubmit)="signIn()">
+        <!-- Mobile Number Field -->
+        <div class="input-group">
+          <label class="input-label">
+            <svg class="label-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+            </svg>
+            Mobile Number
+          </label>
+          <div class="input-wrapper">
+            <div class="input-prefix">+91</div>
+            <input
+              type="tel"
+              class="tesla-input"
+              [(ngModel)]="loginPhoneNumber"
+              name="loginPhoneNumber"
+              placeholder="Enter 10-digit mobile number"
+              maxlength="10"
+              required
+              [disabled]="isLoading"
+              autocomplete="tel">
+            <div class="input-border"></div>
+          </div>
         </div>
-      </div>
 
+        <!-- Password Field -->
+        <div class="input-group">
+          <label class="input-label">
+            <svg class="label-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+            </svg>
+            Password
+          </label>
+          <div class="input-wrapper password-field">
+            <input
+              [type]="showLoginPassword ? 'text' : 'password'"
+              class="tesla-input"
+              [(ngModel)]="loginPassword"
+              name="loginPassword"
+              placeholder="Enter your password"
+              required
+              [disabled]="isLoading"
+              autocomplete="current-password">
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="toggleLoginPasswordVisibility()"
+              [disabled]="isLoading">
+              <svg *ngIf="!showLoginPassword" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+              </svg>
+              <svg *ngIf="showLoginPassword" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
+                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
+              </svg>
+            </button>
+            <div class="input-border"></div>
+          </div>
+        </div>
 
-      <button class="auth-btn primary" (click)="signIn()"
-        [disabled]="isLoading || loginPhoneNumber.length !== 10 || !loginPassword">
-        <span *ngIf="!isLoading">
-          <i class="fas fa-sign-in-alt"></i> Sign In
-        </span>
-        <span *ngIf="isLoading">
-          <i class="fas fa-bolt fa-spin"></i> Signing In... </span>
-      </button>
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="tesla-submit-btn"
+          [disabled]="isLoading || loginPhoneNumber.length !== 10 || !loginPassword">
+          <span class="btn-content" *ngIf="!isLoading">
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            Sign In
+          </span>
+          <span class="btn-content loading" *ngIf="isLoading">
+            <div class="loading-spinner"></div>
 
-      <div class="divider">
-        <span>or</span>
-      </div>
+          </span>
+        </button>
 
-      <button class="auth-btn secondary" (click)="goToSignup()" [disabled]="isLoading">
-        <i class="fas fa-user-plus"></i>
-        No account? Sign Up
-      </button>
+        <!-- Divider -->
+        <div class="form-divider">
+          <span>Don't have an account?</span>
+        </div>
+
+        <!-- Sign Up Link -->
+        <button
+          type="button"
+          class="tesla-link-btn"
+          (click)="goToSignup()"
+          [disabled]="isLoading">
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/>
+          </svg>
+          Create Account
+        </button>
+      </form>
+      <div class="overlay" *ngIf="message">
+  <div class="popup" [ngClass]="{ 'success': isSuccess, 'error': !isSuccess }">
+    <span class="popup-text">{{ message }}</span>
+    <button class="close-btn" (click)="closePopup()">×</button>
+  </div>
+</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="auth-footer">
+      <p>By signing in, you agree to Tesla's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
     </div>
   </div>
 </div>

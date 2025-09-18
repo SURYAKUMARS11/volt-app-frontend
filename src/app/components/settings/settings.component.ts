@@ -28,6 +28,7 @@ export class SettingsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    window.scrollTo(0, 0);
     try {
       const user = await this.supabaseService.getUser();
 
@@ -102,7 +103,7 @@ export class SettingsComponent implements OnInit {
   }
 
   navigateToHelpCentre() {
-    alert('Help Centre coming soon!');
+    this.router.navigate(['/help-centre']);
   }
 
   navigateToInfo() {
@@ -116,6 +117,11 @@ export class SettingsComponent implements OnInit {
   navigateToPassword() {
     this.router.navigate(['/set-password']);
   }
+
+navigateToDownload() {
+  // your logic to route to download page
+  this.router.navigate(['/download-app']);
+}
 
   async logout() {
     const confirmed = confirm('Are you sure you want to logout?');
@@ -137,8 +143,9 @@ export class SettingsComponent implements OnInit {
   navigateToInvite(): void { this.router.navigate(['/invite']); }
   navigateToAbout(): void { this.router.navigate(['/about']); }
   navigateToSettings(): void { this.router.navigate(['/settings']); }
-  openCustomerService(): void { window.open('https://t.me/voltearning', '_blank'); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
     navigateToInvest() {
     this.router.navigate(['/invest']);
   }
+
 }

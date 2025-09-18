@@ -5,11 +5,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router'; // Import Router for navigation
 import { SupabaseService } from '../../supabase.service'; // Adjust path as needed
 import { environment } from '../../../environments/environment.development';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-set-trade-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, LoadingSpinnerComponent],
   templateUrl: './set-trade-password.component.html',
   styleUrls: ['./set-trade-password.component.css']
 })

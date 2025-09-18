@@ -1,446 +1,190 @@
-.page-container {
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Base Container */
+.tesla-home-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f093fb 0%, #f5f7fa 50%, #c3cfe2 100%);
-  padding-bottom: 100px;
-}
-
-.page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 25px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
-
-.back-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 10px;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
-}
-
-.page-header h2 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-.header-icon {
-  width: 45px;
-  height: 45px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
-
-/* Balance Info */
-.balance-info {
-  padding: 20px 20px 0px 20px;
-  margin-top: -10px;
-}
-
-.balance-card {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  border-radius: 10px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-}
-
-.balance-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  opacity: 0.9;
-}
-
-.balance-amount {
-  font-size: 1.4rem;
-  font-weight: 900;
-}
-
-.section {
-  padding: 25px 20px;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.section-title i {
-  font-size: 1.3rem;
-  color: #ff6b9d;
-}
-
-.section-title h3 {
-  color: #2d3748;
-  font-size: 1.2rem;
-  margin: 0;
-  font-weight: 700;
-}
-
-/* Recharge Card */
-.recharge-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 25px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.amount-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 25px;
-}
-
-.amount-btn {
-  padding: 12px 8px;
-  background: rgba(102, 126, 234, 0.1);
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #4a5568;
-}
-
-.amount-btn:hover {
-  border-color: #ff6b9d;
-  background: rgba(255, 107, 157, 0.1);
-  transform: translateY(-2px);
-}
-
-.amount-btn.selected {
-  border-color: #ff6b9d;
-  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-  color: white;
-  box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
-}
-
-.custom-amount-section {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 20px;
-}
-
-.input-wrapper {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   position: relative;
-  margin-bottom: 10px;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1e293b;
+  padding-bottom: 90px;
 }
 
-.currency {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #4a5568;
+/* Background Elements */
+.background-grid {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(220, 38, 38, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridMove 25s linear infinite;
+  z-index: 0;
 }
 
-.amount-input {
-  width: 100%;
-  padding: 15px 20px 15px 50px;
-  border: 2px solid #e2e8f0;
-  border-radius: 15px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
+.background-glow {
+  position: fixed; top: -30%; left: -30%;
+  width: 160%; height: 160%;
+  background: radial-gradient(circle at center, rgba(220, 38, 38, 0.05) 0%, transparent 60%);
+  animation: glowPulse 10s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(40px, 40px); } }
+@keyframes glowPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+
+/* Header */
+.tesla-header {
+  position: relative; z-index: 1;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(220, 38, 38, 0.1);
+  padding: 20px;
+  box-shadow: 0 2px 20px rgba(220, 38, 38, 0.08);
+}
+
+.header-content { display: flex; justify-content: space-between; align-items: center; max-width: 400px; margin: 0 auto; }
+.user-profile { display: flex; align-items: center; gap: 15px; }
+.profile-avatar { width: 50px; height: 50px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25); border: 3px solid rgba(255, 255, 255, 0.9); }
+.user-info { display: flex; flex-direction: column; }
+.user-name { color: #1e293b; font-size: 1.1rem; font-weight: 600; margin: 0; letter-spacing: -0.025em; }
+.user-phone { color: #64748b; font-size: 0.8rem; margin: 2px 0 0; font-weight: 400; }
+.tesla-brand { display: flex; align-items: center; }
+.tesla-logo { width: 80px; height: 16px; color: #dc2626; }
+.tesla-logo svg { width: 100%; height: 100%; }
+
+/* Balance Display */
+.balance-display {
+  position: relative; z-index: 1; text-align: center; padding: 25px 20px;
   background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  margin: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(220, 38, 38, 0.1);
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.08);
+}
+.balance-label { color: #64748b; font-size: 0.8rem; font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+.balance-value { color: #dc2626; font-size: 2rem; font-weight: 800; letter-spacing: -0.025em; }
+
+/* Recharge Section */
+.recharge-section {
+  position: relative; z-index: 1; padding: 0 20px 20px;
+  max-width: 400px; margin: 0 auto;
+  display: grid; gap: 20px;
 }
 
-.amount-input:focus {
-  outline: none;
-  border-color: #ff6b9d;
-  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
-  background: white;
-}
-
-.recharge-amount-text {
-  color: #718096;
-  font-size: 0.9rem;
-  margin: 0;
-  text-align: center;
-  font-weight: 500;
-}
-
-/* Payment Channels */
-.payment-channels {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.channel-card {
+.recharge-card-new {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-radius: 15px;
+  border: 1px solid rgba(220, 38, 38, 0.1);
+  border-radius: 16px;
   padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.08);
 }
 
-.channel-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+.section-title-new { color: #1e293b; font-size: 1rem; font-weight: 600; margin-bottom: 15px; }
+
+/* Amount Grid */
+.amount-grid-new {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px;
 }
 
-.channel-card.selected {
-  border-color: #ff6b9d;
-  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+.amount-btn-new {
+  padding: 12px 8px; background: rgba(241, 245, 249, 0.9);
+  border: 1px solid #e2e8f0; border-radius: 12px;
+  text-align: center; cursor: pointer; transition: all 0.3s ease;
+  font-weight: 600; font-size: 0.85rem; color: #334155;
 }
 
-.channel-icon {
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.3rem;
+.amount-btn-new:hover { border-color: rgba(220, 38, 38, 0.4); background: rgba(220, 38, 38, 0.1); }
+
+.amount-btn-new.selected {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white; border-color: #dc2626;
+  transform: scale(1.05); box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
 }
 
-.channel-name {
-  flex: 1;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #2d3748;
+/* Custom Amount Input */
+.custom-amount-wrapper { margin-top: 10px; }
+.custom-amount-input-new {
+  width: 100%; padding: 12px 15px;
+  border: 1px solid #e2e8f0; border-radius: 12px;
+  font-size: 0.9rem; font-weight: 500; color: #1e293b;
+  background: rgba(248, 250, 252, 0.9); transition: all 0.3s ease;
 }
 
-.channel-radio {
-  font-size: 1.3rem;
-  color: #ff6b9d;
+.custom-amount-input-new::placeholder { color: #94a3b8; }
+.custom-amount-input-new:focus {
+  outline: none; border-color: #dc2626;
+  background: white; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
-/* Proceed Section */
-.proceed-section {
-  padding: 20px;
-  text-align: center;
+/* Channel List */
+.channel-list-new { display: grid; gap: 10px; }
+
+.channel-btn-new {
+  display: flex; align-items: center; gap: 15px;
+  padding: 15px; background: rgba(241, 245, 249, 0.9);
+  border: 1px solid #e2e8f0; border-radius: 12px;
+  cursor: pointer; transition: all 0.3s ease;
+  font-weight: 600; color: #334155;
 }
 
-.proceed-btn {
-  width: 100%;
-  padding: 18px;
-  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+.channel-btn-new:hover { border-color: rgba(220, 38, 38, 0.4); background: rgba(220, 38, 38, 0.1); }
+
+.channel-btn-new.selected {
+  background: white; border-color: #dc2626;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.1);
 }
 
-.proceed-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4);
+.channel-btn-new i { font-size: 1.2rem; color: #dc2626; }
+.channel-btn-new span { flex: 1; }
+
+.radio-icon-new { font-size: 1.2rem; color: #d1d5db; transition: all 0.3s ease; }
+.channel-btn-new.selected .radio-icon-new { color: #dc2626; }
+
+/* Message & Button */
+.recharge-message-new {
+  padding: 12px 15px; border-radius: 12px;
+  font-size: 0.85rem; text-align: center; font-weight: 500;
 }
 
-.proceed-btn:disabled {
-  background: #cbd5e0;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+.recharge-message-new.success { background-color: rgba(5, 150, 105, 0.1); color: #059669; }
+.recharge-message-new.error { background-color: rgba(220, 38, 38, 0.1); color: #dc2626; }
+.recharge-message-new.info { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+
+.proceed-btn-new {
+  width: 100%; padding: 16px; border: none; border-radius: 12px;
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white; font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: all 0.3s ease;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
 }
 
-/* Recharge Rules */
-.rules-card {
+.proceed-btn-new:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(220, 38, 38, 0.4); }
+
+.proceed-btn-new:disabled {
+  background: #94a3b8; cursor: not-allowed;
+  box-shadow: none; transform: none;
+}
+
+/* Bottom Nav */
+.tesla-bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 25px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(220, 38, 38, 0.1);
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 12px 0; z-index: 100;
+  box-shadow: 0 -2px 20px rgba(220, 38, 38, 0.08);
 }
 
-.rule-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  padding: 15px 0;
-  border-bottom: 1px solid #e2e8f0;
-}
+.nav-item { display: flex; flex-direction: column; align-items: center; padding: 8px 12px; cursor: pointer; transition: all 0.3s ease; color: #64748b; border-radius: 12px; }
+.nav-item.active { color: #dc2626; background: rgba(220, 38, 38, 0.1); }
+.nav-item:hover { transform: translateY(-2px); color: #dc2626; }
+.nav-icon { font-size: 1.2rem; margin-bottom: 4px; }
+.nav-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.025em; }
 
-.rule-item:last-child {
-  border-bottom: none;
-}
-
-.rule-number {
-  width: 30px;
-  height: 30px;
-  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-
-.rule-text {
-  flex: 1;
-  color: #4a5568;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  font-weight: 500;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .amount-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-
-  .amount-btn {
-    padding: 10px 6px;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .page-header {
-    padding: 20px 15px;
-  }
-
-  .section {
-    padding: 20px 15px;
-  }
-
-  .amount-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .recharge-card {
-    padding: 20px;
-  }
-
-  .proceed-section {
-    padding: 15px;
-  }
-
-  .rules-card {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 320px) {
-  .amount-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .amount-btn {
-    padding: 8px 4px;
-    font-size: 0.8rem;
-  }
-}
-/* Add these to your existing recharge.component.css */
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999; /* Ensure it's on top */
-  flex-direction: column;
-  color: white;
-}
-
-.loading-spinner {
-  font-size: 1em;
-  margin-bottom: 20px;
-}
-
-.loading-spinner p {
-  font-size: 1em;
-  margin-top: 10px;
-}
-
-/* Recharge message styles */
-.recharge-message {
-  padding: 10px 15px;
-  margin: 15px;
-  border-radius: 8px;
-  font-size: 0.9em;
-  text-align: center;
-  font-weight: bold;
-}
-
-.recharge-message.success {
-  background-color: #e6ffed;
-  color: #28a745;
-  border: 1px solid #28a745;
-}
-
-.recharge-message.error {
-  background-color: #ffe6e6;
-  color: #dc3545;
-  border: 1px solid #dc3545;
-}
-
-.recharge-message.info {
-  background-color: #e0f2f7;
-  color: #007bff;
-  border: 1px solid #007bff;
-}
-
-/* Add or adjust existing button styles for disabled state */
-.proceed-btn:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-/* Ensure minimum amount input placeholder is visible */
-.amount-input::placeholder {
-    color: #999;
-}
+/* Loading Spinner */
+app-loading-spinner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1001; }

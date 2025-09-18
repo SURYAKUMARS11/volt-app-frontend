@@ -1,0 +1,93 @@
+<div class="tesla-home-container">
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-question-circle"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Help Centre</h2>
+          <p class="user-phone">How can we help you?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="help-section">
+    <!-- Support Channels -->
+    <div class="help-card-new">
+      <h3>Get Support</h3>
+      <div class="support-channels-new">
+        <div class="support-item-new" *ngFor="let channel of supportChannels" (click)="openSupportChannel(channel.link)">
+          <div class="support-icon-new"><i [class]="channel.icon"></i></div>
+          <div class="support-info-new">
+            <h4>{{channel.name}}</h4>
+            <p>{{channel.description}}</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="help-card-new">
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-list-new">
+        <div class="faq-item-new" *ngFor="let faq of faqItems; let i = index">
+          <div class="faq-question-new" (click)="toggleFaq(i)">
+            <span>{{faq.question}}</span>
+            <i class="fas fa-chevron-down" [class.rotated]="faq.isOpen"></i>
+          </div>
+          <div class="faq-answer-new" [class.open]="faq.isOpen">
+            <p>{{faq.answer}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="help-card-new">
+      <h3>Contact Information</h3>
+      <div class="contact-info-new">
+        <div class="contact-item-new">
+          <i class="fas fa-envelope"></i>
+          <div>
+            <strong>Email Support</strong>
+            <p>supportvoltpro.com</p>
+          </div>
+        </div>
+        <div class="contact-item-new">
+          <i class="fas fa-clock"></i>
+          <div>
+            <strong>Support Hours</strong>
+            <p>24/7 Available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      <span class="nav-label">Invest</span>
+    </div>
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+      <span class="nav-label">Team</span>
+    </div>
+    <div class="nav-item active" (click)="navigateToSettings()">
+      <div class="nav-icon"><i class="fas fa-cog"></i></div>
+      <span class="nav-label">Settings</span>
+    </div>
+  </div>
+</div>

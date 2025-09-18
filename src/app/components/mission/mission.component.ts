@@ -47,7 +47,7 @@ export class MissionComponent {
   ];
 
   claimReward(mission: Mission) {
-    const telegramUrl = `https://t.me/your_bot_username?start=claim_${mission.id}_${mission.reward.replace('₹', '').replace(',', '')}`;
+    const telegramUrl = `https://t.me/Volt_support_care?start=claim_${mission.id}_${mission.reward.replace('₹', '').replace(',', '')}`;
     window.open(telegramUrl, '_blank');
   }
   goBack() { this.router.navigate(['/home']); }

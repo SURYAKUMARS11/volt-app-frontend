@@ -1,6 +1,6 @@
 .status-message {
   position: fixed;
-  top: 50%;
+  top: 49%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -8,6 +8,6 @@
 }
 
 .loading-icon {
-  font-size: 48px;
+  font-size: 30px;
   color: #ff6b9d ;
 }

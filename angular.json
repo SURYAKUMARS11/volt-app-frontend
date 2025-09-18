@@ -57,7 +57,8 @@
             "replace": "src/environments/environment.development.ts",
             "with": "src/environments/environment.ts"
           }
-        ]
+        ],
+        "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,

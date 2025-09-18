@@ -1,31 +1,30 @@
 // src/app/home/home.component.ts
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription, interval, lastValueFrom } from 'rxjs';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
-// Import the updated UserWallet type
+// Import the new WalletService
 import type { UserProfile, UserWallet } from '../../supabase.service';
-
-import {
-  SupabaseService,
-} from '../../supabase.service';
+import { SupabaseService } from '../../supabase.service';
 import { environment } from '../../../environments/environment.development';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { WalletService } from '../../wallet.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,LoadingSpinnerComponent],
+  imports: [CommonModule, HttpClientModule, LoadingSpinnerComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
   userName: string = '';
   userPhone: string = '';
-
+  deferredPrompt: any;
+  isInstalled = false;
   // Display properties for the UI
   rechargedBalance: number = 0; // This will show 'Your Balance'
   totalEarnedIncome: number = 0; // This will show 'Your Income'
@@ -42,83 +41,140 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentNotificationIndex: number = 0;
   private notificationInterval?: any;
 
-  isLoading: boolean = true;
-  errorMessage: string | null = null;
+  todayBonus: number = 5;
+  canClaimToday: boolean = false;
+  totalDailyEarnings: number = 0;
+
+  // A variable to store the date of the last claim
+  lastClaimDate: string | null = null;
+
+  // Properties for user feedback messages
+  isLoading: boolean = false; // Initialized to false
 
   showTelegramPopup: boolean = false;
 
   private userId: string | null = null;
+  private walletSubscription?: Subscription; // Add a subscription for the wallet service
 
-  // Referral data (now primarily managed in InviteComponent, but kept for clarity if needed)
-  // These should ideally be fetched from a dedicated invite/referral API endpoint if not directly from wallet
+  // Referral data
   currentInvites: number = 0;
   totalReferrals: number = 0;
-  referralEarnings: number = 0; // This specific earnings part should flow into _inviteCommission
+  referralEarnings: number = 0;
   pendingBonus: number = 0;
   canClaimBonus: boolean = false;
   referralCode: string = '';
   invitationLink: string = '';
   activePlanType: string = 'daily';
   isLoadingSpinner: boolean = true;
+
+  // NEW: A flag to prevent the subscription from overwriting the UI state
+  private isClaimingBonus: boolean = false;
+
   constructor(
     private supabaseService: SupabaseService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private walletService: WalletService,
+    // <-- Inject the new WalletService
   ) {
     console.log('HomeComponent constructor called.');
   }
 
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onBeforeInstallPrompt(event: Event) {
+    event.preventDefault();
+    this.deferredPrompt = event;
+    console.log('PWA install prompt captured');
+  }
+
+  installPWA() {
+    if (this.isInstalled) {
+      console.log('App is already installed.');
+      return;
+    }
+
+    if (!this.deferredPrompt) {
+      console.log('Install option not available yet. Please try again later.');
+      return;
+    }
+
+    this.deferredPrompt.prompt();
+
+    this.deferredPrompt.userChoice.then((choiceResult: any) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted installation');
+        this.isInstalled = true; // Mark as installed
+      } else {
+        console.log('User dismissed installation');
+      }
+      this.deferredPrompt = null;
+    });
+  }
+
+  checkIfInstalled() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    this.isInstalled = !!isStandalone;
+  }
+
   async ngOnInit() {
+    this.checkIfInstalled();
     this.isLoadingSpinner = true;
     try {
       const user = await this.supabaseService.getUser();
 
-      if (user) {
-        this.userId = user.id;
-
-        const userProfile = await this.supabaseService.getUserProfile(user.id);
-        if (userProfile) {
-          this.userName = userProfile.nickname || user.email || 'User';
-          this.userPhone = userProfile.phone_number || 'N/A';
-        } else {
-          console.warn(`User profile not found for user ID: ${user.id}.`);
-          this.userName = user.email || 'User';
-          this.userPhone = 'N/A';
-        }
-
-        // Fetch wallet with new granular fields
-        const userWallet = await this.supabaseService.getUserWallet(user.id);
-        if (userWallet) {
-          this.rechargedBalance = userWallet.recharged_amount;
-          this._orderIncome = userWallet.order_income;
-          this._inviteCommission = userWallet.invite_commission;
-          this.totalEarnedIncome = this._orderIncome + this._inviteCommission;
-        } else {
-          console.warn(`User wallet not found for user ID: ${user.id}. Attempting to create one.`);
-          // Create wallet will now initialize with new fields
-          const newWallet = await this.supabaseService.createWalletForUser(user.id);
-          if (newWallet) {
-            this.rechargedBalance = newWallet.recharged_amount;
-            this._orderIncome = newWallet.order_income;
-            this._inviteCommission = newWallet.invite_commission;
-            this.totalEarnedIncome = this._orderIncome + this._inviteCommission;
-          } else {
-            console.error('Failed to create wallet for user.');
-            this.rechargedBalance = 0;
-            this.totalEarnedIncome = 0;
-          }
-        }
-        // If referral data is separate, fetch it here:
-        // await this.fetchReferralData(); // (If you have a separate API for it)
-
-      } else {
+      if (!user) {
         console.log('No user logged in. Redirecting to login.');
         this.router.navigate(['/login']);
+        this.isLoadingSpinner = false;
         return;
       }
+      this.userId = user.id;
+
+      // CRITICAL FIX: Trigger the initial data fetch and wait for it to complete.
+      // This ensures that when we subscribe, we get the most recent data.
+      await this.walletService.initializeWalletData();
+
+      // Now, subscribe to the wallet service's stream.
+      this.walletSubscription = this.walletService.userWallet$.subscribe(wallet => {
+        if (wallet) {
+          this.rechargedBalance = wallet.recharged_amount;
+          this._orderIncome = wallet.order_income;
+          this._inviteCommission = wallet.invite_commission;
+          this.totalEarnedIncome = this._orderIncome + this._inviteCommission;
+          this.totalDailyEarnings = wallet.total_daily_earnings || 0;
+
+          // Only update the claim state if we are not in the middle of a claim process
+          if (!this.isClaimingBonus) {
+            this.canClaimToday = this.isBonusClaimable(wallet.last_daily_bonus_claim_date);
+          }
+
+        } else {
+          // Reset balances if the wallet is null
+          this.rechargedBalance = 0;
+          this.totalEarnedIncome = 0;
+          this._orderIncome = 0;
+          this._inviteCommission = 0;
+          this.totalDailyEarnings = 0;
+          this.canClaimToday = false;
+        }
+      });
+
+
+      // Fetch user profile and other data
+      const userProfile = await this.supabaseService.getUserProfile(user.id);
+      if (userProfile) {
+        this.userName = userProfile.nickname || user.email || 'User';
+        this.userPhone = userProfile.phone_number || 'N/A';
+      } else {
+        console.warn(`User profile not found for user ID: ${user.id}.`);
+        this.userName = user.email || 'User';
+        this.userPhone = 'N/A';
+      }
+
+      await this.fetchInviteData(this.userId);
+
     } catch (error) {
       console.error('Error in ngOnInit (loading user data):', error);
-      this.errorMessage = 'Failed to load user data. Please try again.';
     } finally {
       this.isLoadingSpinner = false;
     }
@@ -131,10 +187,75 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
+  private isBonusClaimable(lastClaimDate: string | null): boolean {
+    if (!lastClaimDate) {
+      return true; // No previous claim, so it's claimable
+    }
+    const lastClaim = new Date(lastClaimDate).toISOString().slice(0, 10);
+    const today = new Date().toISOString().slice(0, 10);
+    return today !== lastClaim;
+  }
+
+  // --- Daily Bonus Logic ---
+  async claimDailyBonus(): Promise<void> {
+    if (!this.userId) {
+      console.log("User not logged in.");
+      return;
+    }
+    if (!this.canClaimToday) {
+      console.log("Bonus has already been claimed for today.");
+      return;
+    }
+
+    this.isLoading = true;
+    this.isClaimingBonus = true; // NEW: Set flag to true
+
+    try {
+      const session = await this.supabaseService.getSession();
+      const user = await this.supabaseService.getUser();
+
+      if (!session || !user) {
+        console.log('You must be logged in to claim the bonus.');
+        this.isLoading = false;
+        this.isClaimingBonus = false; // NEW: Reset flag on failure
+        return;
+      }
+
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      });
+
+      const body = { userId: user.id };
+
+      const response = await lastValueFrom(
+        this.http.post<any>(`${environment.backendApiUrl}/user/claim-daily-bonus`, body, { headers })
+      );
+
+      if (response.success) {
+        console.log(response.message);
+        this.canClaimToday = false; // NEW: Optimistically update UI
+        // Trigger the wallet service to get the latest data
+        await this.walletService.refreshWalletData();
+      } else {
+        console.log(response.message);
+        this.canClaimToday = true; // Re-enable if the claim failed
+      }
+    } catch (error: any) {
+      console.error('API Error (claimDailyBonus):', error);
+      this.canClaimToday = true; // Re-enable on API error
+    } finally {
+      this.isLoading = false;
+      this.isClaimingBonus = false; // NEW: Reset flag after process is complete
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.notificationInterval) {
       clearInterval(this.notificationInterval);
     }
+    // Unsubscribe from the wallet service stream to prevent memory leaks
+    this.walletSubscription?.unsubscribe();
   }
 
   getHiddenPhone(): string {
@@ -146,7 +267,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // --- Navigation methods ---
   navigateToRecharge(): void { this.router.navigate(['/recharge']); }
-  // Withdrawal: User can only withdraw `totalEarnedIncome`
   navigateToWithdrawal(): void { this.router.navigate(['/withdrawal']); }
   navigateToTeam(): void { this.router.navigate(['/team']); }
   navigateToOrders(): void { this.router.navigate(['/orders']); }
@@ -154,13 +274,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   navigateToInvite(): void { this.router.navigate(['/invite']); }
   navigateToAbout(): void { this.router.navigate(['/about']); }
   navigateToSettings(): void { this.router.navigate(['/settings']); }
-  openCustomerService(): void { window.open('https://t.me/voltearning', '_blank'); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
   navigateToInvest() {
     this.router.navigate(['/invest']);
   }
   viewMissions() {
     this.router.navigate(['/mission']);
-  } 
+  }
   redeemGiftCode() {
     this.router.navigate(['/gift']);
   }
@@ -213,9 +333,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     try {
-    const response = await lastValueFrom(
-      this.http.get<any>(`${environment.backendApiUrl}/user/invite-data/${userId}`, { headers })
-    );
+      const response = await lastValueFrom(
+        this.http.get<any>(`${environment.backendApiUrl}/user/invite-data/${userId}`, { headers })
+      );
 
       if (response.success) {
         this.referralCode = response.referralCode;
@@ -227,57 +347,56 @@ export class HomeComponent implements OnInit, OnDestroy {
         console.log('Invite data fetched successfully:', response);
       } else {
         console.error('Failed to fetch invite data:', response.message);
-        this.errorMessage = 'Error: ' + response.message;
       }
     } catch (error) {
       console.error('API Error (fetchInviteData):', error);
-      this.errorMessage = 'Failed to fetch invite data. Please try again later.';
     }
   }
-  
+
   async claimReferralBonus(): Promise<void> {
     if (!this.userId) {
-      alert("User not logged in.");
+      console.log("User not logged in.");
       return;
     }
     if (!this.canClaimBonus || this.pendingBonus <= 0) {
-      alert("No bonus to claim or already claimed.");
+      console.log("No bonus to claim or already claimed.");
       return;
     }
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     try {
       const response = await lastValueFrom(
-  this.http.post<any>(
-    `${environment.backendApiUrl}/user/claim-referral-bonus`,
-    { userId: this.userId, amount: this.pendingBonus },
-    { headers }
-  )
-);
+        this.http.post<any>(
+          `${environment.backendApiUrl}/user/claim-referral-bonus`,
+          { userId: this.userId, amount: this.pendingBonus },
+          { headers }
+        )
+      );
 
       if (response.success) {
-        alert(response.message);
+        console.log(response.message);
         this.referralEarnings = response.new_total_referral_earnings;
         this.pendingBonus = response.new_pending_bonus;
         this.canClaimBonus = this.pendingBonus > 0;
         await this.fetchInviteData(this.userId);
       } else {
-        alert('Failed to claim bonus: ' + response.message);
+        console.log('Failed to claim bonus: ' + response.message);
       }
     } catch (error) {
       console.error('API Error (claimReferralBonus):', error);
-      alert('Error claiming bonus. Please try again.');
+      console.log('Error claiming bonus. Please try again.');
     }
   }
+
   openYouTube() {
-  window.open('https://youtube.com/yourchannel', '_blank');
-}
+    window.open('https://youtube.com/yourchannel', '_blank');
+  }
 
+  openTelegram() {
+    window.open('https://t.me/voltearning', '_blank');
+  }
 
-
-
-
-openTelegram() {
-  window.open('https://t.me/yourchannel', '_blank');
-}
+  navigateToBlog(): void {
+    this.router.navigate(['/blog']);
+  }
 }

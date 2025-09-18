@@ -21,9 +21,11 @@ export interface UserWallet {
   order_income: number;       // NEW: Income from invested plans
   invite_commission: number;  // NEW: Income from referral commissions
   last_updated: string;       // Or Date if you parse it
-  // Removed 'balance' and 'total_income' from this interface
-  // as they are replaced by the more granular fields.
-  // If you kept them in your DB for migration, they just won't be used by the frontend.
+  total_daily_earnings: number;
+  last_daily_bonus_claim_date: string | null;
+  pending_referral_bonus: number;
+  total_referral_earnings: number;
+  total_referrals: number;
 }
 
 export interface InvestmentPlan {
@@ -39,7 +41,7 @@ export interface InvestmentPlan {
   is_active: boolean;
   is_purchasable_once?: boolean;
 
-  is_presale?: boolean; 
+  is_presale?: boolean;
 }
 
 export type investment_status_type = 'active' | 'completed' | 'cancelled';

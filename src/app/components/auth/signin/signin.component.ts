@@ -40,87 +40,53 @@ export class SigninComponent {
 }
   async signIn() {
   this.isLoading = true;
+  this.isSuccess = false;
+  this.message = ''; // clear old messages
 
-
+  // Validation
   if (this.loginPhoneNumber.length !== 10 || !this.loginPassword) {
     this.isLoading = false;
-
-    await Swal.fire({
-      icon: 'error',
-      title: 'Invalid Input',
-      text: 'Please enter a valid phone number and password.',
-      showConfirmButton: false,
-      timer: 2500,
-      customClass: {
-        popup: 'custom-swal-popup',
-        title: 'custom-swal-title',
-        htmlContainer: 'custom-swal-content',
-        icon: 'custom-swal-icon'
-      }
-    });
+    this.isSuccess = false;
+    this.message = 'Please enter a valid phone number and password.';
     return;
   }
 
   try {
-    Swal.fire({
-      title: 'Signing in...',
-      didOpen: () => Swal.showLoading(),
-      allowOutsideClick: false,
-      customClass: {
-        popup: 'custom-swal-popup',
-        title: 'custom-swal-title',
-        icon: 'custom-swal-icon'
-      }
-    });
+    // Show loading message in popup
+    this.isSuccess = true;
+    this.message = 'Signing in...';
 
     const { data, error } = await this.supabaseService.client.auth.signInWithPassword({
       phone: `+91${this.loginPhoneNumber}`,
       password: this.loginPassword
     });
 
-    Swal.close();
     this.isLoading = false;
 
+    if (error) {
+      throw error;
+    }
 
-    if (error) throw error;
+    // Success popup
+    this.isSuccess = true;
+    this.message = 'Signed in successfully!';
 
-    await Swal.fire({
-      icon: 'success',
-      title: 'Signed in successfully!',
-      showConfirmButton: false,
-      timer: 2000,
-      customClass: {
-        popup: 'custom-swal-popup',
-        title: 'custom-swal-title',
-        htmlContainer: 'custom-swal-content',
-        icon: 'custom-swal-icon'
-      }
-    });
-
-    console.log('User logged in:', data.user);
-    this.router.navigate(['/home']);
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 2000);
 
   } catch (error: any) {
-    Swal.close();
     this.isLoading = false;
-
-    await Swal.fire({
-      icon: 'error',
-      title: 'Login Failed',
-      text: error.message,
-      showConfirmButton: false,
-      timer: 10000,
-      customClass: {
-        popup: 'custom-swal-popup',
-        title: 'custom-swal-title',
-        htmlContainer: 'custom-swal-content',
-        icon: 'custom-swal-icon'
-      }
-    });
-
-    console.error('Login error:', error);
+    this.isSuccess = false;
+    this.message = error.message || 'Login failed. Please try again.';
+  } finally {
+    // Auto-hide popup after 5 sec
+    setTimeout(() => {
+      this.message = '';
+    }, 5000);
   }
 }
+
 //   async signIn() {
 //   this.isLoading = true;
 
@@ -132,6 +98,9 @@ export class SigninComponent {
 //   this.router.navigate(['/home']);
 //   this.isLoading = false;
 // }
+closePopup() {
+  this.message = '';
+}
   goToSignup() {
     this.router.navigate(['/signup']);
   }

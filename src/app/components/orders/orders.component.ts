@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SupabaseService, Order, transaction_status, InvestmentPlan } from '../../supabase.service';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 // Corrected type based on your Supabase schema
 type PlanType = 'daily' | 'advanced';
@@ -32,13 +33,13 @@ export interface DisplayOrder {
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule,LoadingSpinnerComponent]
 })
 export class OrdersComponent implements OnInit {
-  activeTab: PlanType = 'daily'; 
+  activeTab: PlanType = 'daily';
   orders: DisplayOrder[] = [];
   isLoading: boolean = true;
-
+  isLoadingSpinner: boolean = true;
   constructor(
     private router: Router,
     private supabaseService: SupabaseService
@@ -51,7 +52,7 @@ export class OrdersComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/home']);
   }
-  
+
   navigateToInvest(): void {
     this.router.navigate(['/invest']);
   }
@@ -61,7 +62,7 @@ export class OrdersComponent implements OnInit {
   }
 
   async loadOrders(): Promise<void> {
-    this.isLoading = true;
+    this.isLoadingSpinner = true;
     try {
       const user = await this.supabaseService.getUser();
       if (!user) {
@@ -75,7 +76,7 @@ export class OrdersComponent implements OnInit {
 
       // 1. Fetch user investments
       const fetchedOrders = await this.supabaseService.getUserInvestments(userId);
-      
+
       // 2. Fetch all investment plans to get the missing plan_type
       const dailyPlans = await this.supabaseService.getInvestmentPlans('daily');
       const advancedPlans = await this.supabaseService.getInvestmentPlans('advanced');
@@ -106,7 +107,7 @@ export class OrdersComponent implements OnInit {
       console.error('Failed to load orders:', error);
       this.orders = [];
     } finally {
-      this.isLoading = false;
+      this.isLoadingSpinner = false;
     }
   }
 
@@ -140,4 +141,9 @@ export class OrdersComponent implements OnInit {
   floor(value: number): number {
     return Math.floor(value);
   }
+
+  navigateToHome(): void { this.router.navigate(['/home']); }
+  navigateToTeam(): void { this.router.navigate(['/team']); }
+  navigateToSettings(): void { this.router.navigate(['/settings']); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
 }

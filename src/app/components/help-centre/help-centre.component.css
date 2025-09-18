@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Base Container */
+.tesla-home-container { min-height: 100vh; background: #f0f2f5; position: relative; overflow-x: hidden; font-family: 'Inter', sans-serif; color: #1e293b; padding-bottom: 90px; }
+
+/* Header */
+.tesla-header { position: sticky; top: 0; z-index: 10; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid #e5e7eb; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.header-content { display: flex; justify-content: space-between; align-items: center; max-width: 420px; margin: 0 auto; }
+.user-profile { display: flex; align-items: center; gap: 12px; }
+.profile-avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3); }
+.user-info h2 { font-size: 1rem; font-weight: 600; margin: 0; }
+.user-info p { font-size: 0.8rem; color: #6b7280; margin: 2px 0 0; }
+
+/* Help Section */
+.help-section { padding: 20px; max-width: 420px; margin: 0 auto; display: grid; gap: 20px; }
+
+.help-card-new { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.07); }
+.help-card-new h3 { font-size: 1rem; font-weight: 600; margin: 0 0 15px; }
+
+/* Support Channels */
+.support-channels-new { display: grid; gap: 10px; }
+.support-item-new { display: flex; align-items: center; gap: 15px; padding: 12px 10px; border-radius: 10px; cursor: pointer; transition: background-color 0.2s ease; }
+.support-item-new:hover { background-color: #f3f4f6; }
+.support-icon-new { width: 40px; height: 40px; background: linear-gradient(135deg, #059669, #10b981); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; }
+.support-info-new h4 { font-size: 0.9rem; font-weight: 600; margin: 0; }
+.support-info-new p { font-size: 0.8rem; color: #6b7280; margin: 0; }
+.support-item-new .fa-chevron-right { color: #9ca3af; font-size: 0.8rem; }
+
+/* FAQ */
+.faq-list-new { display: grid; gap: 10px; }
+.faq-item-new { background: #f9fafb; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; }
+.faq-question-new { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; cursor: pointer; font-weight: 500; }
+.faq-question-new i { transition: transform 0.2s ease; }
+.faq-question-new i.rotated { transform: rotate(180deg); }
+.faq-answer-new { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+.faq-answer-new.open { max-height: 200px; /* Adjust as needed */ }
+.faq-answer-new p { padding: 10px 15px; font-size: 0.85rem; color: #374151; line-height: 1.5; }
+
+/* Contact Info */
+.contact-info-new { display: grid; gap: 10px; }
+.contact-item-new { display: flex; align-items: center; gap: 15px; padding: 12px 10px; border-radius: 10px; }
+.contact-item-new i { font-size: 1.1rem; color: #dc2626; width: 25px; text-align: center; }
+.contact-item-new strong { font-size: 0.9rem; font-weight: 600; display: block; }
+.contact-item-new p { font-size: 0.8rem; color: #6b7280; margin: 0; }
+
+/* Bottom Nav */
+.tesla-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); max-width: 420px; width: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px); border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; align-items: center; padding: 10px 0; z-index: 100; border-radius: 20px 20px 0 0; }
+.nav-item { display: flex; flex-direction: column; align-items: center; padding: 8px 12px; cursor: pointer; color: #6b7280; }
+.nav-item.active { color: #dc2626; }
+.nav-center-btn { width: 55px; height: 55px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3); margin-top: -25px; border: 4px solid #f0f2f5; }
+.center-icon { font-size: 1.4rem; color: white; }
+.nav-icon { font-size: 1.2rem; margin-bottom: 4px; }
+.nav-label { font-size: 0.7rem; font-weight: 600; }

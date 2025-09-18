@@ -7,11 +7,12 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { SupabaseService } from '../../supabase.service';
 import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-invite',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, LoadingSpinnerComponent],
   templateUrl: './invite.component.html',
   styleUrls: ['./invite.component.css']
 })
@@ -27,7 +28,7 @@ export class InviteComponent implements OnInit {
   errorMessage: string | null = null;
 
   invitationRules = [
-    'Earn ₹10 instantly when someone signs up using your referral link and completes registration.',
+    'Earn 10% of commission on every activated referral.',
     'Referral earnings have no expiry date and can be withdrawn anytime after meeting minimum withdrawal criteria.',
     'Fraudulent activities or fake accounts will result in reward cancellation and account suspension.'
   ];
@@ -179,6 +180,6 @@ export class InviteComponent implements OnInit {
   navigateToHome(): void { this.router.navigate(['/home']); }
   navigateToInvite(): void { this.router.navigate(['/invite']); }
   navigateToSettings(): void { this.router.navigate(['/settings']); }
-  openCustomerService(): void { window.open('https://t.me/voltearning', '_blank'); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
   navigateToInvest() { this.router.navigate(['/invest']); }
 }

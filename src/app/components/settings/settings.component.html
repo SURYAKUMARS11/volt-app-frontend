@@ -1,128 +1,121 @@
-<div class="page-container">
-  <div class="page-header">
-    <button class="back-btn" (click)="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <h2>Settings</h2>
-    <div class="header-icon">
-      <i class="fas fa-cog"></i>
+<div class="tesla-home-container">
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-cog"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Settings</h2>
+          <p class="user-phone">Manage your account</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="profile-card">
-      <div class="profile-header">
-        <div class="profile-avatar">
-          <i class="fas fa-user"></i>
-        </div>
-        <div class="profile-info">
+  <div class="settings-section">
+    <!-- Combined User and Wallet Card -->
+    <div class="settings-card-new compact-user-card">
+      <div class="user-info-top">
+        <div class="profile-avatar-compact"><i class="fas fa-user"></i></div>
+        <div class="user-details-compact">
           <h3>{{ getHiddenPhone() }}</h3>
         </div>
       </div>
-      <div class="balance-section">
-        <div class="balance-item">
-          <div class="balance-label">Balance</div>
-          <div class="balance-value">₹{{ balance }}</div>
+      <div class="wallet-info-compact">
+        <div class="balance-item-compact">
+          <span class="balance-label">Balance :  </span>
+          <span class="balance-value">₹{{ balance | number:'1.2-2' }}</span>
         </div>
-        <div class="balance-item">
-          <div class="balance-label">Withdrawable</div>
-          <div class="balance-value">₹{{ withdrawableIncome }}</div>
+        <div class="balance-item-compact">
+          <span class="balance-label">Withdraw : </span>
+          <span class="balance-value income">₹{{ withdrawableIncome | number:'1.2-2' }}</span>
         </div>
       </div>
-      <div class="action-buttons">
-        <button class="action-btn recharge" (click)="navigateToRecharge()">
+      <div class="wallet-actions-compact">
+        <button (click)="navigateToRecharge()">
           <i class="fas fa-credit-card"></i> Recharge
         </button>
-        <button class="action-btn withdrawal" (click)="navigateToWithdrawal()">
-          <i class="fas fa-money-bill-wave"></i> Withdrawal
+        <button (click)="navigateToWithdrawal()">
+          <i class="fas fa-money-bill-wave"></i> Withdraw
         </button>
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-concierge-bell"></i>
-      <h3>Services</h3>
-    </div>
-    <div class="services-card">
-      <div class="service-item" (click)="navigateToOrders()">
-        <div class="service-icon"><i class="fas fa-clipboard-list"></i></div>
+    <!-- Menu List -->
+    <div class="settings-card-new menu-card">
+      <div class="menu-item-new" (click)="navigateToOrders()">
+        <i class="fas fa-clipboard-list menu-icon"></i>
         <span>Orders</span>
         <i class="fas fa-chevron-right"></i>
       </div>
-      <div class="service-item" (click)="navigateToDepositRecord()">
-        <div class="service-icon"><i class="fas fa-plus-circle"></i></div>
+      <div class="menu-item-new" (click)="navigateToDepositRecord()">
+        <i class="fas fa-plus-circle menu-icon"></i>
         <span>Deposit Record</span>
         <i class="fas fa-chevron-right"></i>
       </div>
-      <div class="service-item" (click)="navigateToWithdrawalRecord()">
-        <div class="service-icon"><i class="fas fa-minus-circle"></i></div>
+      <div class="menu-item-new" (click)="navigateToWithdrawalRecord()">
+        <i class="fas fa-minus-circle menu-icon"></i>
         <span>Withdrawal Record</span>
         <i class="fas fa-chevron-right"></i>
       </div>
-      <div class="service-item" (click)="navigateToBankCard()">
-        <div class="service-icon"><i class="fas fa-credit-card"></i></div>
+       <div class="menu-item-new" (click)="navigateToBankCard()">
+        <i class="fas fa-credit-card menu-icon"></i>
         <span>Bank Card</span>
         <i class="fas fa-chevron-right"></i>
       </div>
-      <div class="service-item" (click)="navigateToHelpCentre()">
-        <div class="service-icon"><i class="fas fa-question-circle"></i></div>
-        <span>Help Centre</span>
-        <i class="fas fa-chevron-right"></i>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-user-cog"></i>
-      <h3>Account</h3>
-    </div>
-    <div class="account-card">
-      <div class="account-item" (click)="navigateToInfo()">
-        <div class="account-icon"><i class="fas fa-info-circle"></i></div>
-        <span>Info</span>
-        <i class="fas fa-chevron-right"></i>
-      </div>
-      <div class="account-item" (click)="navigateToTradePassword()">
-        <div class="account-icon"><i class="fas fa-key"></i></div>
+      <div class="menu-item-new" (click)="navigateToTradePassword()">
+        <i class="fas fa-key menu-icon"></i>
         <span>Trade Password</span>
         <i class="fas fa-chevron-right"></i>
       </div>
-      <div class="account-item" (click)="navigateToPassword()">
-        <div class="account-icon"><i class="fas fa-lock"></i></div>
-        <span>Password</span>
+    </div>
+
+    <div class="settings-card-new menu-card">
+      <div class="menu-item-new" (click)="navigateToHelpCentre()">
+        <i class="fas fa-question-circle menu-icon"></i>
+        <span>Help Centre</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="menu-item-new" (click)="navigateToAbout()">
+        <i class="fas fa-info-circle menu-icon"></i>
+        <span>About Us</span>
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="menu-item-new" (click)="navigateToDownload()">
+        <i class="fas fa-download menu-icon"></i>
+        <span>Download App</span>
         <i class="fas fa-chevron-right"></i>
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <button class="logout-btn" (click)="logout()">
+    <!-- Logout Button -->
+    <button class="logout-btn-new" (click)="logout()">
       <i class="fas fa-sign-out-alt"></i> Logout
     </button>
   </div>
-</div>
 
-<div class="bottom-nav">
-  <div class="nav-item" (click)="navigateToHome()">
-    <div class="nav-icon"><i class="fas fa-home"></i></div>
-    <span>Home</span>
-  </div>
-  <div class="nav-item" (click)="navigateToInvest()">
-    <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
-    <span>Invest</span>
-  </div>
-  <div class="customer-service-btn" (click)="openCustomerService()">
-    <div class="service-icon231"><i class="fas fa-headset"></i></div>
-  </div>
-  <div class="nav-item" (click)="navigateToTeam()">
-    <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
-    <span>Team</span>
-  </div>
-  <div class="nav-item active" (click)="navigateToSettings()">
-    <div class="nav-icon"><i class="fas fa-cog"></i></div>
-    <span>Settings</span>
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      <span class="nav-label">Invest</span>
+    </div>
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+      <span class="nav-label">Team</span>
+    </div>
+    <div class="nav-item active" (click)="navigateToSettings()">
+      <div class="nav-icon"><i class="fas fa-cog"></i></div>
+      <span class="nav-label">Settings</span>
+    </div>
   </div>
 </div>

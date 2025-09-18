@@ -1,241 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
 
-
-.auth-container {
+/* Tesla Auth Container */
+.tesla-auth-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  background: #000000;
   position: relative;
+  overflow: hidden;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.auth-container::before {
-  content: '';
+/* Background Elements */
+.background-grid {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.3;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
 }
 
-.auth-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 25px;
-  padding: 35px 30px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 420px;
-  animation: slideUp 0.6s ease-out;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.background-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(220, 38, 38, 0.03) 0%, transparent 70%);
+  animation: glowPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* Main Wrapper */
+.auth-wrapper {
   position: relative;
   z-index: 1;
-}
-.logo-img {
-  height: 50px;
-  margin-bottom: 8px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.auth-header {
+/* Tesla Header */
+.tesla-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
-.app-icon {
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-  border-radius: 20px;
+.tesla-logo {
+  width: 120px;
+  height: 24px;
+  margin: 0 auto 24px;
+  color: #ffffff;
+}
+
+.tesla-logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+.auth-title {
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 300;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  color: #a1a1aa;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Form Container */
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 32px 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Status Message */
+.status-message {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
-   animation: flash 1.5s infinite;
-}
-@keyframes flash {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.2; transform: scale(1.2); }
-}
-.app-icon i {
-  font-size: 1.2rem;
-  color: white;
-  transform: rotate(-15deg);
-}
-
-.auth-header h2 {
-  color: #2d3748;
-  font-size: 2rem;
-  margin: 15px 0 8px;
-  font-weight: 700;
-}
-
-.auth-header p {
-  color: #718096;
-  font-size: 1rem;
-}
-
-.form-group {
-  margin-bottom: 22px;
-}
-
-.form-group label {
-  display: block;
-  color: #4a5568;
-  font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 0.95rem;
-}
-
-.form-group label i {
-  margin-right: 8px;
-  color: #ff6b9d;
-}
-
-.input-group {
-  display: flex;
   gap: 12px;
-  align-items: flex-end;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  animation: slideIn 0.3s ease-out;
 }
 
-.input-wrapper {
-  position: relative;
-  flex: 1;
+.status-message.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-.input-wrapper input {
+.status-message.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.status-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.status-icon svg {
   width: 100%;
-  padding: 15px 50px 15px 20px;
-  border: 2px solid #e2e8f0;
-  border-radius: 15px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.8);
+  height: 100%;
 }
 
-.input-wrapper input:focus {
-  outline: none;
-  border-color: #ff6b9d;
-  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
-  background: white;
-}
-
-.input-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-  cursor: pointer;
-  font-size: 1rem;
-  z-index: 10;
-}
-
-.otp-btn, .verify-btn {
-  padding: 15px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-}
-
-.otp-btn:hover, .verify-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-}
-
-.otp-btn:disabled, .verify-btn:disabled {
-  background: #cbd5e0;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.auth-btn {
-  width: 100%;
-  padding: 18px;
-  border: none;
-  border-radius: 15px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.auth-btn.primary {
-  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-  color: white;
-  box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
-}
-
-.auth-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(255, 107, 157, 0.4);
-}
-
-.auth-btn.secondary {
-  background: transparent;
-  color: #667eea;
-  border: 2px solid #667eea;
-}
-
-.auth-btn.secondary:hover {
-  background: #667eea;
-  color: white;
-  transform: translateY(-2px);
-}
-
-.auth-btn:disabled {
-  background: #cbd5e0;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.divider {
-  text-align: center;
-  margin: 25px 0;
-  position: relative;
-}
-
-.divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #e2e8f0;
-}
-
-.divider span {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 0 15px;
-  color: #a0aec0;
-  font-size: 0.9rem;
-}
-
-@keyframes slideUp {
+@keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
@@ -243,74 +147,422 @@
   }
 }
 
+/* Form Styles */
+.tesla-form {
+  width: 100%;
+}
+
+.input-group {
+  margin-bottom: 24px;
+}
+
+.input-label {
+  display: block;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  letter-spacing: 0.025em;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.tesla-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.tesla-input::placeholder {
+  color: #71717a;
+  font-size: 14px;
+}
+
+.tesla-input:focus {
+  outline: none;
+  border-bottom-color: #dc2626;
+}
+
+.tesla-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.tesla-input:focus + .input-border {
+  transform: scaleX(1);
+}
+
+/* Password Field */
+.password-field {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #71717a;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover:not(:disabled) {
+  color: #dc2626;
+}
+
+.password-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.password-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Submit Button */
+.tesla-submit-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #dc2626, #b91c1c);
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+  font-family: inherit;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.tesla-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #b91c1c, #991b1b);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+}
+
+.tesla-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.tesla-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-content.loading {
+  gap: 12px;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form Divider */
+.form-divider {
+  text-align: center;
+  margin: 24px 0 16px;
+  color: #71717a;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* Link Button */
+.tesla-link-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  letter-spacing: 0.025em;
+}
+
+.tesla-link-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.tesla-link-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.auth-footer {
+  margin-top: 32px;
+  text-align: center;
+  max-width: 400px;
+}
+
+.auth-footer p {
+  color: #71717a;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.auth-footer a {
+  color: #dc2626;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-footer a:hover {
+  color: #ef4444;
+}
+
+/* Mobile Responsive */
 @media (max-width: 480px) {
-  .auth-card {
-    padding: 25px 20px;
-    margin: 10px;
+  .auth-wrapper {
+    padding: 16px;
+    justify-content: flex-start;
+    padding-top: 60px;
   }
 
-  .auth-header h2 {
-    font-size: 1.7rem;
+  .tesla-header {
+    margin-bottom: 24px;
   }
 
-  .app-icon {
-    width: 50px;
-    height: 50px;
+  .tesla-logo {
+    width: 100px;
+    height: 20px;
+    margin-bottom: 20px;
   }
 
-  .app-icon i {
-    font-size: 1.7rem;
+  .auth-title {
+    font-size: 24px;
   }
 
-  .input-wrapper input {
-    padding: 12px 45px 12px 15px;
+  .auth-subtitle {
+    font-size: 13px;
+  }
+
+  .form-container {
+    padding: 24px 20px;
+    max-width: 100%;
   }
 
   .input-group {
-    flex-direction: column;
-    gap: 10px;
+    margin-bottom: 20px;
   }
 
-  .otp-btn, .verify-btn {
-    width: 100%;
-    justify-content: center;
+  .input-label {
+    font-size: 12px;
+    margin-bottom: 6px;
   }
 
-  .auth-btn {
-    padding: 15px;
-    font-size: 1rem;
+  .tesla-input {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 10px 0;
+  }
+
+  .tesla-input::placeholder {
+    font-size: 14px;
+  }
+
+  .tesla-submit-btn {
+    padding: 14px 20px;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .tesla-link-btn {
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+
+  .form-divider {
+    margin: 20px 0 14px;
+    font-size: 11px;
+  }
+
+  .auth-footer {
+    margin-top: 24px;
+  }
+
+  .auth-footer p {
+    font-size: 10px;
   }
 }
 
-@media (max-width: 480px) {
-    .auth-container {
-        padding: 5px; /* Reduce overall padding */
-    }
+@media (max-width: 360px) {
+  .form-container {
+    padding: 20px 16px;
+  }
 
-    .auth-card {
-        padding: 20px 15px; /* Reduce card padding */
-        margin: 5px; /* Reduce margin around the card */
-    }
+  .auth-title {
+    font-size: 22px;
+  }
 
-    .auth-header {
-        margin-bottom: 20px; /* Reduce space below header */
-    }
+  .tesla-input {
+    font-size: 15px;
+    padding: 9px 0;
+  }
 
-    .form-group {
-        margin-bottom: 15px; /* Reduce space between form groups */
-    }
+  .tesla-submit-btn {
+    padding: 13px 18px;
+    font-size: 12px;
+  }
 
-    .input-wrapper input {
-        padding: 10px 45px 10px 15px; /* Further reduce input padding */
-        font-size: 0.9rem; /* Slightly reduce font size for inputs */
-    }
+  .tesla-link-btn {
+    padding: 11px 18px;
+    font-size: 12px;
+  }
+}
 
-    .auth-btn {
-        padding: 12px; /* Reduce button padding */
-        font-size: 0.95rem; /* Slightly reduce button font size */
-    }
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .tesla-submit-btn,
+  .tesla-link-btn {
+    min-height: 48px;
+  }
 
-    .divider {
-        margin: 10px 0; /* Reduce space around the divider */
-    }
+  .password-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .form-container {
+    border: 2px solid #ffffff;
+  }
+
+  .tesla-input {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .tesla-input:focus {
+    border-bottom-color: #ffffff;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* Dark background overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Popup box */
+.popup {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  min-width: 300px;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+
+/* Success style */
+.popup.success {
+  border: 3px solid #28a745;
+  color: #155724;
+}
+
+/* Error style */
+.popup.error {
+  border: 3px solid #dc3545;
+  color: #721c24;
+}
+
+/* Popup text */
+.popup-text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

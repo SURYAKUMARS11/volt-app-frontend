@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { lastValueFrom } from 'rxjs';
 import { SupabaseService } from '../../supabase.service';
 import { environment } from '../../../environments/environment.development';
@@ -23,7 +24,7 @@ interface WithdrawalRecord {
 @Component({
   selector: 'app-withdrawal-record',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, DatePipe],
+  imports: [CommonModule, HttpClientModule, DatePipe, LoadingSpinnerComponent],
   templateUrl: './withdrawal-record.component.html',
   styleUrls: ['./withdrawal-record.component.css'],
   providers: [SupabaseService]
@@ -32,12 +33,12 @@ export class WithdrawalRecordComponent implements OnInit {
   selectedFilter: string = 'all';
   records: WithdrawalRecord[] = [];
   filteredRecords: WithdrawalRecord[] = [];
-  
+
   isLoading: boolean = true;
   errorMessage: string | null = null;
-  
+
   constructor(
-    private router: Router, 
+    private router: Router,
     private http: HttpClient,
     private supabaseService: SupabaseService
   ) {}
@@ -45,7 +46,7 @@ export class WithdrawalRecordComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
     this.errorMessage = null;
-    
+
     try {
       const user = await this.supabaseService.getUser();
       if (user) {
@@ -63,7 +64,7 @@ export class WithdrawalRecordComponent implements OnInit {
 
   async loadRecords(userId: string) {
     const backendUrl = `${environment.backendApiUrl}/user/withdrawal-records/${userId}`;
-    
+
     try {
       const response = await lastValueFrom(
         this.http.get<{success: boolean; records: WithdrawalRecord[]}>(backendUrl)
@@ -80,6 +81,16 @@ export class WithdrawalRecordComponent implements OnInit {
       this.errorMessage = 'Failed to connect to the server.';
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'processing': return 'processing';
+      case 'completed': return 'completed';
+      case 'failed': return 'failed';
+      case 'rejected': return 'failed';
+      default: return '';
     }
   }
 
@@ -110,6 +121,12 @@ export class WithdrawalRecordComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/settings']);
   }
+
+  navigateToHome(): void { this.router.navigate(['/home']); }
+  navigateToInvest(): void { this.router.navigate(['/invest']); }
+  navigateToTeam(): void { this.router.navigate(['/team']); }
+  navigateToSettings(): void { this.router.navigate(['/settings']); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
 }

@@ -1,0 +1,110 @@
+<div class="tesla-home-container">
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-blog"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Proof Wall</h2>
+          <p class="user-phone">Share your success, claim rewards!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="blog-section-new">
+    <!-- Daily Post Status Card -->
+    <div class="blog-card-new status-card">
+      <div class="status-icon"><i class="fas fa-calendar-check"></i></div>
+      <div class="status-info">
+        <h3 *ngIf="canPostToday">Ready to Post!</h3>
+        <h3 *ngIf="!canPostToday">Post Limit Reached</h3>
+        <p *ngIf="canPostToday">You can upload your proof and claim your bonus today.</p>
+        <p *ngIf="!canPostToday">You have already posted today. Try again in {{ timeLeftForNextPost }}</p>
+      </div>
+    </div>
+
+    <!-- Upload Proof Card -->
+    <div class="blog-card-new upload-card">
+      <h3>Upload Your Proof</h3>
+      <p>Share your withdrawal success with a screenshot and a comment to earn a bonus!</p>
+      <div class="form-group-new">
+        <label for="proofImage">Upload Image</label>
+        <input type="file" id="proofImage" accept="image/*" (change)="onFileSelected($event)" [disabled]="!canPostToday || isUploading">
+      </div>
+      <div class="form-group-new">
+        <label for="comment">Your Comment</label>
+        <textarea id="comment" rows="3" placeholder="e.g., 'Got my withdrawal instantly! Volt is amazing!'" [(ngModel)]="userComment" [disabled]="!canPostToday || isUploading"></textarea>
+      </div>
+      <button class="upload-btn-new" [disabled]="!selectedFile || !userComment || isUploading || !canPostToday" (click)="uploadProof()">
+        <i class="fas fa-upload"></i>
+        <span>{{ isUploading ? 'Uploading...' : 'Upload Proof' }}</span>
+      </button>
+      <div *ngIf="uploadMessage" class="message-new" [ngClass]="uploadMessage.type">{{ uploadMessage.text }}</div>
+    </div>
+
+    <!-- Reward Claim Card -->
+    <div class="blog-card-new reward-card">
+      <h3>Claim Your Reward</h3>
+      <p>Each valid proof earns you <strong>₹5 - ₹10</strong> as an ad-free bonus!</p>
+      <button class="claim-btn-new" [disabled]="!canClaimReward || isClaiming" (click)="claimReward()">
+        <i class="fas fa-gift"></i>
+        <span>{{ isClaiming ? 'Claiming...' : 'Claim Reward' }}</span>
+      </button>
+      <div *ngIf="claimMessage" class="message-new" [ngClass]="claimMessage.type">{{ claimMessage.text }}</div>
+    </div>
+
+    <!-- Recent Proofs Display Card -->
+    <div class="blog-card-new recent-proofs-card">
+      <h3>Recent Success Stories</h3>
+      <div class="proofs-list-new">
+        <div class="proof-item-new" *ngFor="let proof of recentProofs">
+          <img [src]="proof.imageUrl" alt="Withdrawal Proof">
+          <div class="proof-details-new">
+            <p class="proof-comment-new">"{{ proof.comment }}"</p>
+            <span class="proof-user-new">- {{ proof.username }}</span>
+          </div>
+        </div>
+        <div *ngIf="recentProofs.length === 0" class="no-proofs-new">
+          No proofs yet. Be the first to share your success!
+        </div>
+      </div>
+    </div>
+
+    <!-- Rules/Info Card -->
+    <div class="blog-card-new info-card">
+      <h3>Important Information</h3>
+      <ul>
+        <li>You can upload <strong>one proof per day</strong>.</li>
+        <li>Each valid proof earns a random bonus between <strong>₹5 and ₹10</strong>.</li>
+        <li>Bonus will be credited to your main balance instantly.</li>
+        <li>Proofs are manually reviewed for validity.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      <span class="nav-label">Invest</span>
+    </div>
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+      <span class="nav-label">Team</span>
+    </div>
+    <div class="nav-item active" (click)="navigateToSettings()">
+      <div class="nav-icon"><i class="fas fa-cog"></i></div>
+      <span class="nav-label">Settings</span>
+    </div>
+  </div>
+</div>

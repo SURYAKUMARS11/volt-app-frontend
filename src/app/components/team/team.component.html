@@ -1,143 +1,121 @@
-<div class="page-container">
+<div class="tesla-home-container">
+  <!-- Loading Spinner -->
+  <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
 
-  <div class="page-header">
-    <button class="back-btn" (click)="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <h2>My Team</h2>
-    <div class="header-icon">
-      <i class="fas fa-users"></i>
-    </div>
-  </div>
+  <!-- Background Elements -->
+  <div class="background-grid"></div>
+  <div class="background-glow"></div>
 
-  <div *ngIf="isLoading" class="status-message">
-    <i class="fas fa-spinner fa-spin loading-icon"></i>
-    <p>Loading..</p>
-  </div>
-  <div *ngIf="errorMessage" class="status-message error-message">
-    <i class="fas fa-exclamation-triangle"></i>
-    <p>{{ errorMessage }}</p>
-  </div>
-
-  <div *ngIf="!isLoading && !errorMessage">
-
-    <div class="referrals-section">
-      <div class="referrals-card">
-        <div class="referrals-icon">
-          <i class="fas fa-user-friends"></i>
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-users"></i>
         </div>
-        <div class="referrals-info">
-          <div class="referrals-count">{{ totalReferrals }}</div>
-          <div class="referrals-label">Total Referrals</div>
+        <div class="user-info">
+          <h2 class="user-name">My Team</h2>
+          <p class="user-phone">Your network and earnings</p>
         </div>
-        <div class="referrals-earnings">
-          <div class="earnings-amount">₹{{ totalEarnings | number:'1.2-2' }}</div>
-          <div class="earnings-label">Total Earned</div>
+      </div>
+      <div class="tesla-brand">
+        <div class="tesla-logo">
+          <svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+          </svg>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="commission-section">
-  <div class="commission-card" style="position: relative;">
-
-    <!-- Invitation Button in Top-Right -->
-    <button class="invite-button-top" (click)="redirectToInvite()">Referral Link</button>
-
-    <div class="commission-header">
-      <div class="commission-icon">
-        <i class="fas fa-percentage"></i>
+  <!-- Team Section -->
+  <div class="team-section-new" *ngIf="!isLoading && !errorMessage">
+    <div class="team-stats-grid">
+      <div class="stat-card-new">
+        <div class="stat-icon-new referrals"><i class="fas fa-users"></i></div>
+        <div class="stat-info-new">
+          <span class="stat-value-new">{{ totalReferrals }}</span>
+          <span class="stat-label-new">Total Referrals</span>
+        </div>
       </div>
-      <div class="commission-text">
-        <h4>Level 1 : 10%</h4>
-        <h4>Level 2 : 3%</h4>
-        <h4>Level 3 : 1%</h4>
-        <p>Earn commission based on your referrals.</p>
+      <div class="stat-card-new">
+        <div class="stat-icon-new earnings"><i class="fas fa-coins"></i></div>
+        <div class="stat-info-new">
+          <span class="stat-value-new">₹{{ totalEarnings | number:'1.2-2' }}</span>
+          <span class="stat-label-new">Total Earnings</span>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-
-    <div class="team-members-section">
-      <div class="section-title">
-        <i class="fas fa-list"></i>
-        <h3>Team Members ({{ totalReferrals }})</h3>
+    <div class="team-list-card-new">
+      <div class="team-list-header-new" (click)="toggleTeamList()">
+        <span>Team Members ({{ totalReferrals }})</span>
+        <i class="fas" [ngClass]="{ 'fa-chevron-down': !showTeamList, 'fa-chevron-up': showTeamList }"></i>
       </div>
-      <div class="members-list-card">
-        <div class="members-header">
-          <!-- <div class="header-item">Name</div> -->
-          <div class="header-item">Phone</div>
-          <div class="header-item">Status</div>
+      <div class="team-list-body-new" *ngIf="showTeamList">
+        <div class="team-member-row-new header">
+          <div class="member-info">Phone</div>
+          <div class="member-status">Status</div>
         </div>
-        <div class="members-list">
-          <div class="member-row" *ngFor="let member of teamMembers">
-            <!-- <div class="member-name">
-              <i class="fas fa-user-circle"></i>
-              {{ member.name }}
-            </div> -->
-            <div class="member-phone">{{ member.phone }}</div>
-            <div class="member-status" [class]="member.status">
-              <i class="fas fa-circle"></i>
-              {{ member.status | titlecase }}
+        <div *ngIf="teamMembers.length > 0; else noMembers" class="members-scroll-view">
+          <div class="team-member-row-new" *ngFor="let member of teamMembers">
+            <div class="member-info">{{ member.phone }}</div>
+            <div class="member-status" [ngClass]="member.status">
+              <i class="fas fa-circle"></i> {{ member.status | titlecase }}
             </div>
           </div>
-          <div *ngIf="teamMembers.length === 0" class="no-members">
-            <p>No Team. Share max.</p>
-          </div>
         </div>
+        <ng-template #noMembers>
+          <div class="no-members-new">No team members yet. Share your referral link!</div>
+        </ng-template>
       </div>
     </div>
 
-    <div class="benefits-section">
-      <div class="section-title">
-        <i class="fas fa-gift"></i>
-        <h3>Referral Benefits</h3>
-      </div>
-      <div class="benefits-card">
-        <div class="benefit-rule" *ngFor="let benefit of referralBenefits; let i = index">
-          <div class="rule-number">{{ i + 1 }}</div>
-          <div class="rule-content">
-            <i class="fas fa-check-circle"></i>
-            <span class="rule-text">{{ benefit }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    <button class="invite-btn-new-bottom" (click)="redirectToInvite()">
+      <i class="fas fa-share-alt"></i>
+      <span>Get Referral Link</span>
+    </button>
 
-<div class="bottom-nav">
-  <div class="nav-item " (click)="navigateToHome()">
-    <div class="nav-icon">
-      <i class="fas fa-home"></i>
+    <div class="commission-card-new">
+      <div class="commission-level"><span>Level 1</span><strong>10%</strong></div>
+      <div class="commission-level"><span>Level 2</span><strong>3%</strong></div>
+      <div class="commission-level"><span>Level 3</span><strong>1%</strong></div>
     </div>
-    <span>Home</span>
+
+    <div class="commission-example-card">
+      <h3>Commission Example</h3>
+      <p>If your Level 1 referral invests ₹1000, you earn ₹100 (10%).</p>
+      <p>If their referral (your Level 2) invests ₹1000, you earn ₹30 (3%).</p>
+      <p>If their referral (your Level 3) invests ₹1000, you earn ₹10 (1%).</p>
+    </div>
+
   </div>
 
-  <div class="nav-item" (click)="navigateToInvest()">
-    <div class="nav-icon">
-      <i class="fas fa-chart-line"></i>
-    </div>
-    <span>Invest</span>
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !isLoading" class="team-message-new error">
+    {{ errorMessage }}
   </div>
 
-  <div class="customer-service-btn" (click)="openCustomerService()">
-    <div class="service-icon">
-      <i class="fas fa-headset"></i>
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <span class="nav-label">Home</span>
     </div>
-  </div>
-
-  <div class="nav-item active" (click)="navigateToTeam()">
-    <div class="nav-icon">
-      <i class="fas fa-user-friends"></i>
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      <span class="nav-label">Invest</span>
     </div>
-    <span>Team</span>
-  </div>
-
-  <div class="nav-item" (click)="navigateToSettings()">
-    <div class="nav-icon">
-      <i class="fas fa-cog"></i>
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon"><i class="fas fa-headset"></i></div>
     </div>
-    <span>Settings</span>
+    <div class="nav-item active" (click)="navigateToTeam()">
+      <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+      <span class="nav-label">Team</span>
+    </div>
+    <div class="nav-item" (click)="navigateToSettings()">
+      <div class="nav-icon"><i class="fas fa-cog"></i></div>
+      <span class="nav-label">Settings</span>
+    </div>
   </div>
 </div>

@@ -8,11 +8,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { SupabaseService, UserWallet, BankDetails, UserProfile } from '../../supabase.service';
 import { environment } from '../../../environments/environment.development';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-withdrawal',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, LoadingSpinnerComponent],
   templateUrl: './withdrawal.component.html',
   styleUrls: ['./withdrawal.component.css']
 })
@@ -27,15 +28,15 @@ export class WithdrawalComponent implements OnInit {
   userId: string | null = null;
   bankCards: BankDetails[] = [];
   userProfile: UserProfile | null = null;
-
+  showPopup = false;
   isLoading: boolean = false;
   withdrawalMessage: { type: 'success' | 'error' | 'info'; text: string } | null = null;
 
   withdrawalRules = [
     'Minimum withdrawal amount is ₹300. All withdrawals are processed within 24-48 hours.',
-    'Withdrawals are only allowed between 5:00 PM and 11:00 PM.',
+    'Withdrawals are only allowed between 10:30 AM and 4:00 PM.',
     'You need to invest first before you can withdraw.',
-    'Trade password is required for security verification. Ensure you enter the correct password.',
+    'Only 2 times withdrawal is allowed in a day.',
     'Processing fees will apply 12% on your tier and withdrawal amount.'
   ];
 
@@ -99,7 +100,10 @@ export class WithdrawalComponent implements OnInit {
       this.isLoading = false;
     }
   }
-
+  closePopup() {
+  this.showPopup = false;
+  this.router.navigate(['/withdrawal-record']);
+}
   isTradePasswordSet(): boolean {
       return !!this.userProfile && !!this.userProfile.trade_password_hash;
   }
@@ -107,66 +111,129 @@ export class WithdrawalComponent implements OnInit {
   async applyWithdrawal() {
   this.withdrawalMessage = null;
   this.isLoading = true;
+  this.showPopup = true;
   this.withdrawalMessage = { type: 'info', text: 'Processing withdrawal request...' };
 
-  // --- Time Restriction Check ---
-  const now = new Date();
-  const currentHour = now.getHours();
-  if (currentHour < 17 || currentHour >= 23) {
-    this.withdrawalMessage = {
-      type: 'error',
-      text: 'Withdrawals are only allowed between 5:00 PM and 11:00 PM.',
-    };
+  // --- NEW: Scroll to the top when a message is displayed ---
+  window.scrollTo(0, 0);
+
+  // --- Check for a successful investment ---
+  try {
+    const hasInvestedResponse = await this.http.get<{ hasInvested: boolean }>(
+      `${this.flaskApiBaseUrl}/user/has-successful-investment?userId=${this.userId}`
+    ).toPromise();
+
+    if (!hasInvestedResponse || !hasInvestedResponse.hasInvested) {
+      this.withdrawalMessage = {
+        type: 'error',
+        text: 'You must have a successful investment to make a withdrawal.'
+      };
+      // --- NEW: Scroll to the top when a new message is set ---
+      window.scrollTo(0, 0);
+      this.isLoading = false;
+      this.showPopup = false;
+      return;
+    }
+  } catch (error) {
+    console.error('Error checking for successful investment:', error);
+    this.withdrawalMessage = { type: 'error', text: 'An error occurred while checking investment status.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
+  // --- Time Restriction Check ---
+const now = new Date();
+const currentHour = now.getHours();      // 0 to 23
+const currentMinute = now.getMinutes();  // 0 to 59
+
+// Check if current time is NOT between 10:30 AM and 4:00 PM
+const beforeStart = (currentHour < 10) || (currentHour === 10 && currentMinute < 30);
+const afterEnd = (currentHour > 16) || (currentHour === 16 && currentMinute > 0);
+
+if (beforeStart || afterEnd) {
+  this.withdrawalMessage = {
+    type: 'error',
+    text: 'Withdrawals are only allowed between 10:30 AM and 4:00 PM.',
+  };
+  window.scrollTo(0, 0);
+  this.isLoading = false;
+  this.showPopup = false;
+  return;
+}
+
   if (!this.userId) {
     this.withdrawalMessage = { type: 'error', text: 'User not logged in.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
   if (!this.isTradePasswordSet()) {
     this.withdrawalMessage = { type: 'error', text: 'Please set your trade password before withdrawing.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
   if (this.withdrawalAmount <= 0) {
     this.withdrawalMessage = { type: 'error', text: 'Please enter a valid withdrawal amount.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
   if (this.withdrawalAmount < this.minimumWithdrawal) {
     this.withdrawalMessage = { type: 'error', text: `Withdrawal amount must be at least ₹${this.minimumWithdrawal}.` };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
   if (this.withdrawalAmount > this.availableBalance) {
     this.withdrawalMessage = { type: 'error', text: 'Insufficient available income for withdrawal.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
   if (!this.tradePassword) {
     this.withdrawalMessage = { type: 'error', text: 'Trade password is required.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
   if (!this.selectedBankCardId) {
     this.withdrawalMessage = { type: 'error', text: 'Please select a bank card.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
   const selectedCard = this.bankCards.find(card => card.id === this.selectedBankCardId);
   if (!selectedCard) {
     this.withdrawalMessage = { type: 'error', text: 'Selected bank card not found. Please re-select.' };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
     this.isLoading = false;
+    this.showPopup = false;
     return;
   }
 
@@ -176,12 +243,19 @@ export class WithdrawalComponent implements OnInit {
       { userId: this.userId, password: this.tradePassword }
     ).toPromise();
 
+    console.log('passwordVerifyResponse raw:', passwordVerifyResponse);
+
     if (!passwordVerifyResponse || !passwordVerifyResponse.success) {
-      this.withdrawalMessage = { type: 'error', text: passwordVerifyResponse?.message || 'Invalid trade password.' };
+      this.withdrawalMessage = { type: 'error', text: passwordVerifyResponse?.message || 'Invalid trade password.' 
+
+      };
+      // --- NEW: Scroll to the top when a new message is set ---
+      window.scrollTo(0, 0);
       this.isLoading = false;
+      this.showPopup = false;
       return;
     }
-
+    
     const withdrawalRequestPayload = {
       userId: this.userId,
       amount: this.withdrawalAmount,
@@ -200,6 +274,8 @@ export class WithdrawalComponent implements OnInit {
         type: 'success',
         text: response.message || `Withdrawal of ₹${this.withdrawalAmount} requested successfully!`
       };
+      // --- NEW: Scroll to the top when a new message is set ---
+      window.scrollTo(0, 0);
 
       this.withdrawalAmount = 0;
       this.tradePassword = '';
@@ -208,20 +284,30 @@ export class WithdrawalComponent implements OnInit {
       setTimeout(() => {
         this.ngZone.run(() => {
           this.withdrawalMessage = null;
+          this.navigateToWithdrawalRecords();
         });
-      }, 5000);
+      }, 2000);
 
     } else {
       this.withdrawalMessage = { type: 'error', text: response?.message || 'Withdrawal request failed. Please try again.' };
+      // --- NEW: Scroll to the top when a new message is set ---
+      window.scrollTo(0, 0);
     }
 
   } catch (error) {
     console.error('Error applying withdrawal:', error);
-    this.withdrawalMessage = { type: 'error', text: 'An unexpected error occurred during withdrawal.' };
+    const errorMessage = (error && typeof error === 'object' && 'error' in error && (error as any).error?.message)
+      ? (error as any).error.message
+      : 'Invalid trade password.';
+    this.withdrawalMessage = { type: 'error', text: errorMessage };
+    // --- NEW: Scroll to the top when a new message is set ---
+    window.scrollTo(0, 0);
   } finally {
     this.isLoading = false;
+    this.showPopup = false;
   }
 }
+
 
   goBack() {
     this.router.navigate(['/home']);
@@ -238,4 +324,10 @@ export class WithdrawalComponent implements OnInit {
   navigateToWithdrawalRecords() {
     this.router.navigate(['/withdrawal-record']);
   }
+
+  navigateToHome(): void { this.router.navigate(['/home']); }
+  navigateToInvest(): void { this.router.navigate(['/invest']); }
+  navigateToTeam(): void { this.router.navigate(['/team']); }
+  navigateToSettings(): void { this.router.navigate(['/settings']); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
 }

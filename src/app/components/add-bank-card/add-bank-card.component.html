@@ -1,83 +1,58 @@
-<div class="page-container">
-  <div class="page-header">
-    <button class="back-btn" (click)="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <h2>Add Bank Card</h2>
-    <div class="header-icon">
-      <i class="fas fa-university"></i>
+<div class="tesla-home-container">
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-credit-card"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Add Bank Card</h2>
+          <p class="user-phone">Securely save your bank details</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div *ngIf="isLoading" class="loading-spinner">
-    <i class="fas fa-spinner fa-spin"></i> Loading...
-  </div>
-  <div *ngIf="addCardMessage" [ngClass]="['message-card', addCardMessage.type]">
-    {{ addCardMessage.text }}
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-credit-card"></i>
-      <h3>Enter Bank Details</h3>
+  <div class="form-section">
+    <div *ngIf="isLoading" class="loading-spinner-container">
+      <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
     </div>
-    <div class="bank-form-card">
-      <div class="form-group">
-        <label for="accountNumber">Account Number</label>
-        <input
-          id="accountNumber"
-          type="text"
-          [(ngModel)]="bankDetails.account_number"
-          placeholder="Enter Account Number"
-          class="form-input"
-          required
-        >
-      </div>
 
-      <div class="form-group">
-        <label for="bankName">Bank Name</label>
-        <input
-          id="bankName"
-          type="text"
-          [(ngModel)]="bankDetails.bank_name"
-          placeholder="e.g., State Bank of India"
-          class="form-input"
-          required
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="ifscCode">IFSC Code</label>
-        <input
-          id="ifscCode"
-          type="text"
-          [(ngModel)]="bankDetails.ifsc_code"
-          placeholder="e.g., SBIN0000001"
-          class="form-input"
-          required
-        >
-      </div>
+    <div *ngIf="addCardMessage" class="message-new" [ngClass]="addCardMessage.type">
+      {{ addCardMessage.text }}
+    </div>
 
-      <div class="form-group">
+    <div class="form-card-new">
+      <div class="form-group-new">
         <label for="accountHolderName">Account Holder Name</label>
-        <input
-          id="accountHolderName"
-          type="text"
-          [(ngModel)]="bankDetails.account_holder_name"
-          placeholder="Name as per Bank Account"
-          class="form-input"
-          required
-        >
+        <input id="accountHolderName" type="text" [(ngModel)]="bankDetails.account_holder_name" placeholder="Name as per Bank Account" required>
+      </div>
+      <div class="form-group-new">
+        <label for="accountNumber">Account Number</label>
+        <input id="accountNumber" type="text" [(ngModel)]="bankDetails.account_number" placeholder="Enter Account Number" required>
+      </div>
+      <div class="form-group-new">
+        <label for="ifscCode">IFSC Code</label>
+        <input id="ifscCode" type="text" [(ngModel)]="bankDetails.ifsc_code" placeholder="e.g., SBIN0000001" required>
+      </div>
+      <div class="form-group-new">
+        <label for="bankName">Bank Name</label>
+        <input id="bankName" type="text" [(ngModel)]="bankDetails.bank_name" placeholder="e.g., State Bank of India" required>
       </div>
 
-      <button
-        class="save-btn"
-        [disabled]="!bankDetails.account_number || !bankDetails.bank_name || !bankDetails.ifsc_code || !bankDetails.account_holder_name || isLoading"
-        (click)="saveBankCard()"
-      >
+      <button class="save-btn-new" [disabled]="!bankDetails.account_number || !bankDetails.bank_name || !bankDetails.ifsc_code || !bankDetails.account_holder_name || isLoading" (click)="saveBankCard()">
         <i class="fas fa-save"></i>
-        Save Bank Card
+        <span>Save Bank Card</span>
       </button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="goBack()">
+      <div class="nav-icon"><i class="fas fa-arrow-left"></i></div>
+      <span class="nav-label">Back</span>
     </div>
   </div>
 </div>

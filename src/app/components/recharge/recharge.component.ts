@@ -9,13 +9,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 // UserWallet interface is now updated in supabase.service.ts
 import { SupabaseService, UserWallet, transaction_type, transaction_status } from '../../supabase.service';
 import { environment } from '../../../environments/environment.development';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 declare var Razorpay: any;
 
 @Component({
   selector: 'app-recharge',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, LoadingSpinnerComponent],
   templateUrl: './recharge.component.html',
   styleUrls: ['./recharge.component.css']
 })
@@ -35,10 +36,11 @@ export class RechargeComponent implements OnInit {
     { id: 'channelA', name: 'UPI Gateway', icon: 'fas fa-money-check-alt' },
   ];
   rechargeRules = [
-    'Minimum recharge amount is ₹500. All transactions are processed instantly or within 5 mins.',
-    'Recharge amount will be reflected in your wallet balance immediately after successful payment.',
-    'Payments are processed through Razorpay, a secure payment gateway.',
-    'For any payment issues, please contact customer support within 24 hours.'
+    'Deposit Timings: 8:00 AM to 8:00 PM.',
+    'Recharge amount must be ₹500 or more.',
+    'Payment channels: Razorpay UPI Gateway.',
+    'All transactions are processed within 20 minutes.',
+    'For any issues, contact customer support within 24 hours.'
   ];
 
   private flaskApiBaseUrl = environment.backendApiUrl;
@@ -260,7 +262,37 @@ export class RechargeComponent implements OnInit {
     }
   }
 
+  goPayment() {
+    // Get the current hour (0-23)
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    // Define the allowed time window (8 AM to 8 PM)
+    const startHour = 8;
+    const endHour = 20; // 20:00 in 24-hour format is 8 PM
+
+    // Check if the current time is within the allowed range
+    if (currentHour >= startHour && currentHour < endHour) {
+        // If the time is valid, proceed with the amount check
+        if (this.selectedAmount && this.selectedAmount >= 500) {
+            this.router.navigate(['/payment'], { queryParams: { amount: this.selectedAmount } });
+        } else {
+            // Handle validation error for amount
+            this.rechargeMessage = { type: 'error', text: 'Please select a valid amount (minimum ₹500).' };
+        }
+    } else {
+        // If the time is outside the allowed range, show an error message
+        this.rechargeMessage = { type: 'error', text: 'Deposit timing is from 8:00 AM to 8:00 PM.' };
+    }
+}
+
   goBack() {
     this.router.navigate(['/home']);
   }
+
+  navigateToHome(): void { this.router.navigate(['/home']); }
+  navigateToInvest(): void { this.router.navigate(['/invest']); }
+  navigateToTeam(): void { this.router.navigate(['/team']); }
+  navigateToSettings(): void { this.router.navigate(['/settings']); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
 }

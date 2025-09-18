@@ -1,194 +1,54 @@
-.page-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f093fb 0%, #f5f7fa 50%, #c3cfe2 100%);
-  padding-bottom: 20px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-.page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 25px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
+/* Base Container */
+.tesla-home-container { min-height: 100vh; background: #f0f2f5; position: relative; overflow-x: hidden; font-family: 'Inter', sans-serif; color: #1e293b; padding-bottom: 90px; }
 
-.back-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 10px;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
+/* Header */
+.tesla-header { position: sticky; top: 0; z-index: 10; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid #e5e7eb; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.header-content { display: flex; justify-content: space-between; align-items: center; max-width: 420px; margin: 0 auto; }
+.user-profile { display: flex; align-items: center; gap: 12px; }
+.profile-avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3); }
+.user-info h2 { font-size: 1rem; font-weight: 600; margin: 0; }
+.user-info p { font-size: 0.8rem; color: #6b7280; margin: 2px 0 0; }
 
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
-}
+/* Records Section */
+.records-section-new { padding: 20px; max-width: 420px; margin: 0 auto; display: grid; gap: 20px; }
 
-.page-header h2 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
+.tabs-new { display: flex; background: white; border-radius: 12px; padding: 5px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.tab-btn-new { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; background: transparent; color: #6b7280; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.tab-btn-new.active { background: linear-gradient(135deg, #dc2626, #ef4444); color: white; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2); }
 
-.header-icon {
-  width: 45px;
-  height: 45px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
+.records-list-new { display: grid; gap: 15px; }
 
-.filter-section {
-  padding: 20px;
-}
+.record-card-new { background: white; border-radius: 18px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.07); }
 
-.filter-buttons {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding:10px 0px 10px 0px
-}
+.record-header-new { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.record-title-new { font-size: 1.1rem; font-weight: 600; }
+.record-status-new { font-size: 0.8rem; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
+.record-status-new.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.record-status-new.completed { background: rgba(5, 150, 105, 0.1); color: #059669; }
+.record-status-new.failed { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
 
-.filter-btn {
-  padding: 8px 16px;
-  border: 2px solid #e2e8f0;
-  background: white;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  color: #718096;
-}
+.record-body-new { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center; margin-bottom: 15px; }
+.stat-label { font-size: 0.75rem; color: #6b7280; margin-bottom: 5px; }
+.stat-value { font-size: 1rem; font-weight: 600; }
 
-.filter-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
-  color: white;
-}
+.record-footer-new { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #6b7280; }
+.record-date { font-weight: 500; }
 
-.filter-btn:hover {
-  transform: translateY(-2px);
-}
+.empty-state-new { text-align: center; padding: 40px 20px; }
+.empty-icon { font-size: 3rem; color: #d1d5db; margin-bottom: 15px; }
+.empty-state-new h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+.empty-state-new p { color: #6b7280; margin-bottom: 20px; }
 
-.records-section {
-  padding: 0 20px;
-}
+.message-new { padding: 12px 15px; border-radius: 12px; font-size: 0.85rem; text-align: center; font-weight: 500; margin-bottom: 20px; }
+.message-new.error { background-color: rgba(220, 38, 38, 0.1); color: #dc2626; }
 
-.no-records {
-  text-align: center;
-  padding: 60px 20px;
-  color: #718096;
-}
-
-.no-records i {
-  font-size: 4rem;
-  margin-bottom: 20px;
-  color: #cbd5e0;
-}
-
-.no-records h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #4a5568;
-}
-
-.record-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 15px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-}
-
-.record-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-}
-
-.record-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.record-info h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0 0 5px;
-}
-
-.record-info p {
-  color: #718096;
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-.status-badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.status-badge.pending {
-  background: #fef3c7;
-  color: #d97706;
-}
-
-.status-badge.completed {
-  background: #d1fae5;
-  color: #059669;
-}
-
-.status-badge.failed {
-  background: #fee2e2;
-  color: #dc2626;
-}
-
-.record-details {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 15px;
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.detail-item:last-child {
-  margin-bottom: 0;
-}
-
-.label {
-  color: #718096;
-  font-size: 0.9rem;
-}
-
-.value {
-  color: #2d3748;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
+/* Bottom Nav */
+.tesla-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); max-width: 420px; width: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px); border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; align-items: center; padding: 10px 0; z-index: 100; border-radius: 20px 20px 0 0; }
+.nav-item { display: flex; flex-direction: column; align-items: center; padding: 8px 12px; cursor: pointer; color: #6b7280; }
+.nav-item.active { color: #dc2626; }
+.nav-center-btn { width: 55px; height: 55px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3); margin-top: -25px; border: 4px solid #f0f2f5; }
+.center-icon { font-size: 1.4rem; color: white; }
+.nav-icon { font-size: 1.2rem; margin-bottom: 4px; }
+.nav-label { font-size: 0.7rem; font-weight: 600; }

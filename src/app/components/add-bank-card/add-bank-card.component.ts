@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SupabaseService } from '../../supabase.service'; // Adjust path as needed
 import { environment } from '../../../environments/environment.development';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 // Define an interface for bank details for better type safety
 export interface BankDetails {
@@ -21,7 +22,7 @@ export interface BankDetails {
 @Component({
   selector: 'app-add-bank-card',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, LoadingSpinnerComponent],
   templateUrl: './add-bank-card.component.html',
   styleUrls: ['./add-bank-card.component.css']
 })

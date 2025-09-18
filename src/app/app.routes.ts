@@ -1,5 +1,5 @@
 // src/app/app.routes.ts
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { SplashComponent } from './components/splash/splash.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
@@ -18,6 +18,11 @@ import { MissionComponent } from './components/mission/mission.component';
 import { GiftComponent } from './components/gift/gift.component';
 import { WithdrawalRecordComponent } from './components/withdrawal-record/withdrawal-record.component';
 import { DepositRecordComponent } from './components/deposit-record/deposit-record.component';
+import { HelpCentreComponent } from './components/help-centre/help-centre.component';
+import { DownloadAppComponent } from './components/download-app/download-app.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { BlogComponent } from './components/blog/blog.component';
+import { NgModule } from '@angular/core';
 
 
 
@@ -40,5 +45,20 @@ export const routes = [
   { path: 'gift', component: GiftComponent },
   { path: 'withdrawal-record', component: WithdrawalRecordComponent },
   { path: 'deposit-record', component: DepositRecordComponent },
+  { path: 'help-centre', component: HelpCentreComponent },
+  { path: 'download-app', component: DownloadAppComponent },
+  { path: 'payment', component: PaymentComponent,},
+  { path: 'blog', component: BlogComponent },
   { path: '**', redirectTo: '' }
 ];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'top', // ✅ Always scroll to top on navigation
+      anchorScrolling: 'enabled'        // ✅ Allow anchor link scrolling
+    })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}

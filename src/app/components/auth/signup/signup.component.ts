@@ -172,28 +172,30 @@ export class SignupComponent implements OnInit {
   async signup() {
   this.isLoading = true;
   this.isSuccess = false;
+  this.message = ''; // Clear previous messages
 
-
-  // Validation checks with SweetAlert
+  // Validation checks, now using the component's own message box
   if (!this.nickname.trim() || this.nickname.trim().length < 2) {
-    Swal.fire('Oops!', 'Nickname must be at least 2 characters long.', 'warning');
+    this.isSuccess = false;
+    this.message = 'Nickname must be at least 2 characters long.';
     this.isLoading = false;
     return;
   }
   if (this.phoneNumber.length !== 10) {
-    Swal.fire('Invalid Phone', 'Please enter a valid 10-digit mobile number.', 'warning');
+    this.isSuccess = false;
+    this.message = 'Please enter a valid 10-digit mobile number.';
     this.isLoading = false;
-    
     return;
   }
   if (this.password_signup.length < 6) {
-    Swal.fire('Weak Password', 'Password must be at least 6 characters long.', 'warning');
+    this.isSuccess = false;
+    this.message = 'Password must be at least 6 characters long.';
     this.isLoading = false;
-    
     return;
   }
   if (this.password_signup !== this.confirmPassword_signup) {
-    Swal.fire('Mismatch', 'Passwords do not match!', 'error');
+    this.isSuccess = false;
+    this.message = 'Passwords do not match!';
     this.isLoading = false;
     return;
   }
@@ -202,12 +204,9 @@ export class SignupComponent implements OnInit {
   console.log('✅ signup(): Value of referralCode retrieved from localStorage:', referralCode);
 
   try {
-    Swal.fire({
-      title: 'Please wait...',
-      text: 'Creating your account',
-      didOpen: () => Swal.showLoading(),
-      allowOutsideClick: false
-    });
+    // Show a loading message in the status box
+    this.isSuccess = true;
+    this.message = 'Creating your account...';
 
     const backendResponse = await fetch(`${environment.backendApiUrl}/create-supabase-user`, {
       method: 'POST',
@@ -222,33 +221,41 @@ export class SignupComponent implements OnInit {
 
     const responseData = await backendResponse.json();
 
-    Swal.close();
-
     if (!backendResponse.ok) {
       if (backendResponse.status === 409) {
-        Swal.fire('Already Registered', responseData.error || 'This phone number is already registered.', 'info');
+        this.isSuccess = false;
+        this.message = responseData.error || 'This phone number is already registered.';
       } else {
-        Swal.fire('Error', responseData.error || 'Failed to create account. Please try again.', 'error');
+        this.isSuccess = false;
+        this.message = responseData.error || 'Failed to create account. Please try again.';
       }
-      throw new Error(responseData.error || 'Backend error.');
+      throw new Error(this.message); // Re-throw to hit the catch block if needed
     }
 
-    Swal.fire('Success!', 'Account created successfully! You can now sign in.', 'success');
-
+    // Success message
+    this.isSuccess = true;
+    this.message = 'Account created successfully! You can now sign in.';
+    setTimeout(() => {
     this.router.navigate(['/signin']);
     localStorage.removeItem('referral_code_from_url');
+}, 3000);
+
 
   } catch (error: any) {
-    if (!this.message) {
-      Swal.fire('Error', `Error creating account: ${error.message || 'Network error.'}`, 'error');
-    }
+    this.isSuccess = false;
+    this.message = `Error creating account: ${error.message || 'Network error.'}`;
     console.error('Error creating account:', error);
   } finally {
     this.isLoading = false;
-
+    // You can add a setTimeout here to automatically hide the message after a few seconds
+    setTimeout(() => {
+        this.message = '';
+    }, 5000);
   }
 }
-
+closePopup() {
+  this.message = '';
+}
 
   goToSignin() {
     this.router.navigate(['/signin']);

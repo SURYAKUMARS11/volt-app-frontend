@@ -1,110 +1,126 @@
-<div class="page-container">
-  <div class="loading-overlay" *ngIf="isLoading">
-    <div class="loading-spinner">
-      <i class="fas fa-spinner fa-spin"></i>
-      <p>{{ rechargeMessage?.text || 'Loading...' }}</p>
-    </div>
-  </div>
+<div class="tesla-home-container">
+  <!-- Loading Spinner -->
+  <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
 
-  <div class="page-header">
-    <button class="back-btn" (click)="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <h2>Recharge Wallet</h2>
-    <div class="header-icon">
-      <i class="fas fa-credit-card"></i>
-    </div>
-  </div>
+  <!-- Background Elements -->
+  <div class="background-grid"></div>
+  <div class="background-glow"></div>
 
-  <div class="balance-info">
-    <div class="balance-card">
-      <div class="balance-header">
-        <i class="fas fa-wallet"></i>
-        <span>Current Balance</span>
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-credit-card"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Recharge</h2>
+          <p class="user-phone">Add funds to your wallet</p>
+        </div>
       </div>
-      <div class="balance-amount">₹{{ currentBalance | number:'1.2-2' }}</div>
+      <div class="tesla-brand">
+        <div class="tesla-logo">
+          <svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-bolt"></i>
-      <h3>Quick Recharge</h3>
-    </div>
+  <!-- Balance Display -->
+  <div class="balance-display">
+    <div class="balance-label">Current Balance</div>
+    <div class="balance-value">₹{{ currentBalance | number:'1.2-2' }}</div>
+  </div>
 
-    <div class="recharge-card">
-      <div class="amount-grid">
+  <!-- Recharge Section -->
+  <div class="recharge-section">
+    <div class="recharge-card-new">
+      <div class="section-title-new">Select Amount</div>
+      <div class="amount-grid-new">
         <div
-          class="amount-btn"
+          class="amount-btn-new"
           *ngFor="let amount of quickAmounts"
           [class.selected]="selectedAmount === amount"
           (click)="selectAmount(amount)">
           ₹{{amount}}
         </div>
       </div>
-
-      <div class="custom-amount-section">
-        <div class="input-wrapper">
-          <span class="currency">₹</span>
-          <input
-            type="number"
-            [(ngModel)]="customAmount"
-            (input)="onCustomAmountChange()"
-            placeholder="Enter custom amount (Min ₹500)"
-            class="amount-input">
-        </div>
-        <p class="recharge-amount-text">Recharge Amount</p>
+      <div class="custom-amount-wrapper">
+        <input
+          type="number"
+          [(ngModel)]="customAmount"
+          (input)="onCustomAmountChange()"
+          placeholder="Or enter a custom amount (Min ₹500)"
+          class="custom-amount-input-new">
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-credit-card"></i>
-      <h3>Payment Channel</h3>
-    </div>
-    <div class="payment-channels">
-      <div
-        class="channel-card"
-        *ngFor="let channel of paymentChannels"
-        [class.selected]="selectedChannel === channel.id"
-        (click)="selectPaymentChannel(channel.id)">
-        <div class="channel-icon">
+    <div class="recharge-card-new">
+      <div class="section-title-new">Payment Channel</div>
+      <div class="channel-list-new">
+        <div
+          class="channel-btn-new"
+          *ngFor="let channel of paymentChannels"
+          [class.selected]="selectedChannel === channel.id"
+          (click)="selectPaymentChannel(channel.id)">
           <i [class]="channel.icon"></i>
-        </div>
-        <div class="channel-name">{{channel.name}}</div>
-        <div class="channel-radio">
-          <i class="fas fa-check-circle" *ngIf="selectedChannel === channel.id"></i>
-          <i class="far fa-circle" *ngIf="selectedChannel !== channel.id"></i>
+          <span>{{channel.name}}</span>
+          <div class="radio-icon-new">
+            <i class="fas fa-check-circle"></i>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div *ngIf="rechargeMessage" class="recharge-message" [ngClass]="rechargeMessage.type">
-    {{ rechargeMessage.text }}
-  </div>
+    <div *ngIf="rechargeMessage" class="recharge-message-new" [ngClass]="rechargeMessage.type">
+      {{ rechargeMessage.text }}
+    </div>
 
-  <div class="proceed-section">
     <button
-      class="proceed-btn"
+      class="proceed-btn-new"
       [disabled]="!selectedAmount || selectedAmount < 500 || !selectedChannel || isLoading"
-      (click)="proceedToPayment()">
-      <i class="fas fa-lock"></i>
-      Proceed to Pay ₹{{selectedAmount || 0 | number:'1.2-2'}}
+      (click)="goPayment()">
+      <i class="fas fa-shield-alt"></i>
+      <span>Proceed to Pay ₹{{selectedAmount || 0 | number:'1.2-2'}}</span>
     </button>
   </div>
 
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-info-circle"></i>
-      <h3>Recharge Rules</h3>
-    </div>
-    <div class="rules-card">
-      <div class="rule-item" *ngFor="let rule of rechargeRules; let i = index">
-        <div class="rule-number">{{i + 1}}</div>
-        <div class="rule-text">{{rule}}</div>
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon">
+        <i class="fas fa-home"></i>
       </div>
+      <span class="nav-label">Home</span>
+    </div>
+
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <span class="nav-label">Invest</span>
+    </div>
+
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon">
+        <i class="fas fa-headset"></i>
+      </div>
+    </div>
+
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon">
+        <i class="fas fa-user-friends"></i>
+      </div>
+      <span class="nav-label">Team</span>
+    </div>
+
+    <div class="nav-item" (click)="navigateToSettings()">
+      <div class="nav-icon">
+        <i class="fas fa-cog"></i>
+      </div>
+      <span class="nav-label">Settings</span>
     </div>
   </div>
 </div>

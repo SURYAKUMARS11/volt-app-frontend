@@ -1,144 +1,124 @@
-<div class="page-container">
-  <!-- Header -->
-  <div class="page-header">
-    <button class="back-btn" (click)="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <h2>Withdrawal</h2>
-    <div class="header-icon">
-      <i class="fas fa-money-bill-wave"></i>
-    </div>
-  </div>
-
+<div class="tesla-home-container">
   <!-- Loading Spinner -->
-  <div *ngIf="isLoading" class="loading-section">
-    <div class="loading-spinner">
-      <div class="spinner"></div>
-      <span>Loading...</span>
+  <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+
+  <!-- Background Elements -->
+  <div class="background-grid"></div>
+  <div class="background-glow"></div>
+
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Withdrawal</h2>
+          <p class="user-phone">Transfer funds to your bank</p>
+        </div>
+      </div>
+      <div class="tesla-brand">
+        <div class="tesla-logo">
+          <svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Message Card -->
-  <div *ngIf="withdrawalMessage" class="message-section">
-    <div class="message-card" [ngClass]="withdrawalMessage.type">
-      <div class="message-content">
-        <i class="fas fa-info-circle" *ngIf="withdrawalMessage.type === 'info'"></i>
-        <!-- <i class="fas fa-exclamation-triangle" *ngIf="withdrawalMessage.type === 'warning'"></i> -->
-        <i class="fas fa-check-circle" *ngIf="withdrawalMessage.type === 'success'"></i>
-        <i class="fas fa-times-circle" *ngIf="withdrawalMessage.type === 'error'"></i>
-        <span>{{ withdrawalMessage.text }}</span>
-      </div>
-      <button *ngIf="withdrawalMessage.text === 'Please set your trade password first.'" class="add-card-link"
-        (click)="navigateToSetTradePassword()">
-        <i class="fas fa-key"></i>
-        Set Trade Password
+  <!-- Balance Display -->
+  <div class="balance-display">
+    <div class="balance-label">Available for Withdrawal</div>
+    <div class="balance-value">₹{{ availableBalance | number:'1.2-2' }}</div>
+    <div class="balance-sub-label">Minimum withdrawal: ₹{{ minimumWithdrawal }}</div>
+  </div>
+
+  <!-- Withdrawal Section -->
+  <div class="withdrawal-section">
+    <div *ngIf="withdrawalMessage" class="withdrawal-message-new" [ngClass]="withdrawalMessage.type">
+      <i class="fas fa-info-circle"></i>
+      <span>{{ withdrawalMessage.text }}</span>
+      <button *ngIf="withdrawalMessage.text === 'Please set your trade password first.'" class="action-btn-new" (click)="navigateToSetTradePassword()">
+        Set Password
       </button>
     </div>
-  </div>
 
-  <!-- Balance Info -->
-  <div class="balance-info">
-    <div class="balance-card">
-      <div class="balance-header">
-        <i class="fas fa-wallet"></i>
-        <span>Available Balance</span>
-      </div>
-      <div class="balance-amount">₹{{availableBalance | number:'1.2-2'}}</div>
-      <div class="balance-note">Minimum withdrawal ₹{{minimumWithdrawal}}</div>
-    </div>
-  </div>
-
-  <!-- Withdrawal Form -->
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-money-bill-wave"></i>
-      <h3>Withdrawal Application</h3>
-    </div>
-    <div class="withdrawal-form-card">
-      <div class="form-group">
-        <label for="withdrawalAmount">
-          <i class="fas fa-rupee-sign"></i>
-          Withdrawal Amount
-        </label>
-        <div class="input-wrapper">
-          <span class="currency"></span>
-          <select id="withdrawalAmount" [(ngModel)]="withdrawalAmount" class="form-input"
-            [disabled]="!isTradePasswordSet()">
-            <option [ngValue]="null" disabled selected>Select amount</option>
-            <option [ngValue]="300">300</option>
-            <option [ngValue]="500">500</option>
-            <option [ngValue]="1000">1000</option>
-            <option [ngValue]="4000">4000</option>
-          </select>
-          <i class="fas fa-money-bill-wave input-icon"></i>
-        </div>
+    <div class="withdrawal-card-new">
+      <div class="form-group-new">
+        <label for="withdrawalAmount">Amount</label>
+        <select id="withdrawalAmount" [(ngModel)]="withdrawalAmount" class="form-select-new" [disabled]="!isTradePasswordSet()">
+          <option [ngValue]="null" disabled selected>Select amount</option>
+          <option [ngValue]="300">₹300</option>
+          <option [ngValue]="500">₹500</option>
+          <option [ngValue]="1000">₹1000</option>
+          <option [ngValue]="4000">₹4000</option>
+        </select>
       </div>
 
-      <div class="form-group">
-        <label for="tradePassword">
-          <i class="fas fa-lock"></i>
-          Trade Password
-        </label>
-        <div class="input-wrapper">
-          <input id="tradePassword" type="password" [(ngModel)]="tradePassword" placeholder="Enter your trade password"
-            class="form-input" [disabled]="!isTradePasswordSet()">
-          <i class="fas fa-key input-icon"></i>
-        </div>
+      <div class="form-group-new">
+        <label for="tradePassword">Trade Password</label>
+        <input id="tradePassword" type="password" [(ngModel)]="tradePassword" placeholder="Enter your trade password" class="form-input-new" [disabled]="!isTradePasswordSet()">
       </div>
 
-      <div class="form-group">
-        <label for="bankCardSelect">
-          <i class="fas fa-credit-card"></i>
-          Choose Bank Card
-        </label>
-        <div class="select-wrapper">
-          <select id="bankCardSelect" [(ngModel)]="selectedBankCardId" class="form-input"
-            [disabled]="bankCards.length === 0 || !isTradePasswordSet()">
-            <option [ngValue]="null" disabled selected>
-              {{ bankCards.length > 0 ? 'Select a bank card' : 'No bank cards added' }}
-            </option>
-            <option *ngFor="let card of bankCards" [ngValue]="card.id">
-              {{ card.bank_name }} (A/C: ****{{ card.account_number | slice:-4 }})
-            </option>
-          </select>
-          <i class="fas fa-chevron-down select-icon"></i>
-        </div>
-        <button *ngIf="bankCards.length === 0" class="add-card-link" (click)="navigateToAddBankCard()">
-          <i class="fas fa-plus"></i>
-          Add Bank Card
-        </button>
-      </div>
-
-      <div class="form-actions">
-        <button class="apply-btn"
-          [disabled]="!isTradePasswordSet() || !withdrawalAmount || !tradePassword || !selectedBankCardId || isLoading"
-          (click)="applyWithdrawal()">
-          <i class="fas fa-paper-plane"></i>
-          Apply Withdrawal
-        </button>
-
-        <button class="withdrawal-records-btn" (click)="navigateToWithdrawalRecords()">
-          <i class="fas fa-history"></i>
-          Withdrawal Records
+      <div class="form-group-new">
+        <label for="bankCardSelect">Bank Card</label>
+        <select id="bankCardSelect" [(ngModel)]="selectedBankCardId" class="form-select-new" [disabled]="bankCards.length === 0 || !isTradePasswordSet()">
+          <option [ngValue]="null" disabled selected>{{ bankCards.length > 0 ? 'Select a bank card' : 'No bank cards added' }}</option>
+          <option *ngFor="let card of bankCards" [ngValue]="card.id">{{ card.bank_name }} (****{{ card.account_number | slice:-4 }})</option>
+        </select>
+        <button *ngIf="bankCards.length === 0" class="action-btn-new secondary" (click)="navigateToAddBankCard()">
+          <i class="fas fa-plus"></i> Add Bank Card
         </button>
       </div>
     </div>
+
+    <button class="proceed-btn-new" [disabled]="!isTradePasswordSet() || !withdrawalAmount || !tradePassword || !selectedBankCardId || isLoading" (click)="applyWithdrawal()">
+      <i class="fas fa-paper-plane"></i>
+      <span>Apply for Withdrawal</span>
+    </button>
+
+    <button class="action-btn-new tertiary" (click)="navigateToWithdrawalRecords()">
+      <i class="fas fa-history"></i>
+      <span>View Withdrawal Records</span>
+    </button>
   </div>
 
-  <!-- Withdrawal Rules -->
-  <div class="section">
-    <div class="section-title">
-      <i class="fas fa-info-circle"></i>
-      <h3>Withdrawal Rules</h3>
-    </div>
-    <div class="rules-card">
-      <div class="rule-item" *ngFor="let rule of withdrawalRules; let i = index">
-        <div class="rule-number">{{i + 1}}</div>
-        <div class="rule-content">
-          <i class=""></i>
-          <span class="rule-text">{{rule}}</span>
-        </div>
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon">
+        <i class="fas fa-home"></i>
       </div>
+      <span class="nav-label">Home</span>
+    </div>
+
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <span class="nav-label">Invest</span>
+    </div>
+
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon">
+        <i class="fas fa-headset"></i>
+      </div>
+    </div>
+
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon">
+        <i class="fas fa-user-friends"></i>
+      </div>
+      <span class="nav-label">Team</span>
+    </div>
+
+    <div class="nav-item" (click)="navigateToSettings()">
+      <div class="nav-icon">
+        <i class="fas fa-cog"></i>
+      </div>
+      <span class="nav-label">Settings</span>
     </div>
   </div>
 </div>

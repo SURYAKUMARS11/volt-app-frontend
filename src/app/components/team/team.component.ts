@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http'
 import { lastValueFrom } from 'rxjs';
 import { SupabaseService } from '../../supabase.service';
 import { environment } from '../../../environments/environment.development';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 // Define interfaces for type safety
 interface TeamMember {
@@ -27,7 +28,7 @@ interface TeamDataResponse {
   selector: 'app-team',
   standalone: true,
   // Make sure you have all the necessary modules here
-  imports: [CommonModule, HttpClientModule, TitleCasePipe, DecimalPipe],
+  imports: [CommonModule, HttpClientModule, TitleCasePipe, DecimalPipe, LoadingSpinnerComponent],
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.css']
 })
@@ -39,14 +40,15 @@ export class TeamComponent implements OnInit {
   isLoading: boolean = true;
   errorMessage: string | null = null;
   userId: string | null = null;
-
+  showTeamList = false;
   // You might still have other properties like referralBenefits
   referralBenefits = [
-    'Earn ₹50 instant bonus when your friend joins',
+    'Earn ₹10 instant bonus when your friend just registers',
     'Get 10% commission on all their investments',
     'Lifetime earnings from your referrals',
     'No limit on number of referrals',
-    'Weekly bonus for active referrers'
+    'Weekly bonus for active referrers',
+    'Bonus will be collected via telegram channel'
   ];
 
   constructor(
@@ -112,8 +114,8 @@ export class TeamComponent implements OnInit {
     }
   }
 
-  redirectToInvite(): void {
-    this.router.navigate(['/invite']);
+  toggleTeamList() {
+    this.showTeamList = !this.showTeamList;
   }
 
   goBack() {
@@ -122,6 +124,9 @@ export class TeamComponent implements OnInit {
   navigateToHome(): void { this.router.navigate(['/home']); }
   navigateToTeam(): void { this.router.navigate(['/team']); }
   navigateToSettings(): void { this.router.navigate(['/settings']); }
-  openCustomerService(): void { window.open('https://t.me/voltearning', '_blank'); }
+  openCustomerService(): void { window.open('https://t.me/Volt_support_care', '_blank'); }
   navigateToInvest() { this.router.navigate(['/invest']); }
+  redirectToInvite() {
+    this.router.navigate(['/invite']);
+  }
 }

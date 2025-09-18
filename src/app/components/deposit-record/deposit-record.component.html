@@ -1,83 +1,83 @@
-<div class="page-container">
-  <div class="page-header">
-    <button class="back-btn" (click)="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <h2>Deposit Record</h2>
-    <div class="header-icon">
-      <i class="fas fa-plus-circle"></i>
+<div class="tesla-home-container">
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Deposit Records</h2>
+          <p class="user-phone">Track your deposits</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="filter-section">
-    <div class="filter-buttons">
-      <button 
-        class="filter-btn" 
-        [class.active]="selectedFilter === 'all'"
-        (click)="setFilter('all')">
-        All
-      </button>
-      <button 
-        class="filter-btn" 
-        [class.active]="selectedFilter === 'pending'"
-        (click)="setFilter('pending')">
-        Pending
-      </button>
-      <button 
-        class="filter-btn" 
-        [class.active]="selectedFilter === 'completed'"
-        (click)="setFilter('completed')">
-        Completed
-      </button>
-      <button 
-        class="filter-btn" 
-        [class.active]="selectedFilter === 'failed'"
-        (click)="setFilter('failed')">
-        Failed
-      </button>
-    </div>
-  </div>
-
-  <div class="records-section">
-    <div *ngIf="isLoading" class="status-message">
-      <div class="spinner"></div>
-      <p>Loading records...</p>
+  <div class="records-section-new">
+    <!-- Filter Tabs -->
+    <div class="tabs-new">
+      <button class="tab-btn-new" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">All</button>
+      <button class="tab-btn-new" [class.active]="selectedFilter === 'pending'" (click)="setFilter('pending')">Pending</button>
+      <button class="tab-btn-new" [class.active]="selectedFilter === 'completed'" (click)="setFilter('completed')">Completed</button>
+      <button class="tab-btn-new" [class.active]="selectedFilter === 'failed'" (click)="setFilter('failed')">Failed</button>
     </div>
 
-    <div *ngIf="!isLoading && errorMessage" class="status-message error-message">
-      <p>{{ errorMessage }}</p>
+    <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
+
+    <div *ngIf="!isLoading && errorMessage" class="message-new error">
+      {{ errorMessage }}
     </div>
 
-    <div *ngIf="!isLoading && !errorMessage && filteredRecords.length === 0" class="no-records">
-      <i class="fas fa-inbox"></i>
+    <div *ngIf="!isLoading && !errorMessage && filteredRecords.length === 0" class="empty-state-new">
+      <i class="fas fa-inbox empty-icon"></i>
       <h3>No Records Found</h3>
       <p>You don't have any deposit records yet.</p>
     </div>
 
-    <div *ngIf="!isLoading && !errorMessage" class="record-list">
-      <div *ngFor="let record of filteredRecords" class="record-card">
-        <div class="record-header">
-          <div class="record-info">
-            <h3>₹{{record.amount}}</h3>
-            <p>Razorpay</p>
+    <div class="records-list-new" *ngIf="!isLoading && !errorMessage && filteredRecords.length > 0">
+      <div class="record-card-new" *ngFor="let record of filteredRecords">
+        <div class="record-header-new">
+          <div class="record-title-new">Deposit</div>
+          <div class="record-status-new" [ngClass]="getStatusColor(record.status)">{{ getStatusText(record.status) }}</div>
+        </div>
+        <div class="record-body-new">
+          <div class="record-stat-new">
+            <span class="stat-label">Amount</span>
+            <span class="stat-value">₹{{ record.amount | number:'1.2-2' }}</span>
           </div>
-          <div class="record-status">
-            <span class="status-badge" [ngClass]="record.status">
-              {{getStatusText(record.status)}}
-            </span>
+          <div class="record-stat-new">
+            <span class="stat-label">Transaction ID</span>
+            <span class="stat-value">{{ record.payment_gateway_id }}</span>
           </div>
         </div>
-        <div class="record-details">
-          <div class="detail-item">
-            <span class="label">Transaction ID:</span>
-            <span class="value">{{record.payment_gateway_id}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="label">Date:</span>
-            <span class="value">{{record.created_at | date:'MMM d, y, h:mm a'}}</span>
-          </div>
+        <div class="record-footer-new">
+          <span class="record-date">{{ record.created_at | date:'MMM d, y, h:mm a' }}</span>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+      <span class="nav-label">Invest</span>
+    </div>
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon"><i class="fas fa-headset"></i></div>
+    </div>
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+      <span class="nav-label">Team</span>
+    </div>
+    <div class="nav-item active" (click)="navigateToSettings()">
+      <div class="nav-icon"><i class="fas fa-cog"></i></div>
+      <span class="nav-label">Settings</span>
     </div>
   </div>
 </div>

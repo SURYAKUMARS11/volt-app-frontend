@@ -1,115 +1,72 @@
-<div class="header">
-  <h3>Overview</h3>
-  <button class="btn btn-primary">Hot Plans</button>
-</div>
-<div class="balance-section">
-  <div class="combined-balance-card">
-    <div class="balance-item main-balance">
-      <div class="balance-icon">
-        <i class="fas fa-wallet"></i>
-      </div>
-      <div class="balance-info">
-        <div class="balance-label">Your Balance</div>
-        <div class="balance-value">₹{{currentBalance | number : '1.2-2'}}</div>
-      </div>
-    </div>
+<div class="tesla-home-container">
+  <!-- Loading Spinner -->
+  <app-loading-spinner [isLoading]="isLoading"></app-loading-spinner>
 
-    <div class="balance-divider"></div>
+  <!-- Background Elements -->
+  <div class="background-grid"></div>
+  <div class="background-glow"></div>
 
-    <div class="balance-item">
-      <div class="balance-icon income">
-        <i class="fas fa-chart-line"></i>
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">Investment Plans</h2>
+          <p class="user-phone">Choose your plan</p>
+        </div>
       </div>
-      <div class="balance-info">
-        <div class="balance-label">Total Income</div>
-        <div class="balance-value">₹{{calculatedTotalIncome | number : '1.2-2'}}</div>
+      <div class="tesla-brand">
+        <div class="tesla-logo">
+          <svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+          </svg>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="plans-section">
-  <div class="plans-header">
-    <div class="plan-toggle">
-      <button class="toggle-btn" [class.active]="activePlanType === 'daily'" (click)="switchPlanType('daily')">
-        <i class="fas fa-calendar-day"></i>
-        Daily Plans
-      </button>
-      <button class="toggle-btn" [class.active]="activePlanType === 'advanced'" (click)="switchPlanType('advanced')">
-        <i class="fas fa-star"></i>
-        Advanced Plans
-      </button>
     </div>
   </div>
 
-  <div *ngIf="isLoading" class="loading-spinner">
-  <i class="fas fa-spinner fa-spin"></i>
-  <p>Loading plans...</p>
-</div>
-  <div *ngIf="errorMessage" class="error-message">
-    <p>{{ errorMessage }}</p>
-  </div>
-
-  <div class="plans-grid" *ngIf="!isLoading && !errorMessage">
-    <div class="plan-card" *ngFor="let plan of getCurrentPlans()" [class.active]="plan.is_active && !plan.is_presale">
-      <div class="plan-header">
-        <h4>{{plan.title}}</h4>
-        <div class="plan-badge"
-          *ngIf="plan.is_active && !plan.is_presale && (!plan.is_purchasable_once || (plan.is_purchasable_once && purchasedPlans[plan.id] === 0))">
-          <i class="fas fa-check-circle"></i>
-          Active
-        </div>
-        <div class="plan-badge purchased" *ngIf="plan.is_purchasable_once && purchasedPlans[plan.id] > 0">
-          <i class="fas fa-check-double"></i>
-          Purchased
-        </div>
-        <div class="plan-badge locked" *ngIf="!plan.is_active && !plan.is_presale">
-          <i class="fas fa-lock"></i>
-          Locked
-        </div>
+  <div class="plans-section" *ngIf="!isLoading && !errorMessage">
+    <div class="plan-card-new" *ngFor="let plan of getCurrentPlans()" [class.active]="plan.is_active && !plan.is_presale" (click)="goToInvestmentDetail(plan)">
+      <div class="plan-image-new">
+        <img [src]="plan.image_url" [alt]="plan.title">
+        <div class="plan-title-new">{{plan.title}}</div>
       </div>
-
-      <div class="pre-sale-overlay-container" *ngIf="plan.is_presale">
+      <div class="plan-details-new">
+        <div class="plan-stats-new">
+          <div class="stat-item-new">
+            <span class="stat-label-new">Amount</span>
+            <span class="stat-value-new">₹{{plan.investment | number : '1.0-0'}}</span>
+          </div>
+          <div class="stat-item-new">
+            <span class="stat-label-new">Daily</span>
+            <span class="stat-value-new">₹{{plan.daily_income | number : '1.0-0'}}</span>
+          </div>
+          <div class="stat-item-new">
+            <span class="stat-label-new">Days</span>
+            <span class="stat-value-new">{{plan.days}}</span>
+          </div>
+          <div class="stat-item-new total">
+            <span class="stat-label-new">Total</span>
+            <span class="stat-value-new">₹{{plan.total | number : '1.0-0'}}</span>
+          </div>
+        </div>
+        <button class="invest-btn-new" [disabled]="!plan.is_active">
+          <i class="fas fa-{{plan.is_active && !plan.is_presale ? 'rocket' : 'lock'}}"></i>
+          <span>{{plan.is_active && !plan.is_presale ? 'Invest Now' : 'Locked'}}</span>
+        </button>
+      </div>
+       <div class="pre-sale-overlay-container" *ngIf="plan.is_presale">
         <div class="pre-sale-overlay">
           <span class="pre-sale-text">Pre-sale</span>
         </div>
       </div>
-
-      <div class="plan-image">
-        <img [src]="plan.image_url" [alt]="plan.title">
-        <div class="image-overlay">
-          <i class="fas fa-coins"></i>
-        </div>
-      </div>
-      <div class="plan-details">
-        <div class="plan-info">
-          <div class="info-item">
-            <i class="fas fa-hand-holding-usd"></i>
-            <span>Investment: ₹{{plan.investment | number : '1.0-0'}}</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Daily Income: ₹{{plan.daily_income | number : '1.0-0'}}</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-clock"></i>
-            <span>Duration: {{plan.days}} days</span>
-          </div>
-          <div class="info-item total">
-            <i class="fas fa-trophy"></i>
-            <span>Total Return: ₹{{plan.total | number : '1.0-0'}}</span>
-          </div>
-        </div>
-        <button class="invest-btn" [disabled]="!plan.is_active"
-          (click)="goToInvestmentDetail(plan); $event.stopPropagation()">
-          <i class="fas fa-{{plan.is_active && !plan.is_presale ? 'rocket' : 'lock'}}"></i>
-          {{plan.is_active && !plan.is_presale ? 'Invest Now' : 'Locked'}}
-        </button>
-      </div>
     </div>
   </div>
 
-
+  <!-- Investment Popup -->
   <div class="investment-popup" *ngIf="showInvestmentPopup" (click)="closeInvestmentPopup()">
     <div class="popup-overlay"></div>
     <div class="popup-content" (click)="$event.stopPropagation()">
@@ -119,53 +76,53 @@
           <i class="fas fa-times"></i>
         </button>
       </div>
+
       <div class="popup-body">
-        <div class="plan-image">
+        <div class="plan-image-popup">
           <img [src]="selectedPlan?.image_url" [alt]="selectedPlan?.title">
         </div>
 
-        <div class="plan-details">
-          <div class="detail-item">
-            <i class="fas fa-hand-holding-usd"></i>
-            <span>Investment: ₹{{selectedPlan?.investment | number : '1.0-0'}}</span>
+        <div class="plan-details-popup">
+          <div class="detail-item-popup">
+            <span class="label">Amount</span>
+            <span class="value">₹{{selectedPlan?.investment | number : '1.0-0'}}</span>
           </div>
-          <div class="detail-item">
-            <i class="fas fa-calendar-day"></i>
-            <span>Daily Income: ₹{{selectedPlan?.daily_income | number : '1.0-0'}}</span>
+          <div class="detail-item-popup">
+            <span class="label">Daily</span>
+            <span class="value">₹{{selectedPlan?.daily_income | number : '1.0-0'}}</span>
           </div>
-          <div class="detail-item">
-            <i class="fas fa-clock"></i>
-            <span>Duration: {{selectedPlan?.days}} days</span>
+          <div class="detail-item-popup">
+            <span class="label">Days</span>
+            <span class="value">{{selectedPlan?.days}}</span>
           </div>
-          <div class="detail-item highlight">
-            <i class="fas fa-trophy"></i>
-            <span>Total Return: ₹{{selectedPlan?.total | number : '1.0-0'}}</span>
+          <div class="detail-item-popup highlight">
+            <span class="label">Total</span>
+            <span class="value">₹{{selectedPlan?.total | number : '1.0-0'}}</span>
           </div>
         </div>
 
-        <div class="quantity-section">
+        <div class="quantity-section-popup">
           <h4>Select Quantity</h4>
-          <div class="quantity-controls">
-            <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="investmentQuantity <= 1">
+          <div class="quantity-controls-popup">
+            <button class="quantity-btn-popup" (click)="decreaseQuantity()" [disabled]="investmentQuantity <= 1">
               <i class="fas fa-minus"></i>
             </button>
-            <span class="quantity-display">{{investmentQuantity}}</span>
-            <button class="quantity-btn" (click)="increaseQuantity()">
+            <span class="quantity-display-popup">{{investmentQuantity}}</span>
+            <button class="quantity-btn-popup" (click)="increaseQuantity()">
               <i class="fas fa-plus"></i>
             </button>
           </div>
-          <p class="quantity-note">Total Investment: ₹{{getTotalInvestment() | number : '1.0-0'}}</p>
+          <p class="quantity-note-popup">Total Investment: ₹{{getTotalInvestment() | number : '1.0-0'}}</p>
         </div>
 
-        <div *ngIf="investmentErrorMessage" class="error-message">{{ investmentErrorMessage }}</div>
-        <div *ngIf="investmentSuccessMessage" class="success-message">{{ investmentSuccessMessage }}</div>
+        <div *ngIf="investmentErrorMessage" class="error-message-popup">{{ investmentErrorMessage }}</div>
 
-        <div class="popup-actions">
-          <button class="invest-btn" (click)="confirmInvestment()" [disabled]="!canAffordInvestment() || isLoading">
+        <div class="popup-actions-popup">
+          <button class="invest-btn-popup" (click)="confirmInvestment()" [disabled]="!canAffordInvestment() || isLoading">
             <i class="fas fa-rocket"></i>
             Invest ₹{{getTotalInvestment() | number : '1.0-0'}}
           </button>
-          <button class="recharge-btn" *ngIf="!canAffordInvestment()" (click)="navigateToRecharge()">
+          <button class="recharge-btn-popup" *ngIf="!canAffordInvestment()" (click)="navigateToRecharge()">
             <i class="fas fa-credit-card"></i>
             Recharge Wallet
           </button>
@@ -174,23 +131,43 @@
     </div>
   </div>
 
-  <div class="bottom-nav">
-    <div class="nav-item " (click)="navigateToHome()">
+  <!-- Success Popup -->
+  <div class="success-popup" *ngIf="showSuccessPopup" (click)="closeSuccessPopup()">
+    <div class="popup-overlay"></div>
+    <div class="popup-content" (click)="$event.stopPropagation()">
+      <div class="popup-header">
+        <h3>🎉 Investment Successful</h3>
+        <button class="close-btn" (click)="closeSuccessPopup()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="popup-body">
+        <p>You have successfully invested ₹{{getTotalInvestment() | number : '1.0-0'}} in <strong>{{selectedPlan?.title}}</strong>.</p>
+      </div>
+      <div class="popup-actions">
+        <button class="ok-btn" (click)="closeSuccessPopup()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item" (click)="navigateToHome()">
       <div class="nav-icon">
         <i class="fas fa-home"></i>
       </div>
-      <span>Home</span>
+      <span class="nav-label">Home</span>
     </div>
 
     <div class="nav-item active" (click)="navigateToInvest()">
       <div class="nav-icon">
         <i class="fas fa-chart-line"></i>
       </div>
-      <span>Invest</span>
+      <span class="nav-label">Invest</span>
     </div>
 
-    <div class="customer-service-btn" (click)="openCustomerService()">
-      <div class="service-icon">
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon">
         <i class="fas fa-headset"></i>
       </div>
     </div>
@@ -199,14 +176,14 @@
       <div class="nav-icon">
         <i class="fas fa-user-friends"></i>
       </div>
-      <span>Team</span>
+      <span class="nav-label">Team</span>
     </div>
 
     <div class="nav-item" (click)="navigateToSettings()">
       <div class="nav-icon">
         <i class="fas fa-cog"></i>
       </div>
-      <span>Settings</span>
+      <span class="nav-label">Settings</span>
     </div>
   </div>
 </div>

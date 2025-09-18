@@ -1,307 +1,205 @@
-<app-loading-spinner [isLoading]="isLoadingSpinner"></app-loading-spinner>
-<div class="home-container" >
-  <div class="header">
-    <div class="user-info">
-      <div class="app-icon">
-        <i class="fas fa-bolt"></i>
+<div class="tesla-home-container">
+  <!-- Loading Spinner -->
+  <app-loading-spinner [isLoading]="isLoadingSpinner"></app-loading-spinner>
+
+  <!-- Background Elements -->
+  <div class="background-grid"></div>
+  <div class="background-glow"></div>
+
+  <!-- Header Section -->
+  <div class="tesla-header">
+    <div class="header-content">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <h2 class="user-name">{{userName}}</h2>
+          <p class="user-phone">{{getHiddenPhone()}}</p>
+        </div>
       </div>
-      <div class="user-details">
-        <h3>{{userName}}</h3>
-        <p>{{getHiddenPhone()}}</p>
+      <div class="tesla-brand">
+        <div class="tesla-logo">
+          <svg viewBox="0 0 342 35" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.1v27.6h6.8V7.3L26 7h11a9.8 9.8 0 0 0 7-7H0zm238.6 0h-6.8v34.8H263a9.7 9.7 0 0 0 6.8-6.8h-31.3V.1zm-52.3 6.8c3.6-1 6.6-3.8 7.4-6.9l-38.1.1v20.6h31.1v7.2h-24.4a13.6 13.6 0 0 0-8.7 7h39.9v-21h-31.2v-7zm116.2 28h6.7v-14h24.6v14h6.7v-21h-38zM85.3 7h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 13.8h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zm0 14.1h26a9.6 9.6 0 0 0 7.1-7H78.3a9.6 9.6 0 0 0 7 7zM308.5 7h26a9.6 9.6 0 0 0 7-7h-40a9.6 9.6 0 0 0 7 7z" fill="currentColor"/>
+          </svg>
+        </div>
       </div>
-    </div>
-    <div class="notification-icon">
-      <i class="fas fa-bell"></i>
-      <span class="notification-badge">1</span>
     </div>
   </div>
 
-  <!-- <div class="notification-banner">
-    <div class="banner-content">
-      <div class="banner-image">
-        <img [src]="getCurrentNotification().image" alt="User">
-      </div>
-      <div class="banner-text">
-        <div class="banner-title">
-          <i class="fas fa-check-circle"></i>
-          Congratulations! {{getCurrentNotification().name}}
-        </div>
-        <div class="banner-subtitle">Successfully {{getCurrentNotification().action}}
-          ₹{{getCurrentNotification().amount}} today</div>
-      </div>
-      <div class="banner-amount">₹{{getCurrentNotification().amount}}</div>
-    </div>
-    <div class="banner-indicators">
-      <span *ngFor="let notification of notifications; let i = index" class="indicator"
-        [class.active]="i === currentNotificationIndex">
-      </span>
-    </div>
-  </div> -->
-
-  <div class="balance-section">
-    <div class="combined-balance-card">
-      <div class="balance-item main-balance">
+  <!-- Balance Dashboard -->
+  <div class="balance-dashboard">
+    <div class="balance-card primary">
+      <div class="balance-header">
         <div class="balance-icon">
           <i class="fas fa-wallet"></i>
         </div>
         <div class="balance-info">
-          <div class="balance-label">Your Balance</div>
-          <div class="balance-value">₹{{rechargedBalance | number : '1.2-2'}}</div>
+          <span class="balance-label">Balance</span>
+          <span class="balance-value">₹{{rechargedBalance | number : '1.2-2'}}</span>
         </div>
       </div>
+    </div>
 
-      <div class="balance-divider"></div>
-
-      <div class="balance-item">
+    <div class="balance-card secondary">
+      <div class="balance-header">
         <div class="balance-icon income">
           <i class="fas fa-chart-line"></i>
         </div>
         <div class="balance-info">
-          <div class="balance-label">Your Income</div>
-          <div class="balance-value">₹{{totalEarnedIncome | number : '1.2-2'}}</div>
+          <span class="balance-label">Income</span>
+          <span class="balance-value">₹{{totalEarnedIncome | number : '1.2-2'}}</span>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="action-section">
-    <div class="action-buttons">
-      <div class="action-btn" (click)="navigateToRecharge()">
-        <div class="btn-icon recharge">
-          <i class="fas fa-credit-card"></i>
-        </div>
-        <span>Recharge</span>
+  <!-- Quick Actions Grid -->
+  <div class="actions-grid">
+    <div class="action-card" (click)="navigateToRecharge()">
+      <div class="action-icon recharge">
+        <i class="fas fa-credit-card"></i>
       </div>
-      <div class="action-btn" (click)="navigateToWithdrawal()">
-        <div class="btn-icon withdrawal">
-          <i class="fas fa-money-bill-wave"></i>
-        </div>
-        <span>Withdrawal</span>
-      </div>
-      <div class="action-btn" (click)="navigateToInvite()">
-        <div class="btn-icon team">
-          <i class="fas fa-users"></i>
-        </div>
-        <span>Invite</span>
-      </div>
-      <div class="action-btn" (click)="navigateToOrders()">
-        <div class="btn-icon orders">
-          <i class="fas fa-clipboard-list"></i>
-        </div>
-        <span>Orders</span>
-      </div>
-      <!-- Telegram -->
-      <div class="action-btn" (click)="openTelegram()">
-        <div class="btn-icon telegram">
-          <i class="fab fa-telegram-plane"></i>
-        </div>
-        <span>Telegram</span>
-      </div>
-
-      <!-- YouTube -->
-       <!-- (click)="downloadApp()" -->
-     <div class="action-btn" >
-  <div class="btn-icon youtube">
-    <i class="fas fa-download"></i> <!-- Font Awesome download icon -->
-  </div>
-  <span>Download</span>
-</div>
-      <!-- Mission -->
-      <div class="action-btn" (click)="viewMissions()">
-        <div class="btn-icon mission">
-          <i class="fas fa-bullseye"></i>
-        </div>
-        <span>Mission</span>
-      </div>
-
-      <!-- Gift Code -->
-      <div class="action-btn" (click)="redeemGiftCode()">
-        <div class="btn-icon gift">
-          <i class="fas fa-gift"></i>
-        </div>
-        <span>Gift Code</span>
-      </div>
+      <span class="action-label">Recharge</span>
     </div>
+
+    <div class="action-card" (click)="navigateToWithdrawal()">
+      <div class="action-icon withdrawal">
+        <i class="fas fa-money-bill-wave"></i>
+      </div>
+      <span class="action-label">Withdraw</span>
+    </div>
+
+    <div class="action-card" (click)="navigateToInvite()">
+      <div class="action-icon invite">
+        <i class="fas fa-users"></i>
+      </div>
+      <span class="action-label">Invite</span>
+    </div>
+
+    <div class="action-card" (click)="navigateToOrders()">
+      <div class="action-icon orders">
+        <i class="fas fa-clipboard-list"></i>
+      </div>
+      <span class="action-label">Orders</span>
+    </div>
+
+    <div class="action-card" (click)="openTelegram()">
+      <div class="action-icon telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </div>
+      <span class="action-label">Telegram</span>
+    </div>
+    <div class="action-card" (click)="openTelegram()">
+      <div class="action-icon telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </div>
+      <span class="action-label">WhatsApp</span>
+    </div>
+    <div class="action-card" (click)="openTelegram()">
+      <div class="action-icon telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </div>
+      <span class="action-label">Download</span>
+    </div>
+    <div class="action-card" (click)="openTelegram()">
+      <div class="action-icon telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </div>
+      <span class="action-label">Install</span>
+    </div>
+
+    <div class="action-card" (click)="navigateToBlog()">
+      <div class="action-icon blog">
+        <i class="fas fa-blog"></i>
+      </div>
+      <span class="action-label">Blog</span>
+    </div>
+
+
+
   </div>
 
 
-  <div class="telegram-popup" *ngIf="showTelegramPopup" (click)="closeTelegramPopup()">
+
+  <!-- Telegram Popup -->
+  <div class="tesla-popup" *ngIf="showTelegramPopup" (click)="closeTelegramPopup()">
     <div class="popup-overlay"></div>
-    <div class="popup-content" (click)="$event.stopPropagation()">
+    <div class="popup-container" (click)="$event.stopPropagation()">
       <div class="popup-header">
-        <div class="telegram-logo">
+        <div class="popup-icon">
           <i class="fab fa-telegram-plane"></i>
         </div>
-        <h3>Join Our Community</h3>
-        <h5>Daily Income💸 - Daily Withdrawal🙏</h5>
-        <button class="close-btn" (click)="closeTelegramPopup()">
+        <h3 class="popup-title">Join Our Community</h3>
+        <p class="popup-subtitle">Daily Income💸 - Daily Withdrawal🙏</p>
+        <button class="popup-close" (click)="closeTelegramPopup()">
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="popup-body">
+
+      <div class="popup-content">
         <div class="popup-features">
-          <div class="feature">
+          <div class="popup-feature">
             <i class="fas fa-bell"></i>
-            <span>Get instant updates</span>
+            <span>Instant Updates</span>
           </div>
-          <div class="feature">
+          <div class="popup-feature">
             <i class="fas fa-gift"></i>
-            <span>Exclusive offers</span>
+            <span>Exclusive Offers</span>
           </div>
-          <div class="feature">
+          <div class="popup-feature">
             <i class="fas fa-users"></i>
-            <span>Connect with community</span>
-          </div>
-        </div>
-        <p>Join our official Telegram channel for the latest updates, tips, and exclusive earning opportunities!</p>
-        <div class="popup-buttons">
-          <button class="join-btn" (click)="joinTelegram()">
-            <i class="fab fa-telegram-plane"></i>
-            Join Now
-          </button>
-          <!-- <button class="later-btn" (click)="closeTelegramPopup()">
-            <i class="fas fa-clock"></i>
-            Maybe Later
-          </button> -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="referral-section">
-    <div class="referral-card">
-      <div class="referral-header">
-        <div class="referral-title">
-          <div class="referral-icon">
-            <i class="fas fa-gift"></i>
-          </div>
-          <div class="referral-text">
-            <h3>Referral Bonus</h3>
-            <p>Invite and earn ₹10 on each sign-up</p>
+            <span>Community Support</span>
           </div>
         </div>
 
-      </div>
-      <div class="referral-stats">
-        <div class="stat-item">
-          <div class="stat-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="stat-container">
-            <div class="stat-details">
-              <span class="stat-value">{{totalReferrals}}</span>
-              <span class="stat-label">Total Invites</span>
-            </div>
-
-            <button class="claim-btn" [disabled]="!canClaimBonus" (click)="claimReferralBonus()">
-              <i class="fas fa-hand-holding-usd"></i>
-              {{canClaimBonus ? 'Claim ₹' + pendingBonus : 'No Bonus'}}
-            </button>
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-icon earnings">
-            <i class="fas fa-coins"></i>
-          </div>
-          <div class="stat-details">
-            <span class="stat-value">₹{{referralEarnings}}</span>
-            <span class="stat-label">Bonus Earned</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="about-section">
-    <div class="about-card">
-      <div class="about-header">
-        <div class="about-title">
-          <div class="about-icon">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <h3>Trusted Platform</h3>
-        </div>
-        <div class="verified-badge">
-          <i class="fas fa-certificate"></i>
-          <span>Verified</span>
-        </div>
-      </div>
-      <div class="trust-badges">
-        <div class="badge">
-          <div class="badge-icon">
-            <i class="fas fa-building"></i>
-          </div>
-          <div class="badge-text">
-            <span class="badge-title">Government Approved</span>
-            <span class="badge-subtitle">People Trusted Platform</span>
-          </div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon secure">
-            <i class="fas fa-lock"></i>
-          </div>
-          <div class="badge-text">
-            <span class="badge-title">100% Secure with Razorpay</span>
-            <span class="badge-subtitle">SSL Protected</span>
-          </div>
-        </div>
-        <div class="badge">
-          <div class="badge-icon users">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="badge-text">
-            <span class="badge-title">5K+ Users</span>
-            <span class="badge-subtitle">Active Community</span>
-          </div>
-        </div>
-      </div>
-      <div class="company-info">
-        <div class="info-highlight">
-          <i class="fas fa-award"></i>
-          <span>Licensed & Regulated Investment Platform</span>
-        </div>
-        <p class="about-text">
-          Volt is a government-approved investment platform with over 5,000 satisfied users.
-          We provide secure and guaranteed returns with 24/7 customer support.
+        <p class="popup-description">
+          Join our official Telegram channel for latest updates, tips, and exclusive earning opportunities!
         </p>
+
+        <button class="popup-join-btn" (click)="joinTelegram()">
+          <i class="fab fa-telegram-plane"></i>
+          <span>Join Now</span>
+        </button>
       </div>
     </div>
   </div>
-</div>
 
-
-<div class="bottom-nav">
-  <div class="nav-item active" (click)="navigateToHome()">
-    <div class="nav-icon">
-      <i class="fas fa-home"></i>
+  <!-- Bottom Navigation -->
+  <div class="tesla-bottom-nav">
+    <div class="nav-item active" (click)="navigateToHome()">
+      <div class="nav-icon">
+        <i class="fas fa-home"></i>
+      </div>
+      <span class="nav-label">Home</span>
     </div>
-    <span>Home</span>
-  </div>
 
-  <div class="nav-item" (click)="navigateToInvest()">
-    <div class="nav-icon">
-      <i class="fas fa-chart-line"></i>
+    <div class="nav-item" (click)="navigateToInvest()">
+      <div class="nav-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <span class="nav-label">Invest</span>
     </div>
-    <span>Invest</span>
-  </div>
 
-  <div class="customer-service-btn" (click)="openCustomerService()">
-    <div class="service-icon">
-      <i class="fas fa-headset"></i>
+    <div class="nav-center-btn" (click)="openCustomerService()">
+      <div class="center-icon">
+        <i class="fas fa-headset"></i>
+      </div>
     </div>
-  </div>
 
-  <div class="nav-item" (click)="navigateToTeam()">
-    <div class="nav-icon">
-      <i class="fas fa-user-friends"></i>
+    <div class="nav-item" (click)="navigateToTeam()">
+      <div class="nav-icon">
+        <i class="fas fa-user-friends"></i>
+      </div>
+      <span class="nav-label">Team</span>
     </div>
-    <span>Team</span>
-  </div>
 
-  <div class="nav-item" (click)="navigateToSettings()">
-    <div class="nav-icon">
-      <i class="fas fa-cog"></i>
+    <div class="nav-item" (click)="navigateToSettings()">
+      <div class="nav-icon">
+        <i class="fas fa-cog"></i>
+      </div>
+      <span class="nav-label">Settings</span>
     </div>
-    <span>Settings</span>
   </div>
 </div>
