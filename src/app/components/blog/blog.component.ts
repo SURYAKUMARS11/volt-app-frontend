@@ -8,7 +8,7 @@ import { interval, Subscription } from 'rxjs';
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.css']
 })
