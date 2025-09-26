@@ -491,33 +491,33 @@ this.showInvestmentPopup = false;
     this.router.navigate(['/team']);
   }
   presalePlans: InvestmentPlan[] = [
-  {
-    id: 101,
-    title: 'Pre-sale Daily Plan A',
-    image_url: 'https://img.freepik.com/free-photo/view-electric-car-that-is-being-charged_23-2150972407.jpg?t=st=1720693341~exp=1720696941~hmac=15e59a7093909935142314613598694182ca89a059d5108831a2552862123858&w=1380',
-    is_active: false,
-    is_presale: true,
-    investment: 5000,
-    daily_income: 1500,
-    days: 30,
-    total: 45000,
-    plan_type: 'daily',
-    tier: 1,
-    is_purchasable_once: false
-  },
-  {
-    id: 102,
-    title: 'Pre-sale Daily Plan B',
-    image_url: 'https://img.freepik.com/free-photo/electric-car-charging-station-night_23-2150972412.jpg?t=st=1720693364~exp=1720696964~hmac=3330303805a33a43548b9a4a03a4586043d651c2923f8b92d44d0b941f9f3dfc&w=1380',
-    is_active: false,
-    is_presale: true,
-    investment: 10000,
-    daily_income: 2500,
-    days: 35,
-    total: 87500,
-    plan_type: 'daily',
-    tier: 2,
-    is_purchasable_once: false
-  },
+  // {
+  //   id: 101,
+  //   title: 'Pre-sale Daily Plan A',
+  //   image_url: 'https://img.freepik.com/free-photo/view-electric-car-that-is-being-charged_23-2150972407.jpg?t=st=1720693341~exp=1720696941~hmac=15e59a7093909935142314613598694182ca89a059d5108831a2552862123858&w=1380',
+  //   is_active: false,
+  //   is_presale: true,
+  //   investment: 5000,
+  //   daily_income: 1500,
+  //   days: 30,
+  //   total: 45000,
+  //   plan_type: 'daily',
+  //   tier: 1,
+  //   is_purchasable_once: false
+  // },
+  // {
+  //   id: 102,
+  //   title: 'Pre-sale Daily Plan B',
+  //   image_url: 'https://img.freepik.com/free-photo/electric-car-charging-station-night_23-2150972412.jpg?t=st=1720693364~exp=1720696964~hmac=3330303805a33a43548b9a4a03a4586043d651c2923f8b92d44d0b941f9f3dfc&w=1380',
+  //   is_active: false,
+  //   is_presale: true,
+  //   investment: 10000,
+  //   daily_income: 2500,
+  //   days: 35,
+  //   total: 87500,
+  //   plan_type: 'daily',
+  //   tier: 2,
+  //   is_purchasable_once: false
+  // },
 ];
 }

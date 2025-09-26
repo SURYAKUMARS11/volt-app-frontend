@@ -55,6 +55,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   upiId: string = 'voltearning@pytes'; // Replace with your actual UPI ID
   activeTab: 'upi' | 'qr' = 'upi';
   upiCopied: boolean = false;
+  amountCopied: boolean = false;
 
   // UTR/Mobile Number
   utrNumber: string = '';
@@ -145,6 +146,15 @@ async initializeUser() {
     }, 2000);
   }
 
+  copyAmount() {
+    this.clipboard.copy(this.paymentAmount.toString());
+    this.amountCopied = true;
+    this.toastr.success('Amount copied to clipboard!', 'Copied!');
+    setTimeout(() => {
+      this.amountCopied = false;
+    }, 2000);
+  }
+
   startTimer() {
     this.timerInterval = setInterval(() => {
       if (this.timeLeft > 0) {
@@ -169,12 +179,7 @@ async initializeUser() {
   // --- NEW: Method to handle payment verification ---
   verifyPayment() {
     if (!this.utrNumber || this.utrNumber.length !== 12) {
-      this.toastr.error('Please enter a valid 12-digit UTR/Transaction ID.', 'Invalid UTR');
-      return;
-    }
-
-    if (!this.mobileNumber || this.mobileNumber.length !== 10) {
-      this.toastr.error('Please enter a valid 10-digit mobile number.', 'Invalid Mobile Number');
+      this.toastr.error('Please enter a valid UTR/Transaction ID.', 'Invalid UTR');
       return;
     }
 
@@ -192,7 +197,7 @@ async initializeUser() {
       userId: this.userId, // <-- Use this.userId here
       amount: this.paymentAmount,
       utrNumber: this.utrNumber,
-      mobileNumber: this.mobileNumber,
+      mobileNumber: this.mobileNumber || '',
       paymentMethod: 'upi_manual'
     };
 

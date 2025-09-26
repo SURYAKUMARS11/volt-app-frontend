@@ -1,93 +1,103 @@
-<div class="tesla-home-container">
-  <!-- Header Section -->
-  <div class="tesla-header">
+<div class="payment-container">
+  <!-- Header with Amount and Timer -->
+  <div class="payment-header">
     <div class="header-content">
-      <div class="user-profile">
-        <div class="profile-avatar">
-          <i class="fas fa-shield-alt"></i>
-        </div>
-        <div class="user-info">
-          <h2 class="user-name">Complete Payment</h2>
-          <p class="user-phone">Secure & Fast</p>
-        </div>
+      <h1 class="payment-title">Payment Amount</h1>
+      <div class="amount-display">₹{{paymentAmount | number}}</div>
+      <div class="timer-display" [class.warning]="timeLeft <= 120">
+        {{formatTime(timeLeft)}}
       </div>
     </div>
   </div>
 
-  <div class="payment-section">
-    <!-- Amount & Timer -->
-    <div class="payment-card-new info-card">
-      <div class="info-item">
-        <span class="info-label">Amount to Pay</span>
-        <span class="info-value amount">₹{{paymentAmount | number}}</span>
+  <!-- Main Content -->
+  <div class="payment-content">
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <button class="tab-btn active">Direct Transfer</button>
+      <button class="tab-btn inactive">Scan QRCode</button>
+    </div>
+
+    <!-- Warning Notice -->
+    <div class="warning-card">
+      <div class="warning-icon">
+        <i class="fas fa-exclamation-triangle"></i>
       </div>
-      <div class="info-item timer" [class.warning]="timeLeft <= 120">
-        <span class="info-label">Time Remaining</span>
-        <span class="info-value">{{formatTime(timeLeft)}}</span>
+      <div class="warning-text">
+        Payment can only be made once. Multiple payments are not valid!!!
       </div>
     </div>
 
-    <!-- Payment Method -->
-    <div class="payment-card-new method-card">
-      <div class="method-header">
-        <h3>UPI Transfer</h3>
-        <div class="trusted-badge"><i class="fas fa-check-circle"></i> Trusted</div>
+    <!-- Transfer Instructions -->
+    <div class="transfer-card">
+      <div class="instruction-title">
+        1. Transfer {{paymentAmount}} RS to the following upi
       </div>
-      <div class="detail-item-new">
-        <label>UPI ID</label>
-        <div class="copy-field-new">
-          <input type="text" [value]="upiId" readonly>
-          <button (click)="copyUpiId()" [class.copied]="upiCopied">
-            <i class="fas" [ngClass]="upiCopied ? 'fa-check' : 'fa-copy'"></i>
+
+      <div class="upi-details">
+        <div class="upi-field">
+          <span class="upi-id">{{upiId}}</span>
+          <button class="copy-btn" (click)="copyUpiId()" [class.copied]="upiCopied">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+
+        <div class="amount-field">
+          <span class="amount-text">{{paymentAmount}} RS</span>
+          <button class="copy-btn" (click)="copyAmount()">
+            <i class="fas fa-copy"></i>
           </button>
         </div>
       </div>
-      <div class="detail-item-new">
-        <label>Beneficiary Name</label>
-        <div class="beneficiary-name-new">Volt Capital Pvt Ltd</div>
-      </div>
-    </div>
 
-    <!-- Instructions -->
-    <div class="payment-card-new instructions-card">
-        <h4>How to Pay</h4>
-        <div class="step-item-new">
-            <div class="step-number">1</div>
-            <span>Copy the UPI ID.</span>
-        </div>
-        <div class="step-item-new">
-            <div class="step-number">2</div>
-            <span>Open your UPI app and send ₹{{paymentAmount}}.</span>
-        </div>
-        <div class="step-item-new">
-            <div class="step-number">3</div>
-            <span>Enter the UTR number below after payment.</span>
-        </div>
-    </div>
+      <div class="instruction-title step-2">
+        2. Submit Ref No/Reference No/UTR
+      </div>
 
-    <!-- UTR Input -->
-    <div class="payment-card-new utr-card">
-      <h4>Confirm Payment</h4>
-      <div class="form-group-new">
-        <label for="utr">UTR/Transaction ID</label>
-        <input type="text" id="utr" [(ngModel)]="utrNumber" placeholder="Enter 12-digit UTR No" maxlength="12">
+      <div class="utr-section">
+        <input
+          type="text"
+          class="utr-input"
+          [(ngModel)]="utrNumber"
+          placeholder="UTR(UPI Ref.ID)"
+          maxlength="12">
+
+        <button
+          class="submit-btn"
+          [disabled]="!utrNumber || utrNumber.length < 12 || isVerifying"
+          (click)="verifyPayment()">
+          <span *ngIf="!isVerifying">Submit</span>
+          <div *ngIf="isVerifying" class="spinner"></div>
+        </button>
       </div>
-      <div class="form-group-new">
-        <label for="mobile">Registered Mobile Number</label>
-        <input type="text" id="mobile" [(ngModel)]="mobileNumber" placeholder="Enter 10-digit Mobile No" maxlength="10">
-      </div>
-      <button class="verify-btn-new" [disabled]="!utrNumber || utrNumber.length < 12 || isVerifying" (click)="verifyPayment()">
-        <span *ngIf="!isVerifying">Verify Payment</span>
-        <div *ngIf="isVerifying" class="spinner"></div>
-      </button>
     </div>
   </div>
 
+  <!-- Success Popup -->
   <div class="popup-overlay" *ngIf="showPopup">
     <div class="popup-box">
-      <h3>Success</h3>
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Payment Submitted Successfully!</h3>
       <p>Amount will be added within 15 minutes.</p>
-      <button (click)="closePopup()">OK</button>
+      <button class="ok-btn" (click)="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <!-- Secure Payment Footer -->
+  <div class="secure-footer">
+    <div class="footer-content">
+      <div class="security-badge">
+        <i class="fas fa-shield-alt"></i>
+        <span>Secure Payment Gateway</span>
+      </div>
+      <div class="payment-logos">
+        <div class="logo-item">UPI</div>
+        <div class="logo-item">BHIM</div>
+        <div class="logo-item">PayTM</div>
+        <div class="logo-item">GPay</div>
+      </div>
     </div>
   </div>
 </div>
